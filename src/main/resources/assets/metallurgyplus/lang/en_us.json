@@ -1,0 +1,9 @@
+{
+  "item.metallurgyplus.steel_ingot": "Steel Ingot",
+  "item.metallurgyplus.clay_mineral_raw": "Clay Mineral",
+
+  "block.metallurgyplus.steel_block": "Steel Block",
+  "block.metallurgyplus.clay_mineral": "Clay Mineral",
+
+  "creativetab.metallurgyplus_tab": "MetallurgyPlus"
+}

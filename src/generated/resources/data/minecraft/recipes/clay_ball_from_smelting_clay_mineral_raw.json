@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "clay",
+  "ingredient": {
+    "item": "metallurgyplus:clay_mineral_raw"
+  },
+  "result": "minecraft:clay_ball"
+}
