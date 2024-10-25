@@ -1,6 +1,6 @@
 package net.dafarka.metallurgyplus.datagen.loot;
 
-import net.dafarka.metallurgyplus.blocks.ModBlocks;
+import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -26,9 +26,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.dropSelf(ModBlocks.STEEL_BLOCK.get());
+        this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
 
         this.add(ModBlocks.CLAY_MINERAL.get(),
             block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CLAY_MINERAL_RAW.get()));
+        this.add(ModBlocks.BAUXITE_ORE.get(),
+            block -> createCopperLikeOreDrops(ModBlocks.BAUXITE_ORE.get(), ModItems.BAUXITE_RAW.get()));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {

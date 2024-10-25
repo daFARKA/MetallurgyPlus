@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "metallurgyplus:block/ore_processing_unit"
+    }
+  }
+}

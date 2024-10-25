@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "metallurgyplus:block/bauxite_ore"
+  }
+}

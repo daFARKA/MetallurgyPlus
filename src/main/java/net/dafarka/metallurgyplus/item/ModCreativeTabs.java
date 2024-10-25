@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.blocks.ModBlocks;
+import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

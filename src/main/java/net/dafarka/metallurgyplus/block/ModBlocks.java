@@ -1,6 +1,7 @@
-package net.dafarka.metallurgyplus.blocks;
+package net.dafarka.metallurgyplus.block;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.custom.OreProcessingUnitBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -23,6 +24,12 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> CLAY_MINERAL = registerBlock("clay_mineral",
         () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));
+
+    public static final RegistryObject<Block> BAUXITE_ORE = registerBlock("bauxite_ore",
+        () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
+
+    public static final RegistryObject<Block> ORE_PROCESSING_UNIT = registerBlock("ore_processing_unit",
+        () -> new OreProcessingUnitBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
