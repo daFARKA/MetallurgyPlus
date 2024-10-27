@@ -5,7 +5,7 @@
   "experience": 0.25,
   "group": "aluminum",
   "ingredient": {
-    "item": "metallurgyplus:bauxite_raw"
+    "item": "metallurgyplus:bauxite"
   },
   "result": "metallurgyplus:aluminum_ingot"
 }

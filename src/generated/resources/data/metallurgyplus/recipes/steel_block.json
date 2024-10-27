@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "S": {
+    "X": {
       "item": "metallurgyplus:steel_ingot"
     }
   },
   "pattern": [
-    "SSS",
-    "SSS",
-    "SSS"
+    "XXX",
+    "XXX",
+    "XXX"
   ],
   "result": {
     "item": "metallurgyplus:steel_block"

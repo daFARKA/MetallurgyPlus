@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "metallurgyplus:item/bauxite_raw"
+    "layer0": "metallurgyplus:item/bauxite"
   }
 }

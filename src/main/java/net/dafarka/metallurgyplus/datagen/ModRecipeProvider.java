@@ -8,8 +8,10 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import java.util.List;
@@ -22,23 +24,27 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.STEEL_BLOCK.get())
-            .pattern("SSS")
-            .pattern("SSS")
-            .pattern("SSS")
-            .define('S', ModItems.STEEL_INGOT.get())
-            .unlockedBy(getHasName(ModItems.STEEL_INGOT.get()), has(ModItems.STEEL_INGOT.get()))
-            .save(pWriter);
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.STEEL_INGOT.get(), 9)
-            .requires(ModBlocks.STEEL_BLOCK.get())
-            .unlockedBy(getHasName(ModBlocks.STEEL_BLOCK.get()), has(ModBlocks.STEEL_BLOCK.get()))
-            .save(pWriter);
+        buildBlockRecipe(pWriter, ModItems.STEEL_INGOT.get(), ModBlocks.STEEL_BLOCK.get());
 
         oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
         oreSmelting(pWriter, AL_SMELTABLES, RecipeCategory.MISC, ModItems.ALUMINUM_INGOT.get(), 0.25f, 100, "aluminum");
     }
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CLAY_MINERAL_RAW.get());
-    private static final List<ItemLike> AL_SMELTABLES = List.of(ModItems.BAUXITE_RAW.get(), ModItems.ALUMINUM_RAW.get());
+    private static final List<ItemLike> AL_SMELTABLES = List.of(ModItems.BAUXITE.get(), ModItems.ALUMINUM_RAW.get());
+
+    private void buildBlockRecipe(Consumer<FinishedRecipe> pWriter, Item item, Block block) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block)
+            .pattern("XXX")
+            .pattern("XXX")
+            .pattern("XXX")
+            .define('X', item)
+            .unlockedBy(getHasName(item), has(item))
+            .save(pWriter);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, item, 9)
+            .requires(block)
+            .unlockedBy(getHasName(block), has(block))
+            .save(pWriter);
+    }
 }

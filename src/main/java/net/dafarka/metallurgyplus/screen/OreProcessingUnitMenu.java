@@ -30,7 +30,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
 
     public OreProcessingUnitMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.ORE_PROCESSING_MENU.get(), pContainerId);
-        checkContainerSize(inv, 19);
+        checkContainerSize(inv, 22);
         blockEntity = ((OreProcessingUnitBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
@@ -39,8 +39,30 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 80, 11));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 80, 59));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 39));
+
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, 62, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 2, 80, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 3, 98, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 4, 116, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 5, 134, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 6, 152, 21));
+
+            this.addSlot(new SlotItemHandler(iItemHandler, 7, 62, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 8, 80, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 9, 98, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 10, 116, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 11, 134, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 12, 152, 39));
+
+
+            this.addSlot(new SlotItemHandler(iItemHandler, 13, 62, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 14, 80, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 15, 98, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 16, 116, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 17, 134, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 18, 152, 57));
+
         });
 
         addDataSlots(data);

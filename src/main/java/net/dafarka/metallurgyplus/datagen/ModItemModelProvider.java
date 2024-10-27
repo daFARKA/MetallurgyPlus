@@ -21,8 +21,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.ALUMINUM_INGOT);
 
         simpleItem(ModItems.CLAY_MINERAL_RAW);
-        simpleItem(ModItems.BAUXITE_RAW);
         simpleItem(ModItems.ALUMINUM_RAW);
+        simpleItem(ModItems.BAUXITE);
+        simpleItem(ModItems.KAOLINITE);
 
         simpleItem(ModItems.SILICON);
     }

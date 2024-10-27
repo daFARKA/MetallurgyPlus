@@ -1,5 +1,7 @@
 {
   "values": [
-    "metallurgyplus:steel_block"
+    "metallurgyplus:steel_block",
+    "metallurgyplus:bauxite_ore",
+    "metallurgyplus:ore_processing_unit"
   ]
 }

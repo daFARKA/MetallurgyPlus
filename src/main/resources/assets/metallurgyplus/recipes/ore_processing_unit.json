@@ -1,0 +1,36 @@
+{
+  "recipe0": {
+    "0": {
+      "item": "bauxite",
+      "count": 1
+    },
+    "1": {
+      "item": "aluminum_raw",
+      "count": 2
+    }
+  },
+  "recipe1": {
+    "0": {
+      "item": "clay_mineral_raw",
+      "count": 1
+    },
+    "1": {
+      "item": "kaolinite",
+      "count": 1
+    }
+  },
+  "recipe2": {
+    "0": {
+      "item": "kaolinite",
+      "count": 1
+    },
+    "1": {
+      "item": "aluminum_raw",
+      "count": 1
+    },
+    "2": {
+      "item": "silicon",
+      "count": 1
+    }
+  }
+}

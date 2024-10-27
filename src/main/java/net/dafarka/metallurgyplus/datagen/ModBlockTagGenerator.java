@@ -22,7 +22,11 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(ModBlocks.STEEL_BLOCK.get());
+            .add(ModBlocks.STEEL_BLOCK.get(),
+                ModBlocks.BAUXITE_ORE.get());
+
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .add(ModBlocks.ORE_PROCESSING_UNIT.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());

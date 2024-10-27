@@ -1,9 +1,18 @@
 {
   "item.metallurgyplus.steel_ingot": "Steel Ingot",
+  "item.metallurgyplus.aluminum_ingot": "Aluminum Ingot",
+
   "item.metallurgyplus.clay_mineral_raw": "Clay Mineral",
+  "item.metallurgyplus.aluminum_raw": "Raw Aluminum",
+  "item.metallurgyplus.bauxite": "Bauxite",
+  "item.metallurgyplus.kaolinite": "Kaolinite",
+  "item.metallurgyplus.silicon": "Silicon",
 
   "block.metallurgyplus.steel_block": "Steel Block",
   "block.metallurgyplus.clay_mineral": "Clay Mineral",
+  "block.metallurgyplus.bauxite_ore": "Bauxite Ore",
+
+  "block.metallurgyplus.ore_processing_unit": "Ore Processing Unit",
 
   "creativetab.metallurgyplus_tab": "MetallurgyPlus"
 }

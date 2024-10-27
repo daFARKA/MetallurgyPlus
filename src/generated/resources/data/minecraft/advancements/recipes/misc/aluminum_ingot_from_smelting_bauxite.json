@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bauxite_raw": {
+    "has_bauxite": {
       "conditions": {
         "items": [
           {
             "items": [
-              "metallurgyplus:bauxite_raw"
+              "metallurgyplus:bauxite"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:aluminum_ingot_from_smelting_bauxite_raw"
+        "recipe": "minecraft:aluminum_ingot_from_smelting_bauxite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_bauxite_raw",
+      "has_bauxite",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:aluminum_ingot_from_smelting_bauxite_raw"
+      "minecraft:aluminum_ingot_from_smelting_bauxite"
     ]
   },
   "sends_telemetry_event": false

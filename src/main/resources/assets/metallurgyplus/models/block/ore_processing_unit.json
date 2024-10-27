@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "block/ore_processing_unit",
-		"particle": "block/ore_processing_unit"
+		"0": "metallurgyplus:block/ore_processing_unit_texture",
+		"particle": "metallurgyplus:block/ore_processing_unit_texture"
 	},
 	"elements": [
 		{
