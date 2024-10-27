@@ -26,3 +26,4 @@ forge*changelog.txt
 
 run-data/logs/
 src/generated/resources/*.chache
+src/generated/resources/*.chache/*
