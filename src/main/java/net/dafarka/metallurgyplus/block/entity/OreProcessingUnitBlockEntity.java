@@ -2,12 +2,16 @@ package net.dafarka.metallurgyplus.block.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -32,16 +36,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-
-import static net.dafarka.metallurgyplus.MetallurgyPlus.MODID;
+import java.util.Optional;
 
 public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(19);
@@ -57,7 +58,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     private List<List<Item>> outputs = new ArrayList<>();
     private List<List<Integer>> outputAmounts = new ArrayList<>();
 
-    private Logger logger = LogManager.getLogger(MODID);
+    private Logger logger = LogManager.getLogger(MetallurgyPlus.MODID);
+    private ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
     public OreProcessingUnitBlockEntity(BlockPos pPos,
                                         BlockState pBlockState) {
@@ -156,38 +158,53 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
      *
      * */
     private Item getItem(String name) {
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(MODID, name));
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(MetallurgyPlus.MODID, name));
         if (item == ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "air"))) {
             item = ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", name));
         }
         return item;
     }
 
+    /**
+     * Initializes Input and Output fields to handle the crafting process and making the whole process easily configurable.
+     *
+     * Load in the "data/recipes/ore_processing_unit.json". The 0-th material is the input and all following materials are outputs.
+     * Input and all Outputs are stored in the corresponding lists (inputs, inputAmounts, outputs, outputAmounts).
+     * The first element of input corresponds to the first element of the inputAmounts/outputs/outputAmounts list.
+     * So the first recipe with input, input amount etc. is stored in the first element of each list.
+     *
+     * */
     private void initializeInputsAndOutputs() {
         Gson gson = new Gson();
         Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-            new FileInputStream("F:\\Mods\\MetallurgyPlus\\src\\main\\resources\\assets\\metallurgyplus\\recipes\\ore_processing_unit.json")))) {
-            Map<String, Object> jsonMap = gson.fromJson(bufferedReader, mapType);
+        try {
+            String path = "data/recipes/ore_processing_unit.json";
+            Optional<Resource> optionalResource = resourceManager.getResource(new ResourceLocation(MetallurgyPlus.MODID, path));
+            if (optionalResource.isPresent()) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(optionalResource.get().open()));
 
-            for (int i = 0; i < jsonMap.size(); i++) {
-                Map<String, Map<String, Object>> materials = (Map<String,  Map<String, Object>>) jsonMap.get("recipe" + i);
-                Map<String, Object> material = materials.get("0");
+                Map<String, Object> jsonMap = gson.fromJson(bufferedReader, mapType);
 
+                for (int i = 0; i < jsonMap.size(); i++) {
+                    Map<String, Map<String, Object>> materials = (Map<String,  Map<String, Object>>) jsonMap.get("recipe" + i);
+                    Map<String, Object> material = materials.get("0");
 
-                inputs.add(getItem((String) material.get("item")));
-                inputAmounts.add(((Double) material.get("count")).intValue());
+                    inputs.add(getItem((String) material.get("item")));
+                    inputAmounts.add(((Double) material.get("count")).intValue());
 
-                List<Item> tempItems = new ArrayList<>();
-                List<Integer> tempAmounts = new ArrayList<>();
-                for (int j = 1; j < materials.size(); j++) {
-                    material = materials.get("" + j);
-                    tempItems.add(getItem((String) material.get("item")));
-                    tempAmounts.add(((Double) material.get("count")).intValue());
+                    List<Item> tempItems = new ArrayList<>();
+                    List<Integer> tempAmounts = new ArrayList<>();
+                    for (int j = 1; j < materials.size(); j++) {
+                        material = materials.get("" + j);
+                        tempItems.add(getItem((String) material.get("item")));
+                        tempAmounts.add(((Double) material.get("count")).intValue());
+                    }
+                    outputs.add(tempItems);
+                    outputAmounts.add(tempAmounts);
                 }
-                outputs.add(tempItems);
-                outputAmounts.add(tempAmounts);
+            } else {
+                logger.error("Recipes for OPU were not found.\nThe following path was probably not correct: " + path);
             }
 
         } catch (IOException e) {
@@ -198,10 +215,6 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (!inputs.isEmpty()) {
-            /*System.out.println(inputs);
-            System.out.println(inputAmounts);
-            System.out.println(outputs);
-            System.out.println(outputAmounts);*/
             Item currentInput = this.itemHandler.getStackInSlot(0).getItem();
             int currentIndex = inputs.indexOf(currentInput);
             if (currentIndex != -1) {
@@ -297,7 +310,5 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
             }
             i++;
         }
-
-
     }
 }

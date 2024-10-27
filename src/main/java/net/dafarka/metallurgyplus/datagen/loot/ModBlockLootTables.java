@@ -32,6 +32,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
             block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CLAY_MINERAL_RAW.get()));
         this.add(ModBlocks.BAUXITE_ORE.get(),
             block -> createCopperLikeOreDrops(ModBlocks.BAUXITE_ORE.get(), ModItems.BAUXITE.get()));
+        this.add(ModBlocks.BAUXITE_ORE_DEEPSLATE.get(),
+            block -> createCopperLikeOreDrops(ModBlocks.BAUXITE_ORE_DEEPSLATE.get(), ModItems.BAUXITE.get()));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {

@@ -26,7 +26,10 @@ public class ModBlocks {
         () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));
 
     public static final RegistryObject<Block> BAUXITE_ORE = registerBlock("bauxite_ore",
-        () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
+        () -> new Block(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.STONE)));
+
+    public static final RegistryObject<Block> BAUXITE_ORE_DEEPSLATE = registerBlock("bauxite_ore_deepslate",
+        () -> new Block(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.DEEPSLATE)));
 
     public static final RegistryObject<Block> ORE_PROCESSING_UNIT = registerBlock("ore_processing_unit",
         () -> new OreProcessingUnitBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));

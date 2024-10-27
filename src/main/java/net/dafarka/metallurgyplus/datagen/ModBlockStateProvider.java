@@ -18,8 +18,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         blockWithItem(ModBlocks.STEEL_BLOCK);
+
         blockWithItem(ModBlocks.CLAY_MINERAL);
         blockWithItem(ModBlocks.BAUXITE_ORE);
+        blockWithItem(ModBlocks.BAUXITE_ORE_DEEPSLATE);
 
         simpleBlockWithItem(ModBlocks.ORE_PROCESSING_UNIT.get(), new ModelFile.UncheckedModelFile(modLoc("block/ore_processing_unit")));
     }

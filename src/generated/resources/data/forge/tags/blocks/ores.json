@@ -1,6 +1,7 @@
 {
   "values": [
     "metallurgyplus:clay_mineral",
-    "metallurgyplus:bauxite_ore"
+    "metallurgyplus:bauxite_ore",
+    "metallurgyplus:bauxite_ore_deepslate"
   ]
 }

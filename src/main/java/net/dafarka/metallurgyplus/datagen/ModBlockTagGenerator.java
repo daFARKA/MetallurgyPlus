@@ -23,7 +23,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider pProvider) {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.STEEL_BLOCK.get(),
-                ModBlocks.BAUXITE_ORE.get());
+                ModBlocks.BAUXITE_ORE.get(),
+                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get());
@@ -32,7 +33,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
             .add(ModBlocks.CLAY_MINERAL.get());
 
         this.tag(BlockTags.NEEDS_STONE_TOOL)
-            .add(ModBlocks.BAUXITE_ORE.get());
+            .add(ModBlocks.BAUXITE_ORE.get(),
+                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
             .add(ModBlocks.STEEL_BLOCK.get(),
@@ -40,7 +42,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(Tags.Blocks.ORES)
             .add(ModBlocks.CLAY_MINERAL.get(),
-                ModBlocks.BAUXITE_ORE.get());
+                ModBlocks.BAUXITE_ORE.get(),
+                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
 
     }
 }

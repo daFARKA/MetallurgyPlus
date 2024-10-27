@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     # Set the path to the input and output image and hex color code
     input_image_path = 'input_image.png'  # Replace with your grayscale image
-    hex_color = '#b9f0f0'  # Replace with your desired hex color
+    hex_color = '#6b6a66'  # Replace with your desired hex color
     output_image_path = 'output_image.png'  # The colored output image
 
     apply_color_to_grayscale_image(input_image_path, hex_color, output_image_path)
