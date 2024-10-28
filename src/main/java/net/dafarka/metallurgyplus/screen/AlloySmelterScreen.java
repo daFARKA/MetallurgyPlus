@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class AlloySmelterScreen extends AbstractContainerScreen<AlloySmelterMenu> {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/ore_processing_unit_gui.png");
+        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/alloy_smelter_gui.png");
 
     public AlloySmelterScreen(AlloySmelterMenu pMenu, Inventory pPlayerInventory,
                               Component pTitle) {
@@ -40,7 +40,7 @@ public class AlloySmelterScreen extends AbstractContainerScreen<AlloySmelterMenu
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if(menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 31, y + 43, 177, 0, menu.getScaledProgress(), 8);
+            guiGraphics.blit(TEXTURE, x + 87, y + 39, 177, 0, menu.getScaledProgress(), 8);
         }
     }
 

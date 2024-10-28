@@ -1,17 +1,14 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
+import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.AlloySmelterMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -19,8 +16,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,19 +26,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider {
@@ -53,14 +40,10 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     private int progress = 0;
     private int maxProgress = 100;
 
-    private List<Item> inputs = new ArrayList<>();
-    private List<Integer> inputAmounts = new ArrayList<>();
-    private List<List<Item>> outputs = new ArrayList<>();
-    private List<List<Integer>> outputAmounts = new ArrayList<>();
-
-    private Logger logger = LogManager.getLogger(MetallurgyPlus.MODID);
-    private ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
     private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(this.itemHandler);
+
+    private final int INPUT_SLOT_COUNT = 8;
+    private int outputSlot;
 
     public AlloySmelterBlockEntity(BlockPos pPos,
                                    BlockState pBlockState) {
@@ -88,8 +71,6 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
                 return 2;
             }
         };
-
-        initializeInputsAndOutputs();
     }
 
     @Override
@@ -146,73 +127,17 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         progress = pTag.getInt("alloy_smelter.progress");
     }
 
-    /**
-     * Initializes Input and Output fields to handle the crafting process and making the whole process easily configurable.
-     *
-     * Load in the "data/recipes/alloy_smelter.json". The 0-th material is the input and all following materials are outputs.
-     * Input and all Outputs are stored in the corresponding lists (inputs, inputAmounts, outputs, outputAmounts).
-     * The first element of input corresponds to the first element of the inputAmounts/outputs/outputAmounts list.
-     * So the first recipe with input, input amount etc. is stored in the first element of each list.
-     *
-     * */
-    private void initializeInputsAndOutputs() {
-        Gson gson = new Gson();
-        Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
-
-        try {
-            String path = "data/recipes/ore_processing_unit.json";
-            Optional<Resource> optionalResource = resourceManager.getResource(new ResourceLocation(MetallurgyPlus.MODID, path));
-            if (optionalResource.isPresent()) {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(optionalResource.get().open()));
-
-                Map<String, Object> jsonMap = gson.fromJson(bufferedReader, mapType);
-
-                for (int i = 0; i < jsonMap.size(); i++) {
-                    Map<String, Map<String, Object>> materials = (Map<String,  Map<String, Object>>) jsonMap.get("recipe" + i);
-                    Map<String, Object> material = materials.get("0");
-
-                    inputs.add(utilBlockEntity.getItem((String) material.get("item")));
-                    inputAmounts.add(((Double) material.get("count")).intValue());
-
-                    List<Item> tempItems = new ArrayList<>();
-                    List<Integer> tempAmounts = new ArrayList<>();
-                    for (int j = 1; j < materials.size(); j++) {
-                        material = materials.get("" + j);
-                        tempItems.add(utilBlockEntity.getItem((String) material.get("item")));
-                        tempAmounts.add(((Double) material.get("count")).intValue());
-                    }
-                    outputs.add(tempItems);
-                    outputAmounts.add(tempAmounts);
-                }
-            } else {
-                logger.error("Recipes for Alloy Smelter were not found.\nThe following path was probably not correct: " + path);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        if (!inputs.isEmpty()) {
-            Item currentInput = this.itemHandler.getStackInSlot(0).getItem();
-            int currentIndex = inputs.indexOf(currentInput);
-            if (currentIndex != -1) {
-                int inAmount = inputAmounts.get(currentIndex);
-                List<Integer> outAmounts = outputAmounts.get(currentIndex);
-                if (hasRecipe(currentInput, inAmount, outputs.get(currentIndex), outAmounts)) {
-                    increaseCraftingProgress();
-                    setChanged(pLevel, pPos, pState);
-                    if (hasProgressFinished()) {
-                        craftItem(outputs.get(currentIndex), inAmount, outAmounts);
-                        resetProgress();
-                    }
-                } else {
-                    resetProgress();
-                }
-            } else {
+        if(hasRecipe()) {
+            increaseCraftingProgress();
+            setChanged(pLevel, pPos, pState);
+
+            if(hasProgressFinished()) {
+                craftItem();
                 resetProgress();
             }
+        } else {
+            resetProgress();
         }
     }
 
@@ -228,31 +153,49 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         progress++;
     }
 
-    private boolean hasRecipe(Item in, int inCount, List<Item> out, List<Integer> outCount) {
-        int i = 0;
-        for (Item item : out) {
-            if (utilBlockEntity.getFirstAvailableSlot(item, outCount.get(i)) == -1) {
+    private boolean hasRecipe() {
+        Optional<AlloySmelterRecipe> recipe = getCurrentRecipe();
+
+        if (recipe.isEmpty()) {
+            return false;
+        }
+
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Integer> amounts = recipe.get().getInputAmounts();
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return false;
+            if (itemHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8)).getCount() < amounts.get(i)) {
                 return false;
             }
-            i++;
         }
 
-        return (this.itemHandler.getStackInSlot(0).getItem() == in) &&
-            (this.itemHandler.getStackInSlot(0).getCount() >= inCount);
+        ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
+        outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), 8);
 
+        return outputSlot != -1;
     }
 
-    private void craftItem(List<Item> items, int inAmount, List<Integer> outAmounts) {
-        this.itemHandler.extractItem(0, inAmount, false);
-        int i = 0;
-        for (Item item : items) {
-            int outAmount = outAmounts.get(i);
-            int slotNumber = utilBlockEntity.getFirstAvailableSlot(item, outAmount);
-            if (slotNumber > 0) {
-                ItemStack result = new ItemStack(item, outAmount);
-                this.itemHandler.setStackInSlot(slotNumber, new ItemStack(result.getItem(), this.itemHandler.getStackInSlot(slotNumber).getCount() + result.getCount()));
-            }
-            i++;
+    private Optional<AlloySmelterRecipe> getCurrentRecipe() {
+        SimpleContainer inventory = new SimpleContainer(INPUT_SLOT_COUNT);
+        for (int i = 0; i < INPUT_SLOT_COUNT; i++) {
+            inventory.setItem(i, this.itemHandler.getStackInSlot(i));
         }
+
+        return this.level.getRecipeManager().getRecipeFor(AlloySmelterRecipe.Type.INSTANCE, inventory, level);
+    }
+
+    private void craftItem() {
+        Optional<AlloySmelterRecipe> recipe = getCurrentRecipe();
+        ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
+
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Integer> amounts = recipe.get().getInputAmounts();
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return;
+            this.itemHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8), amounts.get(i), false);
+        }
+
+        this.itemHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
+            this.itemHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
     }
 }

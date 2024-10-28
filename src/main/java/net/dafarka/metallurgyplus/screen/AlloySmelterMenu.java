@@ -21,6 +21,8 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
     public final AlloySmelterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
+    private ItemStack lastMovedStack = ItemStack.EMPTY;
+    private int lastSlotBundleTouched = 1;
 
     public AlloySmelterMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(friendlyByteBuf.readBlockPos()), new SimpleContainerData(19));
@@ -37,29 +39,25 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 26));
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, 26, 26));
+            this.addSlot(new SlotItemHandler(iItemHandler, 2, 8, 44));
+            this.addSlot(new SlotItemHandler(iItemHandler, 3, 26, 44));
 
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 62, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 80, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 98, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 116, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 5, 134, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 6, 152, 21));
+            this.addSlot(new SlotItemHandler(iItemHandler, 4, 50, 26));
+            this.addSlot(new SlotItemHandler(iItemHandler, 5, 68, 26));
+            this.addSlot(new SlotItemHandler(iItemHandler, 6, 50, 44));
+            this.addSlot(new SlotItemHandler(iItemHandler, 7, 68, 44));
 
-            this.addSlot(new SlotItemHandler(iItemHandler, 7, 62, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 8, 80, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 9, 98, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 10, 116, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 11, 134, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 12, 152, 39));
-
-
-            this.addSlot(new SlotItemHandler(iItemHandler, 13, 62, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 14, 80, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 15, 98, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 16, 116, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 17, 134, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 18, 152, 57));
+            this.addSlot(new SlotItemHandler(iItemHandler, 8, 116, 18));
+            this.addSlot(new SlotItemHandler(iItemHandler, 9, 134, 18));
+            this.addSlot(new SlotItemHandler(iItemHandler, 10, 152, 18));
+            this.addSlot(new SlotItemHandler(iItemHandler, 11, 116, 36));
+            this.addSlot(new SlotItemHandler(iItemHandler, 12, 134, 36));
+            this.addSlot(new SlotItemHandler(iItemHandler, 13, 152, 36));
+            this.addSlot(new SlotItemHandler(iItemHandler, 14, 116, 54));
+            this.addSlot(new SlotItemHandler(iItemHandler, 15, 134, 54));
+            this.addSlot(new SlotItemHandler(iItemHandler, 16, 152, 54));
         });
 
         addDataSlots(data);
@@ -78,6 +76,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
+    // Adapted by dafarka to fit the Alloy Smelter of MetallurgyPlus.
     // must assign a slot number to each of the slots used by the GUI.
     // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
     // Each time we add a Slot to the container, it automatically increases the slotIndex, which means
@@ -99,15 +98,48 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         Slot sourceSlot = slots.get(pIndex);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
+        ItemStack copySourceStack = sourceStack.copy(); // Make a copy for later comparison
 
         // Check if the slot clicked is one of the vanilla container slots
         if (pIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             // This is a vanilla container slot so merge the stack into the tile inventory
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                + TE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;  // EMPTY_ITEM
+            if (ItemStack.isSameItemSameTags(sourceStack, lastMovedStack)) {
+                // If items are equal insert into the same slotbundle
+                if (lastSlotBundleTouched == 1) {
+                    if (moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX + 4,
+                        TE_INVENTORY_FIRST_SLOT_INDEX + 8, false)) {
+                        lastSlotBundleTouched = 1;
+                    } else {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX,
+                        TE_INVENTORY_FIRST_SLOT_INDEX + 4, false)) {
+                        lastSlotBundleTouched = 2;
+                    } else {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            } else {
+                // else insert into the other slotbundle
+                if (lastSlotBundleTouched == 1) {
+                    if (moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX,
+                        TE_INVENTORY_FIRST_SLOT_INDEX + 4, false)) {
+                        lastSlotBundleTouched = 2;
+                    } else {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX + 4,
+                        TE_INVENTORY_FIRST_SLOT_INDEX + 8, false)) {
+                        lastSlotBundleTouched = 1;
+                    } else {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
+
+
         } else if (pIndex < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
             // This is a TE slot so merge the stack into the players inventory
             if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
@@ -118,13 +150,14 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
             return ItemStack.EMPTY;
         }
         // If stack size == 0 (the entire stack was moved) set slot contents to null
-        if (sourceStack.getCount() == 0) {
+        if (sourceStack.isEmpty()) {
             sourceSlot.set(ItemStack.EMPTY);
         } else {
             sourceSlot.setChanged();
         }
         sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
+        this.lastMovedStack = copySourceStack;
+        return lastMovedStack;
     }
 
     @Override

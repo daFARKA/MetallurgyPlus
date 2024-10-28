@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.recipe.ModRecipes;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
 import net.dafarka.metallurgyplus.screen.ModMenuTypes;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
@@ -31,11 +32,11 @@ public class MetallurgyPlus
     // Define mod id in a common place for everything to reference
     public static final String MODID = "metallurgyplus";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
 
     public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 19;
-    public static final int ALLOY_SMELTER_SLOTS_COUNT = 19;
+    public static final int ALLOY_SMELTER_SLOTS_COUNT = 17;
 
 
 
@@ -49,6 +50,7 @@ public class MetallurgyPlus
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
