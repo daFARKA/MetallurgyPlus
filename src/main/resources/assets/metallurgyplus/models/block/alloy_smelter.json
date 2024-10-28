@@ -1,0 +1,8 @@
+{
+	"parent": "metallurgyplus:block/block_entity_orientable",
+	"textures": {
+		"top": "metallurgyplus:block/alloy_smelter_top",
+		"front": "metallurgyplus:block/alloy_smelter_front",
+		"side": "metallurgyplus:block/alloy_smelter_side"
+	}
+}

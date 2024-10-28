@@ -15,6 +15,11 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("ore_processing_be", () -> BlockEntityType.Builder.of(OreProcessingUnitBlockEntity::new,
             ModBlocks.ORE_PROCESSING_UNIT.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<AlloySmelterBlockEntity>> ALLOY_SMELTER_BE =
+        BLOCK_ENTITIES.register("alloy_smelter_be", () -> BlockEntityType.Builder.of(AlloySmelterBlockEntity::new,
+            ModBlocks.ALLOY_SMELTER.get()).build(null));
+
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

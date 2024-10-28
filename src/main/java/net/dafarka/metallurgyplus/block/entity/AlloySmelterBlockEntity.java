@@ -3,7 +3,7 @@ package net.dafarka.metallurgyplus.block.entity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
+import net.dafarka.metallurgyplus.screen.AlloySmelterMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,8 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT);
+public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT);
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -62,15 +62,15 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     private ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
     private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(this.itemHandler);
 
-    public OreProcessingUnitBlockEntity(BlockPos pPos,
-                                        BlockState pBlockState) {
-        super(ModBlockEntities.ORE_PROCESSING_BE.get(), pPos, pBlockState);
+    public AlloySmelterBlockEntity(BlockPos pPos,
+                                   BlockState pBlockState) {
+        super(ModBlockEntities.ALLOY_SMELTER_BE.get(), pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> OreProcessingUnitBlockEntity.this.progress;
-                    case 1 -> OreProcessingUnitBlockEntity.this.maxProgress;
+                    case 0 -> AlloySmelterBlockEntity.this.progress;
+                    case 1 -> AlloySmelterBlockEntity.this.maxProgress;
                     default -> 0;
                 };
             }
@@ -78,8 +78,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> OreProcessingUnitBlockEntity.this.progress = pValue;
-                    case 1 -> OreProcessingUnitBlockEntity.this.maxProgress = pValue;
+                    case 0 -> AlloySmelterBlockEntity.this.progress = pValue;
+                    case 1 -> AlloySmelterBlockEntity.this.maxProgress = pValue;
                 }
             }
 
@@ -122,19 +122,19 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.metallurgyplus.ore_processing_unit");
+        return Component.translatable("block.metallurgyplus.alloy_smelter");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new OreProcessingUnitMenu(pContainerId, pPlayerInventory, this, this.data);
+        return new AlloySmelterMenu(pContainerId, pPlayerInventory, this, this.data);
     }
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
-        pTag.putInt("ore_processing_unit.progress", progress);
+        pTag.putInt("alloy_smelter.progress", progress);
 
         super.saveAdditional(pTag);
     }
@@ -143,13 +143,13 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     public void load(CompoundTag pTag) {
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
-        progress = pTag.getInt("ore_processing_unit.progress");
+        progress = pTag.getInt("alloy_smelter.progress");
     }
 
     /**
      * Initializes Input and Output fields to handle the crafting process and making the whole process easily configurable.
      *
-     * Load in the "data/recipes/ore_processing_unit.json". The 0-th material is the input and all following materials are outputs.
+     * Load in the "data/recipes/alloy_smelter.json". The 0-th material is the input and all following materials are outputs.
      * Input and all Outputs are stored in the corresponding lists (inputs, inputAmounts, outputs, outputAmounts).
      * The first element of input corresponds to the first element of the inputAmounts/outputs/outputAmounts list.
      * So the first recipe with input, input amount etc. is stored in the first element of each list.
@@ -185,14 +185,13 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                     outputAmounts.add(tempAmounts);
                 }
             } else {
-                logger.error("Recipes for OPU were not found.\nThe following path was probably not correct: " + path);
+                logger.error("Recipes for Alloy Smelter were not found.\nThe following path was probably not correct: " + path);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (!inputs.isEmpty()) {

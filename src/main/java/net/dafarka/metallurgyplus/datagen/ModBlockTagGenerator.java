@@ -27,7 +27,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(ModBlocks.ORE_PROCESSING_UNIT.get());
+            .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
+                ModBlocks.ALLOY_SMELTER.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());

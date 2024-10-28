@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.block.custom;
 
+import net.dafarka.metallurgyplus.block.entity.AlloySmelterBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
-import net.dafarka.metallurgyplus.block.entity.OreProcessingUnitBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,11 +28,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class OreProcessingUnitBlock extends BaseEntityBlock {
+public class AlloySmelterBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0,0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public OreProcessingUnitBlock(Properties pProperties) {
+    public AlloySmelterBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
     }
@@ -51,8 +51,8 @@ public class OreProcessingUnitBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof OreProcessingUnitBlockEntity) {
-                ((OreProcessingUnitBlockEntity) blockEntity).drops();
+            if (blockEntity instanceof AlloySmelterBlockEntity) {
+                ((AlloySmelterBlockEntity) blockEntity).drops();
             }
         }
 
@@ -63,7 +63,7 @@ public class OreProcessingUnitBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof OreProcessingUnitBlockEntity) {
+            if(entity instanceof AlloySmelterBlockEntity) {
                 NetworkHooks.openScreen((ServerPlayer) pPlayer, (MenuProvider) entity, pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
@@ -80,14 +80,15 @@ public class OreProcessingUnitBlock extends BaseEntityBlock {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.ORE_PROCESSING_BE.get(),
+
+        return createTickerHelper(pBlockEntityType, ModBlockEntities.ALLOY_SMELTER_BE.get(),
             (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new OreProcessingUnitBlockEntity(pPos, pState);
+        return new AlloySmelterBlockEntity(pPos, pState);
     }
 
     @Override

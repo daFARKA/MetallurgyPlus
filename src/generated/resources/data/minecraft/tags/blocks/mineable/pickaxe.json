@@ -3,6 +3,7 @@
     "metallurgyplus:steel_block",
     "metallurgyplus:bauxite_ore",
     "metallurgyplus:bauxite_ore_deepslate",
-    "metallurgyplus:ore_processing_unit"
+    "metallurgyplus:ore_processing_unit",
+    "metallurgyplus:alloy_smelter"
   ]
 }

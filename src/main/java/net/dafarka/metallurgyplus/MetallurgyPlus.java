@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
 import net.dafarka.metallurgyplus.screen.ModMenuTypes;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,10 @@ public class MetallurgyPlus
     public static final String MODID = "metallurgyplus";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
+
+
+    public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 19;
+    public static final int ALLOY_SMELTER_SLOTS_COUNT = 19;
 
 
 
@@ -86,10 +90,11 @@ public class MetallurgyPlus
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
+            LOGGER.info("Hello from MetallurgyPlus!");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             MenuScreens.register(ModMenuTypes.ORE_PROCESSING_MENU.get(), OreProcessingUnitScreen::new);
+            MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
         }
     }
 }

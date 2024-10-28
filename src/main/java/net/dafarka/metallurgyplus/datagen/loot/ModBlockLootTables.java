@@ -27,6 +27,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     protected void generate() {
         this.dropSelf(ModBlocks.STEEL_BLOCK.get());
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
+        this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
 
         this.add(ModBlocks.CLAY_MINERAL.get(),
             block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CLAY_MINERAL_RAW.get()));

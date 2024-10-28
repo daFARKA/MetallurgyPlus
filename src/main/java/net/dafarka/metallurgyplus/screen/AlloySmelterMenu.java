@@ -2,15 +2,13 @@ package net.dafarka.metallurgyplus.screen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.entity.OreProcessingUnitBlockEntity;
-import net.minecraft.core.BlockPos;
+import net.dafarka.metallurgyplus.block.entity.AlloySmelterBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -18,21 +16,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.Nullable;
 
-public class OreProcessingUnitMenu extends AbstractContainerMenu {
-    public final OreProcessingUnitBlockEntity blockEntity;
+public class AlloySmelterMenu extends AbstractContainerMenu {
+    public final AlloySmelterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public OreProcessingUnitMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
+    public AlloySmelterMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(friendlyByteBuf.readBlockPos()), new SimpleContainerData(19));
     }
 
-    public OreProcessingUnitMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.ORE_PROCESSING_MENU.get(), pContainerId);
-        checkContainerSize(inv, MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT);
-        blockEntity = ((OreProcessingUnitBlockEntity) entity);
+    public AlloySmelterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.ALLOY_SMELTER_MENU.get(), pContainerId);
+        checkContainerSize(inv, MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT);
+        blockEntity = ((AlloySmelterBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
 
@@ -96,7 +93,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
@@ -133,7 +130,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-            pPlayer, ModBlocks.ORE_PROCESSING_UNIT.get());
+            pPlayer, ModBlocks.ALLOY_SMELTER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
