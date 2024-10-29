@@ -17,8 +17,8 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(ModItems.STEEL_INGOT);
-        simpleItem(ModItems.ALUMINUM_INGOT);
+        generateMaterials();
+
         simpleItem(ModItems.BARIUM_INGOT);
         simpleItem(ModItems.BERYLLIUM_INGOT);
         simpleItem(ModItems.CADMIUM_INGOT);
@@ -54,7 +54,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.ZIRCONIUM_INGOT);
 
         simpleItem(ModItems.CLAY_MINERAL_RAW);
-        simpleItem(ModItems.ALUMINUM_RAW);
         simpleItem(ModItems.BAUXITE);
         simpleItem(ModItems.KAOLINITE);
 
@@ -65,5 +64,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
             new ResourceLocation(MetallurgyPlus.MODID,"item/" + item.getId().getPath()));
+    }
+
+    private void generateMaterials() {
+        for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
+            simpleItem(item);
+        }
     }
 }

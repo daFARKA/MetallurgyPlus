@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:aluminum_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "metallurgyplus:aluminum_ingot"
+  }
+}

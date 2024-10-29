@@ -17,7 +17,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.STEEL_BLOCK);
+        materialBlocksWithItem();
 
         blockWithItem(ModBlocks.CLAY_MINERAL);
         blockWithItem(ModBlocks.BAUXITE_ORE);
@@ -26,5 +26,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
+    }
+
+    private void materialBlocksWithItem() {
+        for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
+            blockWithItem(block);
+        }
     }
 }

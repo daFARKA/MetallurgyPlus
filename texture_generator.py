@@ -1,5 +1,7 @@
 from PIL import Image
 import sys
+import os
+import shutil
 
 def hex_to_rgb(hex_color):
     """Converts a hex color code to an RGB tuple."""
@@ -41,13 +43,52 @@ def apply_color_to_grayscale_image(image_path, hex_color, output_path):
     colored_image.save(output_path)
     print(f"Image saved as {output_path}")
 
+def clearOutputFolder():
+    folder = './images/output'
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
 if __name__ == "__main__":
-    # Example usage:
-    # python script.py input_image.png #ff5733 output_image.png
+    clearOutputFolder()
 
-    # Set the path to the input and output image and hex color code
-    input_image_path = 'input_image.png'  # Replace with your grayscale image
-    hex_color = '#6b6a66'  # Replace with your desired hex color
-    output_image_path = 'output_image.png'  # The colored output image
+    hex_color = '#b9f0f0'
+    name = "aluminum"
 
-    apply_color_to_grayscale_image(input_image_path, hex_color, output_image_path)
+    input = './images/input/ingot.png'
+    output = './images/output/' + name + '_ingot.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/block.png'
+    output = './images/output/' + name + '_block.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/dust.png'
+    output = './images/output/' + name + '_dust.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/gear.png'
+    output = './images/output/' + name + '_gear.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/nugget.png'
+    output = './images/output/' + name + '_nugget.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/plate.png'
+    output = './images/output/' + name + '_plate.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/rod.png'
+    output = './images/output/' + name + '_rod.png'
+    apply_color_to_grayscale_image(input, hex_color, output)
+
+    input = './images/input/raw.png'
+    output = './images/output/' + name + '_raw.png'
+    apply_color_to_grayscale_image(input, hex_color, output)

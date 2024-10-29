@@ -17,7 +17,7 @@ public class ModCreativeTabs {
         DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MetallurgyPlus.MODID);
 
     public static final RegistryObject<CreativeModeTab> METALLURGY_PLUS_TAB = CREATIVE_TABS.register("metallurgyplus_tab",
-        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.STEEL_INGOT.get()))
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MATERIAL_MAP.get("steel_ingot").get()))
             .title(Component.translatable("creativetab.metallurgyplus_tab"))
             .displayItems((pParameters, pOutput) -> {
                 for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {

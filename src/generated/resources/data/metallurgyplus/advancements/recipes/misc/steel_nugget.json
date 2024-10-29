@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_steel_block": {
+    "has_steel_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "metallurgyplus:steel_block"
+              "metallurgyplus:steel_ingot"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "metallurgyplus:steel_ingot"
+        "recipe": "metallurgyplus:steel_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_steel_block",
+      "has_steel_ingot",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "metallurgyplus:steel_ingot"
+      "metallurgyplus:steel_nugget"
     ]
   },
   "sends_telemetry_event": false
