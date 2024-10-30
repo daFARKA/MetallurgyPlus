@@ -160,7 +160,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
             return false;
         }
 
-        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return false;
@@ -188,7 +188,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         Optional<AlloySmelterRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
 
-        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return;

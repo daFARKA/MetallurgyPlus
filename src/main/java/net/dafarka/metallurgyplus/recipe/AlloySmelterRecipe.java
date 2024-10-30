@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.entity.UtilBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,11 +19,15 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<Ingredient> inputItems;
     private final NonNullList<Integer> inputAmounts;
     private final ItemStack output;
     private final ResourceLocation id;
+
+    private UtilRecipe utilRecipe = new UtilRecipe();
 
     public AlloySmelterRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
         this.inputItems = inputItems;
@@ -65,12 +70,21 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
         return output.copy();
     }
 
-    public NonNullList<Ingredient> getIngredientsCustom() {
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
         return inputItems;
     }
 
     public NonNullList<Integer> getInputAmounts() {
         return inputAmounts;
+    }
+
+    public int getInputAmountForIngredient(Ingredient ingredient) {
+        int index = utilRecipe.findIngredientIndex(inputItems, ingredient);
+        if (index != -1) {
+            return inputAmounts.get(index);
+        }
+        return 1;
     }
 
     @Override
@@ -132,7 +146,7 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
             pBuffer.writeInt(pRecipe.inputItems.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
-                Ingredient ingredient = pRecipe.getIngredientsCustom().get(i);
+                Ingredient ingredient = pRecipe.getIngredients().get(i);
                 ingredient.toNetwork(pBuffer);
                 pBuffer.writeInt(pRecipe.getInputAmounts().get(i));
             }

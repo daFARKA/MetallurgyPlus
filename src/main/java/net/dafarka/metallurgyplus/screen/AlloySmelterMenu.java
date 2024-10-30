@@ -18,6 +18,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class AlloySmelterMenu extends AbstractContainerMenu {
+    public static final int[][] INPUT_POSITIONS = {{8, 26}, {26, 26}, {8, 44}, {26, 44}, {50, 26}, {68, 26}, {50, 44}, {68, 44}};
+
+
     public final AlloySmelterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -39,15 +42,15 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 26));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 26, 26));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 8, 44));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 26, 44));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, INPUT_POSITIONS[0][0], INPUT_POSITIONS[0][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, INPUT_POSITIONS[1][0], INPUT_POSITIONS[1][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 2, INPUT_POSITIONS[2][0], INPUT_POSITIONS[2][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 3, INPUT_POSITIONS[3][0], INPUT_POSITIONS[3][1]));
 
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 50, 26));
-            this.addSlot(new SlotItemHandler(iItemHandler, 5, 68, 26));
-            this.addSlot(new SlotItemHandler(iItemHandler, 6, 50, 44));
-            this.addSlot(new SlotItemHandler(iItemHandler, 7, 68, 44));
+            this.addSlot(new SlotItemHandler(iItemHandler, 4, INPUT_POSITIONS[4][0], INPUT_POSITIONS[4][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 5, INPUT_POSITIONS[5][0], INPUT_POSITIONS[5][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 6, INPUT_POSITIONS[6][0], INPUT_POSITIONS[6][1]));
+            this.addSlot(new SlotItemHandler(iItemHandler, 7, INPUT_POSITIONS[7][0], INPUT_POSITIONS[7][1]));
 
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 116, 18));
             this.addSlot(new SlotItemHandler(iItemHandler, 9, 134, 18));
