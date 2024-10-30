@@ -24,5 +24,10 @@ run
 # Files from Forge MDK
 forge*changelog.txt
 
-/run-data/logs/
-/src/generated/
+/run-data
+/run
+/src/generated
+/images
+
+hexcode.py
+texture_generator.py
