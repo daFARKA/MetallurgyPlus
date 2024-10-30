@@ -58,8 +58,8 @@ def clearOutputFolder():
 if __name__ == "__main__":
     clearOutputFolder()
 
-    hex_color = '#b9f0f0'
-    name = "aluminum"
+    hex_color = '#706464'
+    name = "hafnium"
 
     input = './images/input/ingot.png'
     output = './images/output/' + name + '_ingot.png'

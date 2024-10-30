@@ -18,15 +18,9 @@ import java.util.Map;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
+    public static final Map<String, Integer> COLOR_MAP = new HashMap<>();
 
-    public static final RegistryObject<Item> BARIUM_INGOT = ITEMS.register("barium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> BERYLLIUM_INGOT = ITEMS.register("beryllium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> CADMIUM_INGOT = ITEMS.register("cadmium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> CHROMIUM_INGOT = ITEMS.register("chromium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> COBALT_INGOT = ITEMS.register("cobalt_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> GALLIUM_INGOT = ITEMS.register("gallium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> HAFNIUM_INGOT = ITEMS.register("hafnium_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> INDIUM_INGOT = ITEMS.register("indium_ingot", () -> new Item(new Item.Properties()));
+    /*public static final RegistryObject<Item> INDIUM_INGOT = ITEMS.register("indium_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> IRIDIUM_INGOT = ITEMS.register("iridium_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MAGNESIUM_INGOT = ITEMS.register("magnesium_ingot", () -> new Item(new Item.Properties()));
@@ -51,7 +45,7 @@ public class ModItems {
     public static final RegistryObject<Item> VANADIUM_INGOT = ITEMS.register("vanadium_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> YTTRIUM_INGOT = ITEMS.register("yttrium_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ZINC_INGOT = ITEMS.register("zinc_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> ZIRCONIUM_INGOT = ITEMS.register("zirconium_ingot", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ZIRCONIUM_INGOT = ITEMS.register("zirconium_ingot", () -> new Item(new Item.Properties()));*/
 
 
     public static final RegistryObject<Item> CLAY_MINERAL_RAW = ITEMS.register("clay_mineral_raw", () -> new Item(new Item.Properties()));
@@ -62,24 +56,32 @@ public class ModItems {
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
-        registerMaterial("steel");
-        registerMaterial("aluminum");
+        registerMaterial("steel", 0x707070);
+        registerMaterial("aluminum", 0xb9f0f0);
+        registerMaterial("barium", 0x8c8f85);
+        registerMaterial("beryllium", 0xb5b5b5);
+        registerMaterial("cadmium", 0x56549e);
+        registerMaterial("chromium", 0xededed);
+        registerMaterial("cobalt", 0x00108a);
+        registerMaterial("gallium", 0x84ada2);
+        registerMaterial("hafnium", 0x8f8281);
     }
 
     public static final String[] COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
-    private static void registerMaterial(String materialName) {
-
+    private static void registerMaterial(String materialName, int color) {
         for (String component : COMPONENT_NAMES) {
             String name = materialName + "_" + component;
             RegistryObject<Item> item = ITEMS.register(name, () ->
                 new Item(new Item.Properties())
             );
             MATERIAL_MAP.put(name, item);
+            COLOR_MAP.put(name, color);
         }
         String name = materialName + "_block";
         RegistryObject<Block> block = ModBlocks.registerBlock(name,
             () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
 
         ModBlocks.MATERIAL_BLOCKS_MAP.put(name, block);
+        ModBlocks.COLOR_MAP.put(name, color);
     }
 }

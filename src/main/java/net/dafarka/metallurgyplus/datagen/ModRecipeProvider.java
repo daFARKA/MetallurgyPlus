@@ -31,11 +31,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildMaterialRecipe(pWriter);
 
         oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
-        oreSmelting(pWriter, AL_SMELTABLES, RecipeCategory.MISC, ModItems.MATERIAL_MAP.get("aluminum_ingot").get(), 0.25f, 100, "aluminum");
+        //oreSmelting(pWriter, AL_SMELTABLES, RecipeCategory.MISC, ModItems.MATERIAL_MAP.get("aluminum_ingot").get(), 0.25f, 100, "aluminum");
     }
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CLAY_MINERAL_RAW.get());
-    private static final List<ItemLike> AL_SMELTABLES = List.of(ModItems.BAUXITE.get(), ModItems.MATERIAL_MAP.get("aluminum_raw").get());
+    //private static final List<ItemLike> AL_SMELTABLES = List.of(ModItems.BAUXITE.get(), ModItems.MATERIAL_MAP.get("aluminum_raw").get());
 
     private void buildMaterialRecipe(Consumer<FinishedRecipe> pWriter) {
         List<String> oldMaterials = new ArrayList<>();
