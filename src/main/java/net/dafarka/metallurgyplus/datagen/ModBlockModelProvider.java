@@ -29,10 +29,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
     }
 
     private void registerMaterialModel(String blockName) {
-        // Replace with your block registry name and texture location
         ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/base_block");
 
-        // Generate a cube model with tintindex for each face
         getBuilder(blockName)
             .parent(getExistingFile(mcLoc("block/cube_all")))
             .texture("all", texture)

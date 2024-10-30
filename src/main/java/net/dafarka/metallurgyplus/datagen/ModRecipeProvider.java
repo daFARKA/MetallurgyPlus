@@ -96,6 +96,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .define('X', ingot)
                     .unlockedBy(getHasName(ingot), has(ingot))
                     .save(pWriter);
+
+                oreSmelting(pWriter, List.of(raw), RecipeCategory.MISC, ingot, 0.25f, 100, "aluminum");
             }
         }
 

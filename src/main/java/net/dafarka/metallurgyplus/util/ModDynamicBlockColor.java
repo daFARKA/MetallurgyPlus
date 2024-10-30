@@ -15,7 +15,6 @@ public class ModDynamicBlockColor implements BlockColor {
     @Override
     public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos, int pTintIndex) {
         if (pTintIndex == 0) {
-            // Return the color for the contents based on item type
             String fullName = pState.getBlock().getDescriptionId();
             return ModBlocks.COLOR_MAP.get(fullName.split("\\.")[2]) != null ? ModBlocks.COLOR_MAP.get(fullName.split("\\.")[2]) : -1;
         }

@@ -33,8 +33,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void materialBlocksWithItem() {
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
-            //String blockName = block.get().getDescriptionId().split("\\.")[2];
-            //generateCustomBlockModelWithItem(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(MetallurgyPlus.MODID, blockName)), blockName);
             simpleBlockState(block.get());
         }
     }
@@ -50,10 +48,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     public void simpleBlockState(Block block) {
         String blockName = block.getDescriptionId().split("\\.")[2];
-        // Use the mod ID and the model name to construct the model path
         ResourceLocation model = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
 
-        // Generate a simple blockstate with a single variant
         getVariantBuilder(block).forAllStates(state ->
             ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(model))

@@ -13,7 +13,6 @@ public class ModDynamicItemColor implements ItemColor {
     @Override
     public int getColor(ItemStack pStack, int pTintIndex) {
         if (pTintIndex == 0) {
-            // Return the color for the contents based on item type
             String fullName = pStack.getDescriptionId();
             String name = fullName.split("\\.")[2];
             if (ModItems.COLOR_MAP.get(name) != null) {
