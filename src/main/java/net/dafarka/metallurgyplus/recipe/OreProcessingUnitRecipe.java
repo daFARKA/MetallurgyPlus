@@ -142,9 +142,8 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
 
         @Override
         public @Nullable OreProcessingUnitRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            int inputSize = pBuffer.readInt();
-            NonNullList<Ingredient> inputs = NonNullList.withSize(inputSize, Ingredient.EMPTY);
-            NonNullList<Integer> inputAmounts = NonNullList.withSize(inputSize, 1);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
+            NonNullList<Integer> inputAmounts = NonNullList.withSize(pBuffer.readInt(), 1);
 
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromNetwork(pBuffer));
@@ -153,9 +152,13 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
 
             ItemStack output = pBuffer.readItem();
 
-            NonNullList<ItemStack> extraOutputs = NonNullList.withSize(pBuffer.readInt(), ItemStack.EMPTY);
-            for (int i = 0; i < extraOutputs.size(); i++) {
-                extraOutputs.set(i, pBuffer.readItem());
+            int extraOutputsSize = pBuffer.readInt();
+            NonNullList<ItemStack> extraOutputs = null;
+            if (extraOutputsSize > 0) {
+                extraOutputs = NonNullList.withSize(extraOutputsSize, ItemStack.EMPTY);
+                for (int i = 0; i < extraOutputs.size(); i++) {
+                    extraOutputs.set(i, pBuffer.readItem());
+                }
             }
 
             return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, pRecipeId);
@@ -164,6 +167,7 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, OreProcessingUnitRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
+            pBuffer.writeInt(pRecipe.inputAmounts.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
                 Ingredient ingredient = pRecipe.getIngredients().get(i);
@@ -173,9 +177,14 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
 
             pBuffer.writeItemStack(pRecipe.getResultItem(null), false);
 
-            pBuffer.writeInt(pRecipe.getExtraOutputs().size());
-            for (ItemStack extraResult : pRecipe.getExtraOutputs()) {
-                pBuffer.writeItemStack(extraResult, false);
+            NonNullList<ItemStack> extraOutputs = pRecipe.getExtraOutputs();
+            if (extraOutputs != null) {
+                pBuffer.writeInt(extraOutputs.size());
+                for (ItemStack extraResult : pRecipe.getExtraOutputs()) {
+                    pBuffer.writeItemStack(extraResult, false);
+                }
+            } else {
+                pBuffer.writeInt(0);
             }
         }
     }

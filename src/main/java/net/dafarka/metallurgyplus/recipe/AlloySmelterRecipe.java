@@ -142,6 +142,7 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, AlloySmelterRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
+            pBuffer.writeInt(pRecipe.inputAmounts.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
                 Ingredient ingredient = pRecipe.getIngredients().get(i);

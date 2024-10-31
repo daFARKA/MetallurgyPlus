@@ -33,7 +33,7 @@ public class ModItems {
         registerMaterial("barium", 0x8c8f85);
         registerMaterial("beryllium", 0xb5b5b5);
         registerMaterial("cadmium", 0x56549e);
-        registerMaterial("chromium", 0xededed);
+        registerMaterial("chromium", 0xf5fffb);
         registerMaterial("cobalt", 0x00108a);
         registerMaterial("gallium", 0x84ada2);
         registerMaterial("hafnium", 0x8f8281);
