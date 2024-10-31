@@ -39,10 +39,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             new ResourceLocation(MetallurgyPlus.MODID,"item/" + item.getId().getPath()));
     }
 
-    private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item, String compoundName) {
+    private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item, String componentName) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
-            new ResourceLocation(MetallurgyPlus.MODID,"item/base_" + compoundName));
+            new ResourceLocation(MetallurgyPlus.MODID,"item/base_" + componentName));
     }
 
     private void generateMaterials() {

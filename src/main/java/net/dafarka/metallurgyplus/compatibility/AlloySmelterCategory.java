@@ -18,8 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 public class AlloySmelterCategory implements IRecipeCategory<AlloySmelterRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(MetallurgyPlus.MODID, "alloy_smelter");
     public static final ResourceLocation TEXTURE = new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/alloy_smelter_gui.png");
@@ -32,7 +30,7 @@ public class AlloySmelterCategory implements IRecipeCategory<AlloySmelterRecipe>
     private static final int OFFSET = 4;
 
     public AlloySmelterCategory(IGuiHelper iGuiHelper) {
-        this.background = iGuiHelper.createDrawable(TEXTURE, OFFSET, OFFSET, 170, 77);
+        this.background = iGuiHelper.createDrawable(TEXTURE, OFFSET, OFFSET, 169, 77);
         this.icon = iGuiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.ALLOY_SMELTER.get()));
     }
 

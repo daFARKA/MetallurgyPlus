@@ -55,26 +55,6 @@ public class UtilBlockEntity {
     }
 
     /**
-     * Gets an item from ForgeRegistries using the name.
-     *
-     * The respecting item is given by a priority system. First ModItems are returned,
-     * if no ModItem exists with that name return a vanilla minecraft item with that name
-     * if no vanilla item exists with that name return air. As it is very harmless.
-     *
-     * @param name the name of the item to return
-     *
-     * @return an Item with the given name, air otherwise.
-     *
-     * */
-    public Item getItem(String name) {
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(MetallurgyPlus.MODID, name));
-        if (item == ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "air"))) {
-            item = ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", name));
-        }
-        return item;
-    }
-
-    /**
      * Gets the first slot that contains the ingredient.
      *
      * If startSlot is equal to endSlot, there is only one input slot.

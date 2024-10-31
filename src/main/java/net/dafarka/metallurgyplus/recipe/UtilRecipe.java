@@ -5,7 +5,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class UtilRecipe {
 
-
     /**
      * Finds the first index of an ingredient.
      *

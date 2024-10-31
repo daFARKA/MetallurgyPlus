@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(AlloySmelterMenu.ALLOY_SMELTER_SLOTS_COUNT);
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -42,7 +42,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
 
     private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(this.itemHandler);
 
-    private final int INPUT_SLOT_COUNT = 8;
+    private final int INPUT_SLOT_COUNT = AlloySmelterMenu.INPUT_POSITIONS.length;
     private int outputSlot;
 
     public AlloySmelterBlockEntity(BlockPos pPos,

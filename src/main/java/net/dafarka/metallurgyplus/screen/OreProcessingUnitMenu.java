@@ -21,6 +21,11 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class OreProcessingUnitMenu extends AbstractContainerMenu {
+    public static final int[] INPUT_POSITION = {8, 39};
+    public static final int[][] OUTPUT_POSITIONS = {{62, 21}, {80, 21}, {98, 21}, {116, 21}, {134, 21}, {152, 21},
+        {62, 39}, {80, 39}, {98, 39}, {116, 39}, {134, 39}, {152, 39}, {62, 57}, {80, 57}, {98, 57}, {116, 57}, {134, 57}, {152, 57}};
+    public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 1 + OUTPUT_POSITIONS.length;
+
     public final OreProcessingUnitBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -31,7 +36,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
 
     public OreProcessingUnitMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.ORE_PROCESSING_MENU.get(), pContainerId);
-        checkContainerSize(inv, MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT);
+        checkContainerSize(inv, ORE_PROCESSING_UNIT_SLOTS_COUNT);
         blockEntity = ((OreProcessingUnitBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
@@ -40,29 +45,11 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 39));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, INPUT_POSITION[0], INPUT_POSITION[1]));
 
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 62, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 80, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 98, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 116, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 5, 134, 21));
-            this.addSlot(new SlotItemHandler(iItemHandler, 6, 152, 21));
-
-            this.addSlot(new SlotItemHandler(iItemHandler, 7, 62, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 8, 80, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 9, 98, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 10, 116, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 11, 134, 39));
-            this.addSlot(new SlotItemHandler(iItemHandler, 12, 152, 39));
-
-
-            this.addSlot(new SlotItemHandler(iItemHandler, 13, 62, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 14, 80, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 15, 98, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 16, 116, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 17, 134, 57));
-            this.addSlot(new SlotItemHandler(iItemHandler, 18, 152, 57));
+            for (int i = 0; i < OUTPUT_POSITIONS.length; i++) {
+                this.addSlot(new SlotItemHandler(iItemHandler, i + 1, OUTPUT_POSITIONS[i][0], OUTPUT_POSITIONS[i][1]));
+            }
         });
 
         addDataSlots(data);
@@ -96,7 +83,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = ORE_PROCESSING_UNIT_SLOTS_COUNT;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

@@ -41,12 +41,6 @@ public class MetallurgyPlus
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
-    public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 19;
-    public static final int ALLOY_SMELTER_SLOTS_COUNT = 17;
-
-
-
     public MetallurgyPlus()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

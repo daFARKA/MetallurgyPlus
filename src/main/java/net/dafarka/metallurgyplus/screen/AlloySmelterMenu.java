@@ -19,7 +19,8 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class AlloySmelterMenu extends AbstractContainerMenu {
     public static final int[][] INPUT_POSITIONS = {{8, 26}, {26, 26}, {8, 44}, {26, 44}, {50, 26}, {68, 26}, {50, 44}, {68, 44}};
-
+    public static final int[][] OUTPUT_POSITIONS = {{116, 18}, {134, 18}, {152, 18}, {116, 36}, {134, 36}, {152, 36}, {116, 54}, {134, 54}, {152, 54}};
+    public static final int ALLOY_SMELTER_SLOTS_COUNT = INPUT_POSITIONS.length + OUTPUT_POSITIONS.length;
 
     public final AlloySmelterBlockEntity blockEntity;
     private final Level level;
@@ -33,7 +34,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
 
     public AlloySmelterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.ALLOY_SMELTER_MENU.get(), pContainerId);
-        checkContainerSize(inv, MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT);
+        checkContainerSize(inv, ALLOY_SMELTER_SLOTS_COUNT);
         blockEntity = ((AlloySmelterBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
@@ -42,25 +43,13 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, INPUT_POSITIONS[0][0], INPUT_POSITIONS[0][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, INPUT_POSITIONS[1][0], INPUT_POSITIONS[1][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, INPUT_POSITIONS[2][0], INPUT_POSITIONS[2][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, INPUT_POSITIONS[3][0], INPUT_POSITIONS[3][1]));
+            for (int i = 0; i < INPUT_POSITIONS.length; i++) {
+                this.addSlot(new SlotItemHandler(iItemHandler, i, INPUT_POSITIONS[i][0], INPUT_POSITIONS[i][1]));
+            }
 
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, INPUT_POSITIONS[4][0], INPUT_POSITIONS[4][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 5, INPUT_POSITIONS[5][0], INPUT_POSITIONS[5][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 6, INPUT_POSITIONS[6][0], INPUT_POSITIONS[6][1]));
-            this.addSlot(new SlotItemHandler(iItemHandler, 7, INPUT_POSITIONS[7][0], INPUT_POSITIONS[7][1]));
-
-            this.addSlot(new SlotItemHandler(iItemHandler, 8, 116, 18));
-            this.addSlot(new SlotItemHandler(iItemHandler, 9, 134, 18));
-            this.addSlot(new SlotItemHandler(iItemHandler, 10, 152, 18));
-            this.addSlot(new SlotItemHandler(iItemHandler, 11, 116, 36));
-            this.addSlot(new SlotItemHandler(iItemHandler, 12, 134, 36));
-            this.addSlot(new SlotItemHandler(iItemHandler, 13, 152, 36));
-            this.addSlot(new SlotItemHandler(iItemHandler, 14, 116, 54));
-            this.addSlot(new SlotItemHandler(iItemHandler, 15, 134, 54));
-            this.addSlot(new SlotItemHandler(iItemHandler, 16, 152, 54));
+            for (int i = 0; i < OUTPUT_POSITIONS.length; i++) {
+                this.addSlot(new SlotItemHandler(iItemHandler, i + INPUT_POSITIONS.length, OUTPUT_POSITIONS[i][0], OUTPUT_POSITIONS[i][1]));
+            }
         });
 
         addDataSlots(data);
@@ -95,7 +84,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = MetallurgyPlus.ALLOY_SMELTER_SLOTS_COUNT;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = ALLOY_SMELTER_SLOTS_COUNT;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

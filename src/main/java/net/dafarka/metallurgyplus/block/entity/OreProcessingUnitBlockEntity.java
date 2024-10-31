@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(MetallurgyPlus.ORE_PROCESSING_UNIT_SLOTS_COUNT);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(OreProcessingUnitMenu.ORE_PROCESSING_UNIT_SLOTS_COUNT);
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -161,7 +161,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
             return false;
         }
 
-        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return false;
@@ -198,7 +198,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         Optional<OreProcessingUnitRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
 
-        NonNullList<Ingredient> ingredients = recipe.get().getIngredientsCustom();
+        NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return;

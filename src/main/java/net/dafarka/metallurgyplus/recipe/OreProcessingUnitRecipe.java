@@ -25,6 +25,8 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<ItemStack> extraOutputs;
     private final ResourceLocation id;
 
+    private UtilRecipe utilRecipe = new UtilRecipe();
+
     public OreProcessingUnitRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs,
                                    ResourceLocation id) {
         this.inputItems = inputItems;
@@ -72,8 +74,17 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
         return extraOutputs;
     }
 
-    public NonNullList<Ingredient> getIngredientsCustom() {
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
         return inputItems;
+    }
+
+    public int getInputAmountForIngredient(Ingredient ingredient) {
+        int index = utilRecipe.findIngredientIndex(inputItems, ingredient);
+        if (index != -1) {
+            return inputAmounts.get(index);
+        }
+        return 1;
     }
 
     public NonNullList<Integer> getInputAmounts() {
@@ -155,7 +166,7 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
             pBuffer.writeInt(pRecipe.inputItems.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
-                Ingredient ingredient = pRecipe.getIngredientsCustom().get(i);
+                Ingredient ingredient = pRecipe.getIngredients().get(i);
                 ingredient.toNetwork(pBuffer);
                 pBuffer.writeInt(pRecipe.getInputAmounts().get(i));
             }

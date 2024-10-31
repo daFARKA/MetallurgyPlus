@@ -104,12 +104,10 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
 
     public static class Type implements RecipeType<AlloySmelterRecipe> {
         public static final Type INSTANCE = new Type();
-        public static final String ID = "alloy_smelter";
     }
 
-    public static class Serializer implements  RecipeSerializer<AlloySmelterRecipe> {
+    public static class Serializer implements RecipeSerializer<AlloySmelterRecipe> {
         public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID = new ResourceLocation(MetallurgyPlus.MODID, "alloy_smelter");
 
         @Override
         public AlloySmelterRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
