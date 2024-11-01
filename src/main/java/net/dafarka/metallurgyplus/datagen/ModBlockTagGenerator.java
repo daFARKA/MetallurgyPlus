@@ -12,6 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
@@ -23,11 +24,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-        materialBlocksAddTags();
-
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .add(ModBlocks.BAUXITE_ORE.get(),
-                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
+        mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
+        oreBlocksAddTags();
+        mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
@@ -36,24 +35,25 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());
 
-        this.tag(BlockTags.NEEDS_STONE_TOOL)
-            .add(ModBlocks.BAUXITE_ORE.get(),
-                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
-
         this.tag(BlockTags.NEEDS_IRON_TOOL)
             .add(ModBlocks.CLAY_MINERAL.get());
 
         this.tag(Tags.Blocks.ORES)
-            .add(ModBlocks.CLAY_MINERAL.get(),
-                ModBlocks.BAUXITE_ORE.get(),
-                ModBlocks.BAUXITE_ORE_DEEPSLATE.get());
-
+            .add(ModBlocks.CLAY_MINERAL.get());
     }
 
-    private void materialBlocksAddTags() {
-        for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
+    private void mapBlocksAddTags(Map<String, RegistryObject<Block>> blockMap) {
+        for (RegistryObject<Block> block : blockMap.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(block.get());
+        }
+    }
+
+    private void oreBlocksAddTags() {
+        for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ore.get());
+            this.tag(BlockTags.NEEDS_IRON_TOOL).add(ore.get());
+            this.tag(Tags.Blocks.ORES).add(ore.get());
         }
     }
 }

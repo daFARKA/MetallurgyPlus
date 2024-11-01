@@ -18,18 +18,23 @@ import java.util.Map;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
-    public static final Map<String, Integer> COLOR_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
+    public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
 
     public static final RegistryObject<Item> CLAY_MINERAL_RAW = ITEMS.register("clay_mineral_raw", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> BAUXITE = ITEMS.register("bauxite", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> KAOLINITE = ITEMS.register("kaolinite", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> SILICON = ITEMS.register("silicon", () -> new Item(new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
-        registerMaterial("steel", 0x707070);
+
+        // Register Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
+        registerMaterial("antimony", 0x5465c4);
         registerMaterial("barium", 0x8c8f85);
         registerMaterial("beryllium", 0xb5b5b5);
         registerMaterial("cadmium", 0x56549e);
@@ -63,23 +68,70 @@ public class ModItems {
         registerMaterial("yttrium", 0xdbdec1);
         registerMaterial("zinc", 0xc7fff8);
         registerMaterial("zirconium", 0x705a43);
+
+        // Register Ores
+        registerOre("gibbsite", 0x52695a);
+        registerOre("bauxite", 0x916b4d);
+
+        // Register Alloys
+        registerAlloy("steel", 0x707070);
     }
 
-    public static final String[] COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
+    public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
     private static void registerMaterial(String materialName, int color) {
-        for (String component : COMPONENT_NAMES) {
+        for (String component : MATERIAL_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
             RegistryObject<Item> item = ITEMS.register(name, () ->
                 new Item(new Item.Properties())
             );
             MATERIAL_MAP.put(name, item);
-            COLOR_MAP.put(name, color);
+            MATERIAL_COLOR_MAP.put(name, color);
         }
         String name = materialName + "_block";
         RegistryObject<Block> block = ModBlocks.registerBlock(name,
             () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
 
         ModBlocks.MATERIAL_BLOCKS_MAP.put(name, block);
-        ModBlocks.COLOR_MAP.put(name, color);
+        ModBlocks.MATERIAL_COLOR_MAP.put(name, color);
+    }
+
+    public static final String[] ORE_COMPONENT_NAMES = {"raw", "dust"};
+    public static final String[] ORE_BASE_NAME = {"stone", "deepslate"};
+    private static void registerOre(String oreName, int color) {
+        for (String component : ORE_COMPONENT_NAMES) {
+            String name = oreName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            ORE_MAP.put(name, item);
+            ORE_COLOR_MAP.put(name, color);
+        }
+
+        for (String base : ORE_BASE_NAME) {
+            String name = oreName + "_" + base + "_block";
+            RegistryObject<Block> block = ModBlocks.registerBlock(name,
+                () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
+
+            ModBlocks.ORE_BLOCKS_MAP.put(name, block);
+            ModBlocks.ORE_COLOR_MAP.put(name, color);
+        }
+    }
+
+    public static final String[] ALLOY_COMPONENT_NAMES = {"ingot", "gear", "nugget", "plate", "rod"};
+    private static void registerAlloy(String materialName, int color) {
+        for (String component : ALLOY_COMPONENT_NAMES) {
+            String name = materialName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            ALLOY_MAP.put(name, item);
+            ALLOY_COLOR_MAP.put(name, color);
+        }
+        String name = materialName + "_block";
+        RegistryObject<Block> block = ModBlocks.registerBlock(name,
+            () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
+
+        ModBlocks.ALLOY_BLOCKS_MAP.put(name, block);
+        ModBlocks.ALLOY_COLOR_MAP.put(name, color);
     }
 }

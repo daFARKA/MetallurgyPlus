@@ -24,8 +24,8 @@ public class ModConfiguredFeatures {
         RuleTest deepslateReplaceables = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
 
         List<OreConfiguration.TargetBlockState> overworldBauxiteOres = List.of(OreConfiguration.target(stoneReplaceables,
-                ModBlocks.BAUXITE_ORE.get().defaultBlockState()),
-            OreConfiguration.target(deepslateReplaceables, ModBlocks.BAUXITE_ORE_DEEPSLATE.get().defaultBlockState()));
+                ModBlocks.ORE_BLOCKS_MAP.get("bauxite_stone_block").get().defaultBlockState()),
+            OreConfiguration.target(deepslateReplaceables, ModBlocks.ORE_BLOCKS_MAP.get("bauxite_deepslate_block").get().defaultBlockState()));
 
         register(context, OVERWORLD_BAUXITE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldBauxiteOres, 9));
     }

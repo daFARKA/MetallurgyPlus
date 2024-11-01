@@ -9,12 +9,16 @@ import net.dafarka.metallurgyplus.recipe.ModRecipes;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
 import net.dafarka.metallurgyplus.screen.ModMenuTypes;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
-import net.dafarka.metallurgyplus.util.ModDynamicBlockColor;
-import net.dafarka.metallurgyplus.util.ModDynamicItemColor;
+import net.dafarka.metallurgyplus.util.color.ModDynamicAlloyBlockColor;
+import net.dafarka.metallurgyplus.util.color.ModDynamicMaterialBlockColor;
+import net.dafarka.metallurgyplus.util.color.ModDynamicItemColor;
+import net.dafarka.metallurgyplus.util.color.ModDynamicOreBlockColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -96,6 +100,10 @@ public class MetallurgyPlus
             MenuScreens.register(ModMenuTypes.ORE_PROCESSING_MENU.get(), OreProcessingUnitScreen::new);
             MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
 
+            for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
+                ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.translucent());
+            }
+
             ItemColors itemColors = Minecraft.getInstance().getItemColors();
             for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
                 itemColors.register(new ModDynamicItemColor(), item.get());
@@ -103,7 +111,13 @@ public class MetallurgyPlus
 
             BlockColors blockColors = Minecraft.getInstance().getBlockColors();
             for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
-                blockColors.register(new ModDynamicBlockColor(), block.get());
+                blockColors.register(new ModDynamicMaterialBlockColor(), block.get());
+            }
+            for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
+                blockColors.register(new ModDynamicOreBlockColor(), block.get());
+            }
+            for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
+                blockColors.register(new ModDynamicAlloyBlockColor(), block.get());
             }
         }
     }

@@ -54,13 +54,13 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
             if (!oldMaterials.contains(currentMaterialName)) {
                 oldMaterials.add(currentMaterialName);
 
-                Item ingot = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[0]).get();
-                Item dust = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[1]).get();
-                Item gear = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[2]).get();
-                Item nugget = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[3]).get();
-                Item plate = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[4]).get();
-                Item rod = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[5]).get();
-                Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.COMPONENT_NAMES[6]).get();
+                Item ingot = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[0]).get();
+                Item dust = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[1]).get();
+                Item gear = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[2]).get();
+                Item nugget = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[3]).get();
+                Item plate = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[4]).get();
+                Item rod = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[5]).get();
+                Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[6]).get();
 
                 inputSize = 2;
                 inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));

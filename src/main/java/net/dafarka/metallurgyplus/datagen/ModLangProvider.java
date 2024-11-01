@@ -4,10 +4,13 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Map;
 
 public class ModLangProvider extends LanguageProvider {
 
@@ -31,19 +34,40 @@ public class ModLangProvider extends LanguageProvider {
 
         add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
 
-        addMaterialsTranslations();
+        addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
+        addOreTranslations();
+        addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
     }
 
-    private void addMaterialsTranslations() {
-        for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
+    private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = fullName.split("_")[0] + " " + fullName.split("_")[1];
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
 
-        for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
+        for (RegistryObject<Block> block : blockMap.values()) {
             String fullName = block.getId().getPath();
             String name = fullName.split("_")[0] + " " + fullName.split("_")[1];
+            add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+        }
+    }
+
+    private void addOreTranslations() {
+        for (RegistryObject<Item> item : ModItems.ORE_MAP.values()) {
+            String fullName = item.getId().getPath();
+            String name = fullName.split("_")[0] + " " + fullName.split("_")[1];
+            add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+        }
+
+        for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
+            String fullName = block.getId().getPath();
+            String name = fullName.split("_")[0] + " Ore";
+            for (int i = 1; i < ModItems.ORE_BASE_NAME.length; i++) {
+                if (fullName.split("_")[1].equals(ModItems.ORE_BASE_NAME[i])) {
+                    name = fullName.split("_")[0] + " " + ModItems.ORE_BASE_NAME[i] + " Ore";
+                }
+            }
             add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }

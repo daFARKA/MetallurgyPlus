@@ -22,16 +22,14 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MetallurgyPlus.MODID);
     public static final Map<String, RegistryObject<Block>> MATERIAL_BLOCKS_MAP = new HashMap<>();
-    public static final Map<String, Integer> COLOR_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Block>> ORE_BLOCKS_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Block>> ALLOY_BLOCKS_MAP = new HashMap<>();
+    public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
 
     public static final RegistryObject<Block> CLAY_MINERAL = registerBlock("clay_mineral",
         () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));
-
-    public static final RegistryObject<Block> BAUXITE_ORE = registerBlock("bauxite_ore",
-        () -> new Block(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.STONE)));
-
-    public static final RegistryObject<Block> BAUXITE_ORE_DEEPSLATE = registerBlock("bauxite_ore_deepslate",
-        () -> new Block(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.DEEPSLATE)));
 
     public static final RegistryObject<Block> ORE_PROCESSING_UNIT = registerBlock("ore_processing_unit",
         () -> new OreProcessingUnitBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));

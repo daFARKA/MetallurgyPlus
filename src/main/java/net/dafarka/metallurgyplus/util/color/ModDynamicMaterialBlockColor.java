@@ -1,4 +1,4 @@
-package net.dafarka.metallurgyplus.util;
+package net.dafarka.metallurgyplus.util.color;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.minecraft.client.color.block.BlockColor;
@@ -7,16 +7,16 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class ModDynamicBlockColor implements BlockColor {
+public class ModDynamicMaterialBlockColor implements BlockColor {
 
 
-    public ModDynamicBlockColor() {}
+    public ModDynamicMaterialBlockColor() {}
 
     @Override
     public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos, int pTintIndex) {
         if (pTintIndex == 0) {
             String fullName = pState.getBlock().getDescriptionId();
-            return ModBlocks.COLOR_MAP.get(fullName.split("\\.")[2]) != null ? ModBlocks.COLOR_MAP.get(fullName.split("\\.")[2]) : -1;
+            return ModBlocks.MATERIAL_COLOR_MAP.get(fullName.split("\\.")[2]) != null ? ModBlocks.MATERIAL_COLOR_MAP.get(fullName.split("\\.")[2]) : -1;
         }
         return -1;
     }

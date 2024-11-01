@@ -20,30 +20,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        materialBlocksWithItem();
+        simpleBlocksWithItem();
 
         blockWithItem(ModBlocks.CLAY_MINERAL);
-        blockWithItem(ModBlocks.BAUXITE_ORE);
-        blockWithItem(ModBlocks.BAUXITE_ORE_DEEPSLATE);
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
     }
 
-    private void materialBlocksWithItem() {
+    private void simpleBlocksWithItem() {
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
             simpleBlockState(block.get());
         }
-    }
 
-    private void generateCustomBlockModelWithItem(Block block, String modelName) {
-        // Create a custom model with "cube_all" parent and specified texture path
-        ModelFile model = models().withExistingParent(modelName, "minecraft:block/cube_all")
-            .texture("all", MetallurgyPlus.MODID + ":block/base_block");
+        for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
+            simpleBlockState(block.get());
+        }
 
-        // Link the block state to the custom model
-        simpleBlockWithItem(block, model);
+        for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
+            simpleBlockState(block.get());
+        }
     }
 
     public void simpleBlockState(Block block) {

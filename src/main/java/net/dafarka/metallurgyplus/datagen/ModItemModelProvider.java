@@ -16,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -24,10 +25,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        generateMaterials();
+        generateMaps(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
+        generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP);
+        generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
 
         simpleItem(ModItems.CLAY_MINERAL_RAW);
-        simpleItem(ModItems.BAUXITE);
         simpleItem(ModItems.KAOLINITE);
 
         simpleItem(ModItems.SILICON);
@@ -45,23 +47,6 @@ public class ModItemModelProvider extends ItemModelProvider {
             new ResourceLocation(MetallurgyPlus.MODID,"item/base_" + componentName));
     }
 
-    private void generateMaterials() {
-        for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
-            String currentName = item.getId().getPath();
-            String currentComponentName = currentName.split("_")[1];
-            simpleBaseItem(item, currentComponentName);
-        }
-
-        generateMaterialBlockItems();
-    }
-
-    private void generateMaterialBlockItems() {
-        for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
-            String blockName = block.get().getDescriptionId().split("\\.")[2];
-            simpleBlockItemModel(blockName);
-        }
-    }
-
     public void simpleBlockItemModel(String modelName) {
         getBuilder(modelName)
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)))
@@ -71,5 +56,19 @@ public class ModItemModelProvider extends ItemModelProvider {
             .translation(0, 1.5f, -2.75f)
             .scale(0.375f, 0.375f, 0.375f)
             .end();
+    }
+
+
+    private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            String currentName = item.getId().getPath();
+            String currentComponentName = currentName.split("_")[1];
+            simpleBaseItem(item, currentComponentName);
+        }
+
+        for (RegistryObject<Block> block : blockMap.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            simpleBlockItemModel(blockName);
+        }
     }
 }

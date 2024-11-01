@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -18,11 +19,21 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-        registerMaterialModels();
+        registerDefaultModels();
     }
 
-    private void registerMaterialModels() {
+    private void registerDefaultModels() {
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerMaterialModel(blockName);
+        }
+
+        for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerOreModel(blockName);
+        }
+
+        for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerMaterialModel(blockName);
         }
@@ -43,6 +54,42 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .face(Direction.WEST).tintindex(0).texture("#all").end()
             .face(Direction.UP).tintindex(0).texture("#all").end()
             .face(Direction.DOWN).tintindex(0).texture("#all").end()
+            .end();
+    }
+
+    private void registerOreModel(String blockName) {
+        ResourceLocation textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/stone");
+        for (int i = 1; i < ModItems.ORE_BASE_NAME.length; i++) {
+            if (blockName.split("_")[1].equals(ModItems.ORE_BASE_NAME[i])) {
+                textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/" + ModItems.ORE_BASE_NAME[i]);
+            }
+        }
+        ResourceLocation textureOreLayer = new ResourceLocation(MetallurgyPlus.MODID, "block/ore_layer");
+
+        getBuilder(blockName)
+            .parent(getExistingFile(mcLoc("block/cube_all")))
+            .texture("particle", textureBase)
+            .texture("layer0", textureBase)
+            .texture("layer1", textureOreLayer)
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).tintindex(1).texture("#layer0").end()
+            .face(Direction.SOUTH).tintindex(1).texture("#layer0").end()
+            .face(Direction.EAST).tintindex(1).texture("#layer0").end()
+            .face(Direction.WEST).tintindex(1).texture("#layer0").end()
+            .face(Direction.UP).tintindex(1).texture("#layer0").end()
+            .face(Direction.DOWN).tintindex(1).texture("#layer0").end()
+            .end()
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).tintindex(0).texture("#layer1").end()
+            .face(Direction.SOUTH).tintindex(0).texture("#layer1").end()
+            .face(Direction.EAST).tintindex(0).texture("#layer1").end()
+            .face(Direction.WEST).tintindex(0).texture("#layer1").end()
+            .face(Direction.UP).tintindex(0).texture("#layer1").end()
+            .face(Direction.DOWN).tintindex(0).texture("#layer1").end()
             .end();
     }
 
