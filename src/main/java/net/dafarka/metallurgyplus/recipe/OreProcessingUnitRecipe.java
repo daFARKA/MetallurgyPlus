@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,16 +24,19 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<Integer> inputAmounts;
     private final ItemStack output;
     private final NonNullList<ItemStack> extraOutputs;
+    private final NonNullList<Double> extraOutputChances;
     private final ResourceLocation id;
 
     private UtilRecipe utilRecipe = new UtilRecipe();
+    private static Utility utility = new Utility();
 
     public OreProcessingUnitRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs,
-                                   ResourceLocation id) {
+                                   NonNullList<Double> extraOutputChances, ResourceLocation id) {
         this.inputItems = inputItems;
         this.inputAmounts = inputAmounts;
         this.output = output;
         this.extraOutputs = extraOutputs;
+        this.extraOutputChances = extraOutputChances;
         this.id = id;
     }
 
@@ -72,6 +76,10 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
 
     public NonNullList<ItemStack> getExtraOutputs() {
         return extraOutputs;
+    }
+
+    public NonNullList<Double> getExtraOutputChances() {
+        return extraOutputChances;
     }
 
     @Override
@@ -129,21 +137,28 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
             }
 
             NonNullList<ItemStack> extraOutputs = null;
+            NonNullList<Double> extraOutputChances = null;
             if (pSerializedRecipe.has("extra_outputs")) {
                 JsonArray extraOutputsJson = GsonHelper.getAsJsonArray(pSerializedRecipe, "extra_outputs");
                 extraOutputs = NonNullList.withSize(extraOutputsJson.size(), ItemStack.EMPTY);
+                extraOutputChances = NonNullList.withSize(extraOutputsJson.size(), 1.0);
                 for (int i = 0; i < extraOutputs.size(); i++) {
-                    extraOutputs.set(i, ShapedRecipe.itemStackFromJson((JsonObject) extraOutputsJson.get(i)));
+                    extraOutputs.set(i, new ItemStack(utility.getItem(extraOutputsJson.get(i).getAsJsonObject().get("item").getAsString().split(":")[1]),
+                        extraOutputsJson.get(i).getAsJsonObject().get("count").getAsInt()));
+                    if (extraOutputsJson.get(i).getAsJsonObject().has("chance")) {
+                        extraOutputChances.set(i, extraOutputsJson.get(i).getAsJsonObject().get("chance").getAsDouble());
+                    }
                 }
             }
 
-            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, pRecipeId);
+            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
         }
 
         @Override
         public @Nullable OreProcessingUnitRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
-            NonNullList<Integer> inputAmounts = NonNullList.withSize(pBuffer.readInt(), 1);
+            int inputSize = pBuffer.readInt();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(inputSize, Ingredient.EMPTY);
+            NonNullList<Integer> inputAmounts = NonNullList.withSize(inputSize, 1);
 
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromNetwork(pBuffer));
@@ -154,20 +169,22 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
 
             int extraOutputsSize = pBuffer.readInt();
             NonNullList<ItemStack> extraOutputs = null;
+            NonNullList<Double> extraOutputChances = null;
             if (extraOutputsSize > 0) {
                 extraOutputs = NonNullList.withSize(extraOutputsSize, ItemStack.EMPTY);
-                for (int i = 0; i < extraOutputs.size(); i++) {
+                extraOutputChances = NonNullList.withSize(extraOutputsSize, 1.0);
+                for (int i = 0; i < extraOutputsSize; i++) {
                     extraOutputs.set(i, pBuffer.readItem());
+                    extraOutputChances.set(i, pBuffer.readDouble());
                 }
             }
 
-            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, pRecipeId);
+            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, OreProcessingUnitRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
-            pBuffer.writeInt(pRecipe.inputAmounts.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
                 Ingredient ingredient = pRecipe.getIngredients().get(i);
@@ -178,10 +195,14 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
             pBuffer.writeItemStack(pRecipe.getResultItem(null), false);
 
             NonNullList<ItemStack> extraOutputs = pRecipe.getExtraOutputs();
+            NonNullList<Double> extraOutputChances = pRecipe.getExtraOutputChances();
             if (extraOutputs != null) {
                 pBuffer.writeInt(extraOutputs.size());
+                int i = 0;
                 for (ItemStack extraResult : pRecipe.getExtraOutputs()) {
                     pBuffer.writeItemStack(extraResult, false);
+                    pBuffer.writeDouble(extraOutputChances.get(i));
+                    i++;
                 }
             } else {
                 pBuffer.writeInt(0);

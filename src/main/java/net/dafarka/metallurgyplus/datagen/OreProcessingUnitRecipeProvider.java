@@ -64,13 +64,13 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
                 Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[6]).get();
 
                 // Not sure if this recipe stays here.
-                inputSize = 1;
+                /*inputSize = 1;
                 inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
                 inputAmounts = NonNullList.withSize(inputSize, 1);
                 inputItems.set(0, ingot);
                 inputAmounts.set(0, 1);
                 output = new ItemStack(dust, 1);
-                addOreProcessingUnitRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingot_to_dust_ore_processing_unit"));
+                addOreProcessingUnitRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingot_to_dust_ore_processing_unit"));*/
             }
         }
     }

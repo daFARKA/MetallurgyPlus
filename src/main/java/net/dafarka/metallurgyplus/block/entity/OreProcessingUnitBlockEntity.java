@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
 import net.minecraft.core.BlockPos;
@@ -28,8 +27,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 
 public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(OreProcessingUnitMenu.ORE_PROCESSING_UNIT_SLOTS_COUNT);
@@ -44,6 +43,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     private final int INPUT_SLOT_COUNT = 1;
     private int outputSlot;
+
+    private Random random;
 
     public OreProcessingUnitBlockEntity(BlockPos pPos,
                                         BlockState pBlockState) {
@@ -71,6 +72,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                 return 2;
             }
         };
+
+        random = new Random();
     }
 
     @Override
@@ -209,11 +212,20 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
             this.itemHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
 
         NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
+        NonNullList<Double> extraOutputChances = recipe.get().getExtraOutputChances();
         if (extraOutputs != null) {
+            int i = 0;
             for (ItemStack currentItemStack : extraOutputs) {
-                outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);
-                this.itemHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
-                    this.itemHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
+                boolean success = true;
+                if (extraOutputChances.get(i) < 1.0) {
+                    success =  random.nextDouble() < 0.6;
+                }
+                if (success) {
+                    outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);
+                    this.itemHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
+                        this.itemHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
+                }
+                i++;
             }
         }
     }

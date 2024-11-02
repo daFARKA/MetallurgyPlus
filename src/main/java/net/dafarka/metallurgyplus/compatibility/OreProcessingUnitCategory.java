@@ -66,11 +66,14 @@ public class OreProcessingUnitCategory implements IRecipeCategory<OreProcessingU
         builder.addSlot(RecipeIngredientRole.OUTPUT, OreProcessingUnitMenu.OUTPUT_POSITIONS[0][0] - OFFSET, OreProcessingUnitMenu.OUTPUT_POSITIONS[0][1] - OFFSET).addItemStack(recipe.getResultItem(null));
 
         NonNullList<ItemStack> extraOutputs = recipe.getExtraOutputs();
+        NonNullList<Double> extraOutputChances = recipe.getExtraOutputChances();
         if (extraOutputs != null) {
             int i = 1;
             for (ItemStack extraOutput : extraOutputs) {
+                int j = i - 1;
                 builder.addSlot(RecipeIngredientRole.OUTPUT, OreProcessingUnitMenu.OUTPUT_POSITIONS[i][0] - OFFSET, OreProcessingUnitMenu.OUTPUT_POSITIONS[i][1] - OFFSET)
-                    .addItemStack(extraOutput);
+                    .addItemStack(extraOutput)
+                    .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(Component.literal("Chance: " + (extraOutputChances.get(j) * 100) + "%")));
                 i++;
             }
         }
