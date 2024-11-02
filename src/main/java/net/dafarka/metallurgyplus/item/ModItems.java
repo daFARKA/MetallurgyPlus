@@ -28,6 +28,11 @@ public class ModItems {
     public static final RegistryObject<Item> KAOLINITE = ITEMS.register("kaolinite", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> SILICON = ITEMS.register("silicon", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SULPHUR = ITEMS.register("sulphur", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RARE_EARTH1 = ITEMS.register("rare_earth1", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RARE_EARTH2 = ITEMS.register("rare_earth2", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RARE_EARTH3 = ITEMS.register("rare_earth3", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PLATINUM_LIKE_METALS = ITEMS.register("platinum_like_metals", () -> new Item(new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
@@ -37,7 +42,9 @@ public class ModItems {
         registerMaterial("antimony", 0x5465c4);
         registerMaterial("barium", 0x8c8f85);
         registerMaterial("beryllium", 0xb5b5b5);
+        registerMaterial("bismuth", 0xbbc4c3);
         registerMaterial("cadmium", 0x56549e);
+        registerMaterial("calcium", 0xa3b5b8);
         registerMaterial("chromium", 0xf5fffb);
         registerMaterial("cobalt", 0x00108a);
         registerMaterial("gallium", 0x84ada2);
@@ -45,6 +52,7 @@ public class ModItems {
         registerMaterial("indium", 0xb7bdc7);
         registerMaterial("iridium", 0xc4f8ff);
         registerMaterial("lead", 0x534a6b);
+        registerMaterial("lithium", 0x9db5c9);
         registerMaterial("magnesium", 0xe6e8e8);
         registerMaterial("manganese", 0xe3e3d5);
         registerMaterial("molybdenum", 0x7a6f77);
@@ -56,10 +64,13 @@ public class ModItems {
         registerMaterial("rhenium", 0x5e5e5e);
         registerMaterial("rhodium", 0x362f26);
         registerMaterial("ruthenium", 0xcfc8c6);
+        registerMaterial("samarium", 0xf5ffc9);
+        registerMaterial("selenium", 0x262625);
         registerMaterial("scandium", 0xf2bcac);
         registerMaterial("silver", 0xcccccc);
         registerMaterial("tantalum", 0xc1a3e3);
         registerMaterial("technetium", 0x808691);
+        registerMaterial("terbium", 0xffebfa);
         registerMaterial("thallium", 0x2c2e27);
         registerMaterial("tin", 0x9e9e9e);
         registerMaterial("titanium", 0xb1a8ff);
@@ -70,8 +81,44 @@ public class ModItems {
         registerMaterial("zirconium", 0x705a43);
 
         // Register Ores
-        registerOre("gibbsite", 0x52695a);
-        registerOre("bauxite", 0x916b4d);
+        registerOre("gibbsite", 0x52695a);  //Aluminum
+        registerOre("bauxite", 0x916b4d);   //Aluminum
+        registerOre("stibnite", 0x5465c4);  //Antimony, Sulphur
+        registerOre("beryl", 0xa8bfaf);     //Beryllium, Aluminum, Silicon
+        registerOre("bismuthinite", 0xc7c4b1);  //Bismuth, Sulphur
+        registerOre("chromite", 0x484c59);  //Chromium
+        registerOre("cobaltite", 0x091336); //Cobalt
+        registerOre("malachite", 0x064d00); //Copper
+        registerOre("hematite", 0x75614f);  //Iron
+        registerOre("magnetite", 0x212f36); //Iron
+        registerOre("limonite", 0xbd6500);  //Iron
+        registerOre("galena", 0xae9bde);    //Lead, Silver
+        registerOre("spodumene", 0xeb7cbe); //Lithium, Aluminum, Silicon
+        registerOre("pyrolusite", 0x34ba53); //Manganese
+        registerOre("molybdenite", 0x5a5275); //Molybdenum, Rhenium, Sulphur
+        registerOre("pentlandite", 0x916f4a); //Nickel, Iron, Ruthenium
+        registerOre("garnierite", 0x00ff08); //Nickel, Magnesium
+        registerOre("niobite", 0xc0cc62); //Niobium, Iron, Manganese
+        registerOre("sperrylite", 0xe0bad6); //Platinum-Like-Metals
+        registerOre("bastnaesite", 0xff0000); //Rare Earth 1
+        registerOre("monazite", 0xff8800); //Rare Earth 2
+        registerOre("allanite", 0x4000ff); //Rare Earth 3, Calcium
+        registerOre("cassiterite", 0x00173b); //Tin
+        registerOre("ilmenite", 0x332e29); //Titanium, Iron
+        registerOre("rutile", 0x2e0808); //Titanium
+        registerOre("wolframite", 0x4c7eb0); //Tungsten, Iron, Manganese
+        registerOre("scheelite", 0xdb8348); //Tungsten, Calcium
+        registerOre("patronite", 0x2c2e2a); //Vanadium, Sulphur
+        registerOre("sphalerite", 0xcfb470); //Zinc, Iron, Sulphur
+        registerOre("zircon", 0x705a43); //Zirconium, Silicon, Hafnium
+        registerOre("gallite", 0x7e8761); //Gallium
+        registerOre("baryte", 0x8fb5c9); //Barium, Sulphur
+        registerOre("greenockite", 0xd9cc1e); //Cadmium, Sulphur
+        registerOre("roquesite", 0x619183); //Indium, Copper, Sulphur
+        registerOre("cooperite", 0xabb4b8); //Palladium, Rhodium
+        registerOre("thortveitite", 0xe09128); //Scandium, Yttrium, Silicon
+        registerOre("tantalite", 0x4d2d21); //Tantalum, Iron, Manganese
+        registerOre("crookesite", 0x2b061b); //Thallium, Copper, Silver, Selenium
 
         // Register Alloys
         registerAlloy("steel", 0x707070);
