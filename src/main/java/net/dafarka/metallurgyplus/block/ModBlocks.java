@@ -4,6 +4,7 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.custom.AlloySmelterBlock;
 import net.dafarka.metallurgyplus.block.custom.OreProcessingUnitBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -27,6 +28,8 @@ public class ModBlocks {
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
+
+    public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
     public static final RegistryObject<Block> CLAY_MINERAL = registerBlock("clay_mineral",
         () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));

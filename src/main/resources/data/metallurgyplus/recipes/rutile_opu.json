@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:rutile_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:titanium_raw",
+    "count": 1
+  }
+}

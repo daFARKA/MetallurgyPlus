@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:molybdenite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:molybdenum_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:rhenium_raw",
+      "count": 1,
+      "chance": 0.02
+    },
+    {
+      "item": "metallurgyplus:sulphur",
+      "count": 1,
+      "chance": 1.0
+    }
+  ]
+}

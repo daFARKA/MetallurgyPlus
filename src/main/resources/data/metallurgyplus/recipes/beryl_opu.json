@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:beryl_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:beryllium_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:aluminum_raw",
+      "count": 1,
+      "chance": 0.5
+    },
+    {
+      "item": "metallurgyplus:silicon",
+      "count": 1,
+      "chance": 0.2
+    }
+  ]
+}

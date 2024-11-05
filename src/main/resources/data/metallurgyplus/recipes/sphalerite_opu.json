@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:sphalerite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:zinc_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "minecraft:raw_iron",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:sulphur",
+      "count": 2,
+      "chance": 1.0
+    }
+  ]
+}

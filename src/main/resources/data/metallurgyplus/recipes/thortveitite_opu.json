@@ -2,23 +2,24 @@
   "type": "metallurgyplus:ore_processing_unit",
   "ingredients": [
     {
-      "item": "metallurgyplus:zircon_raw",
+      "item": "metallurgyplus:thortveitite_raw",
       "count": 1
     }
   ],
   "output": {
-    "item": "metallurgyplus:zirconium_raw",
+    "item": "metallurgyplus:scandium_raw",
     "count": 1
   },
   "extra_outputs": [
     {
-      "item": "metallurgyplus:hafnium_raw",
+      "item": "metallurgyplus:yttrium_raw",
       "count": 1,
-      "chance": 0.04
+      "chance": 0.5
     },
     {
       "item": "metallurgyplus:silicon",
-      "count": 1
+      "count": 1,
+      "chance": 1.0
     }
   ]
 }

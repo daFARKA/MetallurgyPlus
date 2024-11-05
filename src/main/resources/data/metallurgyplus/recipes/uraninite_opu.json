@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:uraninite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:uranium_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:thorium_raw",
+      "count": 1,
+      "chance": 0.5
+    },
+    {
+      "item": "metallurgyplus:technetium_raw",
+      "count": 1,
+      "chance": 0.01
+    }
+  ]
+}

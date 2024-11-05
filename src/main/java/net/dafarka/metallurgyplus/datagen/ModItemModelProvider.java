@@ -31,13 +31,15 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         simpleItem(ModItems.CLAY_MINERAL_RAW);
         simpleItem(ModItems.KAOLINITE);
+        simpleItem(ModItems.PLATINUM_LIKE_METALS);
 
         simpleItem(ModItems.SILICON);
         simpleItem(ModItems.SULPHUR);
         simpleItem(ModItems.RARE_EARTH1);
         simpleItem(ModItems.RARE_EARTH2);
         simpleItem(ModItems.RARE_EARTH3);
-        simpleItem(ModItems.PLATINUM_LIKE_METALS);
+        simpleItem(ModItems.SMALL_RARE_EARTH);
+        simpleItem(ModItems.STONE_DUST);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

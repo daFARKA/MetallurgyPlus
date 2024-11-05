@@ -1,0 +1,61 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:rare_earth2",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:cerium_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:yttrium_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:lanthanum_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:neodymium_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:samarium_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:praseodymium_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:terbium_raw",
+      "count": 1,
+      "chance": 0.5
+    }
+  ,
+    {
+      "item": "metallurgyplus:gadolinium_raw",
+      "count": 1,
+      "chance": 0.25
+    },
+    {
+      "item": "metallurgyplus:ytterbium_raw",
+      "count": 1,
+      "chance": 0.03
+    },
+    {
+      "item": "metallurgyplus:lutetium_raw",
+      "count": 1,
+      "chance": 0.01
+    }
+  ]
+}

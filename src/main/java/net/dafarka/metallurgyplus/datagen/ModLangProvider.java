@@ -22,13 +22,15 @@ public class ModLangProvider extends LanguageProvider {
     protected void addTranslations() {
         add("item.metallurgyplus.clay_mineral_raw", "Clay Mineral");
         add("item.metallurgyplus.kaolinite", "Kaolinite");
+        add("item.metallurgyplus.platinum_like_metals", "Platinum Like Metals");
 
         add("item.metallurgyplus.silicon", "Silicon");
         add("item.metallurgyplus.sulphur", "Sulphur");
         add("item.metallurgyplus.rare_earth1", "Rare Earth I");
         add("item.metallurgyplus.rare_earth2", "Rare Earth II");
         add("item.metallurgyplus.rare_earth3", "Rare Earth III");
-        add("item.metallurgyplus.platinum_like_metals", "Platinum Group Metals");
+        add("item.metallurgyplus.small_rare_earth", "Small Pile of Rare Earth");
+        add("item.metallurgyplus.stone_dust", "Stone Dust");
 
         add("block.metallurgyplus.clay_mineral", "Clay Mineral");
 

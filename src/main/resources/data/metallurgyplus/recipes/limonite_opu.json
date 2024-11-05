@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:limonite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:raw_iron",
+    "count": 1
+  }
+}

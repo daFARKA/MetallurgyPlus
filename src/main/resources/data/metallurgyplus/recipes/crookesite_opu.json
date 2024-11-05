@@ -1,0 +1,30 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:crookesite_raw",
+      "count": 4
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:thallium_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "minecraft:raw_copper",
+      "count": 7,
+      "chance": 0.5
+    },
+    {
+      "item": "metallurgyplus:silver_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:selenium_raw",
+      "count": 2,
+      "chance": 1.0
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:pentlandite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:nickel_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "minecraft:raw_iron",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:ruthenium_raw",
+      "count": 1,
+      "chance": 0.2
+    },
+    {
+      "item": "metallurgyplus:cobalt_raw",
+      "count": 1,
+      "chance": 0.01
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:monazite_raw",
+      "count": 8
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:rare_earth2",
+    "count": 1
+  }
+}

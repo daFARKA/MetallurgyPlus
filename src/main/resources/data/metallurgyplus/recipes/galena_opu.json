@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:galena_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:lead_raw",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:silver_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:sulphur",
+      "count": 1,
+      "chance": 0.5
+    }
+  ]
+}

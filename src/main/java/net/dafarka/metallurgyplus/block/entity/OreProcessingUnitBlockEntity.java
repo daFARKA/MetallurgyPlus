@@ -217,8 +217,9 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
             int i = 0;
             for (ItemStack currentItemStack : extraOutputs) {
                 boolean success = true;
-                if (extraOutputChances.get(i) < 1.0) {
-                    success =  random.nextDouble() < 0.6;
+                double chance = extraOutputChances.get(i);
+                if (chance < 1.0) {
+                    success =  random.nextDouble() < chance;
                 }
                 if (success) {
                     outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);

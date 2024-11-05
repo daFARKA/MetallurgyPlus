@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:bauxite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:aluminum_raw",
+    "count": 1
+  }
+}

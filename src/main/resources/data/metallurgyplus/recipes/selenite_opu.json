@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:selenite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:selenium_raw",
+    "count": 1
+  }
+}

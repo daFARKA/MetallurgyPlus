@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:xenotime_raw",
+      "count": 8
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:rare_earth3",
+    "count": 1
+  }
+}

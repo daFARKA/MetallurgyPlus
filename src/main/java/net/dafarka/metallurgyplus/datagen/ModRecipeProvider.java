@@ -11,6 +11,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +26,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private AlloySmelterRecipeProvider alloySmelterRecipeProvider;
     private OreProcessingUnitRecipeProvider oreProcessingUnitRecipeProvider;
 
+    private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CLAY_MINERAL_RAW.get());
+
     public ModRecipeProvider(PackOutput pOutput) {
         super(pOutput);
         alloySmelterRecipeProvider = new AlloySmelterRecipeProvider(pOutput);
@@ -38,11 +41,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildAlloyRecipes(pWriter);
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
-
-        oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
+        buildCustomRecipes(pWriter);
     }
-
-    private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CLAY_MINERAL_RAW.get());
 
     private void buildMaterialRecipes(Consumer<FinishedRecipe> pWriter) {
         List<String> oldMaterials = new ArrayList<>();
@@ -183,5 +183,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .save(pWriter);
             }
         }
+    }
+
+    private void buildCustomRecipes(Consumer<FinishedRecipe> pWriter) {
+        oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.SMALL_RARE_EARTH.get(), 1)
+            .requires(ModItems.RARE_EARTH1.get())
+            .requires(ModItems.RARE_EARTH2.get())
+            .requires(ModItems.RARE_EARTH3.get())
+            .unlockedBy(getHasName(ModItems.RARE_EARTH1.get()), has(ModItems.RARE_EARTH1.get()))
+            .unlockedBy(getHasName(ModItems.RARE_EARTH2.get()), has(ModItems.RARE_EARTH2.get()))
+            .unlockedBy(getHasName(ModItems.RARE_EARTH3.get()), has(ModItems.RARE_EARTH3.get()))
+            .save(pWriter);
     }
 }

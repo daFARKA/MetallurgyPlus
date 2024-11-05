@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:pyrolusite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:manganese_raw",
+    "count": 1
+  }
+}
