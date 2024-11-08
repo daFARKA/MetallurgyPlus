@@ -1,0 +1,21 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:titanium_ingot",
+      "count": 32
+    },
+    {
+      "item": "metallurgyplus:aluminum_ingot",
+      "count": 6
+    },
+    {
+      "item": "metallurgyplus:vanadium_ingot",
+      "count": 4
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:titanium-6al-4v_ingot",
+    "count": 32
+  }
+}

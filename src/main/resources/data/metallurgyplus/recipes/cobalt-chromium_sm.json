@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:cobalt_ingot",
+      "count": 7
+    },
+    {
+      "item": "metallurgyplus:chromium_ingot",
+      "count": 3
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:cobalt-chromium_ingot",
+    "count": 8
+  }
+}

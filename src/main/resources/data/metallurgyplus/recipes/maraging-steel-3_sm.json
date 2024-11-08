@@ -1,0 +1,29 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:steel_ingot",
+      "count": 8
+    },
+    {
+      "item": "metallurgyplus:nickel_ingot",
+      "count": 4
+    },
+    {
+      "item": "metallurgyplus:cobalt_ingot",
+      "count": 2
+    },
+    {
+      "item": "metallurgyplus:molybdenum_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:niobium_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:maraging-steel-3_ingot",
+    "count": 8
+  }
+}

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class ModLangProvider extends LanguageProvider {
@@ -47,13 +48,13 @@ public class ModLangProvider extends LanguageProvider {
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
-            String name = fullName.split("_")[0] + " " + fullName.split("_")[1];
+            String name = getName(fullName);
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
 
         for (RegistryObject<Block> block : blockMap.values()) {
             String fullName = block.getId().getPath();
-            String name = fullName.split("_")[0] + " " + fullName.split("_")[1];
+            String name = getName(fullName);
             add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
@@ -92,5 +93,59 @@ public class ModLangProvider extends LanguageProvider {
         }
 
         return capitalized.toString();
+    }
+
+    private String getName(String fullName) {
+        String[] parts = fullName.split("_");
+
+        String name = parts[0] + " " + parts[1];
+        if (parts[0].split("-").length > 1) {
+            String[] _parts = parts[0].split("-");
+            if (_parts[0].equals("titanium") && _parts.length > 2) {
+                return getTitaniumAlloyName(_parts) + " " + parts[1];
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String text : _parts) {
+                stringBuilder.append(text);
+                stringBuilder.append(" ");
+            }
+            stringBuilder.append(parts[1]);
+            name = stringBuilder.toString();
+        }
+        return name;
+    }
+
+    /**
+     * Titanium Alloys have very industrialized names and always look like this: Titanium-xEl1-xEl1-...
+     * <br>
+     * x stands for a number here and El1 for the first element (that is not Titanium) and so on.
+     *
+     * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
+     *
+     * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
+     *
+     * */
+    private String getTitaniumAlloyName(String[] parts) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Titanium");
+        String[] components = Arrays.copyOfRange(parts, 1, parts.length);
+        for (String component : components) {
+            stringBuilder.append("-");
+            int i = 0;
+            while (i < component.length() && Character.isDigit(component.charAt(i))) {
+                i++;
+            }
+
+            if (i < component.length()) {
+                stringBuilder.append(component, 0, i); // Add the numeric part
+                stringBuilder.append(Character.toUpperCase(component.charAt(i))); // Capitalize the first letter of element
+                stringBuilder.append(component.substring(i + 1)); // Append the rest of the element symbol
+            } else {
+                stringBuilder.append(component);
+            }
+
+        }
+        return stringBuilder.toString();
     }
 }

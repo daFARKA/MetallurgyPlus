@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:lead_ingot",
+      "count": 6
+    },
+    {
+      "item": "metallurgyplus:tin_ingot",
+      "count": 4
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:solder_ingot",
+    "count": 10
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:wrought_iron",
+      "count": 1
+    },
+    {
+      "item": "minecraft:sand",
+      "count": 2
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:pig-iron_ingot",
+    "count": 1
+  }
+}

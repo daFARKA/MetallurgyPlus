@@ -7,7 +7,7 @@
     }
   ],
   "output": {
-    "item": "minecraft:selenium_raw",
+    "item": "metallurgyplus:selenium_raw",
     "count": 1
   }
 }

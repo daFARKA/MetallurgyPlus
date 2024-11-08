@@ -20,11 +20,6 @@
       "item": "metallurgyplus:silver_raw",
       "count": 1,
       "chance": 1.0
-    },
-    {
-      "item": "metallurgyplus:selenium_raw",
-      "count": 2,
-      "chance": 1.0
     }
   ]
 }

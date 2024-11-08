@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:nickel_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:titanium_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:nitinol_ingot",
+    "count": 1
+  }
+}

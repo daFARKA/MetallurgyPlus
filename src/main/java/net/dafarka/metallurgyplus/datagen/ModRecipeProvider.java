@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.datagen;
 
+import net.dafarka.metallurgyplus.Config;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -42,6 +44,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
+
+        if (Config.buildBlockEntitiesRecipies) {
+            buildBlockEntitiesRecipes(pWriter);
+        }
     }
 
     private void buildMaterialRecipes(Consumer<FinishedRecipe> pWriter) {
@@ -195,6 +201,33 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.RARE_EARTH1.get()), has(ModItems.RARE_EARTH1.get()))
             .unlockedBy(getHasName(ModItems.RARE_EARTH2.get()), has(ModItems.RARE_EARTH2.get()))
             .unlockedBy(getHasName(ModItems.RARE_EARTH3.get()), has(ModItems.RARE_EARTH3.get()))
+            .save(pWriter);
+    }
+
+    private void buildBlockEntitiesRecipes(Consumer<FinishedRecipe> pWriter) {
+        // These recipes need to be changed...
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ORE_PROCESSING_UNIT.get())
+            .pattern("III")
+            .pattern("IBI")
+            .pattern("IPI")
+            .define('I', Items.IRON_INGOT)
+            .define('B', Items.IRON_BLOCK)
+            .define('P', Items.PISTON)
+            .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+            .unlockedBy(getHasName(Items.IRON_BLOCK), has(Items.IRON_BLOCK))
+            .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALLOY_SMELTER.get())
+            .pattern("III")
+            .pattern("IBI")
+            .pattern("ICI")
+            .define('I', Items.IRON_INGOT)
+            .define('B', Items.IRON_BLOCK)
+            .define('C', Items.COAL_BLOCK)
+            .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+            .unlockedBy(getHasName(Items.IRON_BLOCK), has(Items.IRON_BLOCK))
+            .unlockedBy(getHasName(Items.COAL_BLOCK), has(Items.COAL_BLOCK))
             .save(pWriter);
     }
 }

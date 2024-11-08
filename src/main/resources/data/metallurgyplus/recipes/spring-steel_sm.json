@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:steel_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:silicon",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:spring-steel_ingot",
+    "count": 1
+  }
+}

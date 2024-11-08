@@ -142,7 +142,37 @@ public class ModItems {
         registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); //Selenium
 
         // Register Alloys
-        registerAlloy("steel", 0x707070);
+        registerAlloy("steel", 0x707070); // Iron, Coal
+        registerAlloy("wrought-iron", 0x242020); // Steel, Iron
+        registerAlloy("pig-iron", 0xe3ccb1); // Wrought Iron, Sand
+        registerAlloy("stainless-steel", 0xe0e0e0); // Steel, Chromium, Nickel, Molybdenum
+        registerAlloy("spring-steel", 0xb5b5b5); // Steel, Silicon
+        registerAlloy("tungsten-steel", 0xbcccd1); // Steel, Tungsten
+        registerAlloy("vanadium-steel", 0x344234); // Steel, Vanadium
+        registerAlloy("invar", 0x9c9a84); // Iron, Nickel
+        registerAlloy("maraging-steel-1", 0x98bad9); // Steel, Nickel, Cobalt, Molybdenum, Aluminum
+        registerAlloy("maraging-steel-2", 0x284866); // Steel, Nickel, Cobalt, Molybdenum, Titanium
+        registerAlloy("maraging-steel-3", 0x677d91); // Steel, Nickel, Cobalt, Molybdenum, Niobium
+        registerAlloy("manganese-steel", 0x211d24); // Steel, Manganese
+        registerAlloy("bronze", 0xd9a84e); // Copper, Tin
+        registerAlloy("brass", 0xc9b134); // Copper, Zinc
+        registerAlloy("zamak", 0xabd1de); // Aluminum, Zinc
+        registerAlloy("aluminum-scandium", 0xd0f1f5); // Aluminum, Scandium
+        registerAlloy("aluminum-zirconium", 0xdaf4f7); // Aluminum, Zirconium
+        registerAlloy("aluminum-magnesium", 0x5a676b); // Aluminum, Magnesium
+        registerAlloy("aluminum-magnesium-zinc", 0x998776); // Aluminum, Magnesium, Zinc
+        registerAlloy("nichrome", 0x526275); // Nickel, Chromium
+        registerAlloy("cobalt-chromium", 0x010538); // Cobalt, Chromium
+        registerAlloy("cupronickel", 0x9c7a59); // Copper, Nickel
+        registerAlloy("solder", 0xc8c5ed); // Lead, Tin
+        registerAlloy("nitinol", 0x918a9e); // Nickel, Titanium
+        registerAlloy("spring-copper", 0xff7e33); // Copper, Beryllium
+        registerAlloy("titanium-8al-1mo-1v", 0x1b0933); // Titanium, Aluminum, Molybdenum, Vanadium
+        registerAlloy("titanium-6al-2sn-4zr-2mo", 0x1e152b); // Titanium, Aluminum, Tin, Zirconium, Molybdenum
+        registerAlloy("titanium-6al-4v", 0x180630); // Titanium, Aluminum, Vanadium
+        registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
+        registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
+
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};

@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "minecraft:copper_ingot",
+      "count": 32
+    },
+    {
+      "item": "metallurgyplus:beryllium_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:spring-copper_ingot",
+    "count": 32
+  }
+}
