@@ -36,7 +36,7 @@ public class Config
             .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);*/
 
     private static final ForgeConfigSpec.BooleanValue BUILD_BLOCK_ENTITIES_RECIPIES = BUILDER
-        .comment("Whether to build default recipes of all Mod Block Entities, such as the Ore Processing Unit or the Alloy Smelter.")
+        .comment(" Whether to build default recipes of all Mod Block Entities, such as the Ore Processing Unit or the Alloy Smelter, etc.")
         .define("buildBlockEntitiesRecipies", true);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
