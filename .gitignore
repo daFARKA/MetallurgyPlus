@@ -28,8 +28,3 @@ forge*changelog.txt
 /run
 /src/generated
 /images
-
-hexcode.py
-texture_generator.py
-
-ideas.md

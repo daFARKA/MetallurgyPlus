@@ -1,7 +1,7 @@
 # Resources
 *this should contain all resources, that are automatically being generated*
 <br>
-*resourceName - hexColor*
+*resourceName - hexColor - \<RARITY\>*
 
 ## Materials
 * aluminum - 0xb9f0f0
@@ -108,3 +108,32 @@
 
 ## Alloys
 * steel - 0x707070
+* wrought iron - 0x242020
+* pig iron - 0xe3ccb1
+* stainless steel - 0xe0e0e0
+* spring steel - 0xb5b5b5
+* tungsten steel - 0xbcccd1
+* vanadium steel - 0x344234
+* invar - 0x9c9a84
+* maraging steel 1 - 0x98bad9
+* maraging steel 2 - 0x284866
+* maraging steel 3 - 0x677d91
+* manganese steel - 0x211d24
+* bronze - 0xd9a84e
+* brass - 0xc9b134
+* zamak - 0xabd1de
+* aluminum scandium - 0xd0f1f5
+* aluminum zirconium - 0xdaf4f7
+* aluminum magnesium - 0x5a676b
+* aluminum magnesium zinc - 0x998776
+* nichrome - 0x526275
+* cobalt chromium - 0x010538
+* cupronickel - 0x9c7a59
+* solder - 0xc8c5ed
+* nitinol - 0x918a9e
+* spring copper - 0xff7e33
+* titanium 8al 1mo 1v - 0x1b0933
+* titanium 6al 2sn 4zr 2mo - 0x1e152b
+* titanium 6al 4v - 0x180630
+* titanium 6al 7nb - 0x270f4a
+* titanium 10v 2fe 3 al - 0x0d021c
