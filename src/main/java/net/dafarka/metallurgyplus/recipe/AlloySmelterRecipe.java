@@ -2,8 +2,6 @@ package net.dafarka.metallurgyplus.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.block.entity.UtilBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;

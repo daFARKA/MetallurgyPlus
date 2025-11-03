@@ -24,6 +24,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,15 +32,10 @@ import java.util.Optional;
 import java.util.Random;
 
 public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(OreProcessingUnitMenu.ORE_PROCESSING_UNIT_SLOTS_COUNT);
-
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 100;
-
-    private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(this.itemHandler);
 
     private final int INPUT_SLOT_COUNT = 1;
     private int outputSlot;
@@ -76,10 +72,49 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         random = new Random();
     }
 
+    // --- Slot Groups ---
+    private final ItemStackHandler inputHandler = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+
+    private final ItemStackHandler outputHandler = new ItemStackHandler(18) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return false;
+        }
+    };
+
+    CombinedInvWrapper allHandler = new CombinedInvWrapper(inputHandler, outputHandler);
+    private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(allHandler);
+
+    private LazyOptional<IItemHandler> inputLazy = LazyOptional.empty();
+    private LazyOptional<IItemHandler> outputLazy = LazyOptional.empty();
+    private LazyOptional<IItemHandler> allLazy = LazyOptional.empty();
+
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
+            if (side == Direction.UP) {
+                // Hopper above -> Input 1
+                return inputLazy.cast();
+            } else if (side == Direction.DOWN) {
+                // Hopper below -> Output
+                return outputLazy.cast();
+            } else if (side != null) {
+                // Hopper from side -> Input 2
+                return inputLazy.cast();
+            } else {
+                // Default (GUI)
+                return allLazy.cast();
+            }
         }
         return super.getCapability(cap, side);
     }
@@ -87,19 +122,23 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     @Override
     public void onLoad() {
         super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        inputLazy = LazyOptional.of(() -> inputHandler);
+        outputLazy = LazyOptional.of(() -> outputHandler);
+        allLazy = LazyOptional.of(() -> allHandler);
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        lazyItemHandler.invalidate();
+        inputLazy.invalidate();
+        outputLazy.invalidate();
+        allLazy.invalidate();
     }
 
     public void drops() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        SimpleContainer inventory = new SimpleContainer(allHandler.getSlots());
+        for (int i = 0; i < allHandler.getSlots(); i++) {
+            inventory.setItem(i, allHandler.getStackInSlot(i));
         }
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
@@ -117,16 +156,17 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
-        pTag.putInt("ore_processing_unit.progress", progress);
-
         super.saveAdditional(pTag);
+        pTag.put("Input", inputHandler.serializeNBT());
+        pTag.put("Output", outputHandler.serializeNBT());
+        pTag.putInt("ore_processing_unit.progress", progress);
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+        inputHandler.deserializeNBT(pTag.getCompound("Input"));
+        outputHandler.deserializeNBT(pTag.getCompound("Output"));
         progress = pTag.getInt("ore_processing_unit.progress");
     }
 
@@ -168,7 +208,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return false;
-            if (itemHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0)).getCount() < amounts.get(i)) {
+            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0)).getCount() < amounts.get(i)) {
                 return false;
             }
         }
@@ -191,7 +231,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     private Optional<OreProcessingUnitRecipe> getCurrentRecipe() {
         SimpleContainer inventory = new SimpleContainer(INPUT_SLOT_COUNT);
         for (int i = 0; i < INPUT_SLOT_COUNT; i++) {
-            inventory.setItem(i, this.itemHandler.getStackInSlot(i));
+            inventory.setItem(i, this.allHandler.getStackInSlot(i));
         }
 
         return this.level.getRecipeManager().getRecipeFor(OreProcessingUnitRecipe.Type.INSTANCE, inventory, level);
@@ -205,11 +245,11 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return;
-            this.itemHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0), amounts.get(i), false);
+            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0), amounts.get(i), false);
         }
 
-        this.itemHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
-            this.itemHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
+        this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
+            this.allHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
 
         NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
         NonNullList<Double> extraOutputChances = recipe.get().getExtraOutputChances();
@@ -223,8 +263,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                 }
                 if (success) {
                     outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);
-                    this.itemHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
-                        this.itemHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
+                    this.allHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
+                        this.allHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
                 }
                 i++;
             }
