@@ -32,7 +32,7 @@ public class OreProcessingUnitCategory implements IRecipeCategory<OreProcessingU
 
     public OreProcessingUnitCategory(IGuiHelper iGuiHelper) {
         this.background = iGuiHelper.createDrawable(TEXTURE, OFFSET, OFFSET, 169, 77);
-        this.icon = iGuiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.ALLOY_SMELTER.get()));
+        this.icon = iGuiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.ORE_PROCESSING_UNIT.get()));
     }
 
     @Override

@@ -35,13 +35,7 @@ public class Config
             .comment("A list of items to log on common setup.")
             .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);*/
 
-    private static final ForgeConfigSpec.BooleanValue BUILD_BLOCK_ENTITIES_RECIPIES = BUILDER
-        .comment(" Whether to build default recipes of all Mod Block Entities, such as the Ore Processing Unit or the Alloy Smelter, etc.")
-        .define("buildBlockEntitiesRecipies", true);
-
     static final ForgeConfigSpec SPEC = BUILDER.build();
-
-    public static boolean buildBlockEntitiesRecipies;
 
     private static boolean validateItemName(final Object obj)
     {
@@ -51,6 +45,6 @@ public class Config
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        buildBlockEntitiesRecipies = BUILD_BLOCK_ENTITIES_RECIPIES.get();
+
     }
 }

@@ -3,9 +3,11 @@ package net.dafarka.metallurgyplus.compatibility;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
@@ -46,5 +48,18 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             AlloySmelterCategory.ALLOY_SMELTER_TYPE);
         registration.addRecipeClickArea(OreProcessingUnitScreen.class, 32, 43, 30, 20,
             OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE);
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(
+            new net.minecraft.world.item.ItemStack(ModBlocks.ALLOY_SMELTER.get()),
+            AlloySmelterCategory.ALLOY_SMELTER_TYPE
+        );
+
+        registration.addRecipeCatalyst(
+            new net.minecraft.world.item.ItemStack(ModBlocks.ORE_PROCESSING_UNIT.get()),
+            OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE
+        );
     }
 }

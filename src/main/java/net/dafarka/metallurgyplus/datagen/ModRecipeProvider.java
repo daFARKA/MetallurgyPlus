@@ -45,9 +45,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
 
-        if (Config.buildBlockEntitiesRecipies) {
-            buildBlockEntitiesRecipes(pWriter);
-        }
+        buildBlockEntitiesRecipes(pWriter);
     }
 
     private void buildMaterialRecipes(Consumer<FinishedRecipe> pWriter) {
@@ -205,7 +203,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     private void buildBlockEntitiesRecipes(Consumer<FinishedRecipe> pWriter) {
-        // These recipes need to be changed...
+        // TODO: Change recipes
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ORE_PROCESSING_UNIT.get())
             .pattern("III")
             .pattern("IBI")

@@ -2,7 +2,7 @@
   "type": "metallurgyplus:alloy_smelter",
   "ingredients": [
     {
-      "item": "metallurgyplus:wrought_iron",
+      "item": "metallurgyplus:wrought-iron_ingot",
       "count": 1
     },
     {
