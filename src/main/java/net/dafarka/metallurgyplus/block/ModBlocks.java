@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,6 +23,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModBlocks {
+    public static final int ENERGY_CONSUMPTION_PER_TICK = 50;
+    public static final int ENERGY_CAPACITY = 100000;
+    public static final int ENERGY_MAX_RECIEVE = 10000;
+    public static final int ENERGY_MAX_EXTRACT = 10000;
+
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MetallurgyPlus.MODID);
     public static final Map<String, RegistryObject<Block>> MATERIAL_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ORE_BLOCKS_MAP = new HashMap<>();

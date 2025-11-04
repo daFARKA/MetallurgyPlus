@@ -30,7 +30,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
-                ModBlocks.ALLOY_SMELTER.get());
+                ModBlocks.ALLOY_SMELTER.get(),
+                ModBlocks.POWER_SOURCE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());

@@ -21,7 +21,7 @@ public class OreProcessingUnitScreen extends AbstractContainerScreen<OreProcessi
     @Override
     protected void init() {
         super.init();
-        //this.inventoryLabelY = 10000;
+        this.inventoryLabelY = 10000;
         //this.titleLabelY = 10000;
     }
 
@@ -36,12 +36,17 @@ public class OreProcessingUnitScreen extends AbstractContainerScreen<OreProcessi
         pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(pGuiGraphics, x, y);
+        renderEnergyBar(pGuiGraphics, x, y);
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if(menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 31, y + 43, 177, 0, menu.getScaledProgress(), 8);
+            guiGraphics.blit(TEXTURE, x + 31, y + 43, 177, 0, menu.utilityMenu.getScaledProgress(), 8);
         }
+    }
+
+    private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
+        guiGraphics.blit(TEXTURE, x + 8, y + 60, 177, 16, menu.utilityMenu.getScaledEnergy(), 13);
     }
 
     @Override

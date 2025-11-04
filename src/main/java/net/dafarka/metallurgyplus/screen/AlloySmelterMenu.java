@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.screen;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.entity.AlloySmelterBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
@@ -22,6 +21,8 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
     public static final int[][] OUTPUT_POSITIONS = {{116, 18}, {134, 18}, {152, 18}, {116, 36}, {134, 36}, {152, 36}, {116, 54}, {134, 54}, {152, 54}};
     public static final int ALLOY_SMELTER_SLOTS_COUNT = INPUT_POSITIONS.length + OUTPUT_POSITIONS.length;
 
+    public UtilityMenu utilityMenu;
+
     public final AlloySmelterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -38,6 +39,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         blockEntity = ((AlloySmelterBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
+        this.utilityMenu = new UtilityMenu(this.data);
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -57,14 +59,6 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
 
     public boolean isCrafting() {
         return data.get(0) > 0;
-    }
-
-    public int getScaledProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
-
-        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

@@ -1,5 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
+import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
 import net.minecraft.core.BlockPos;
@@ -42,6 +44,9 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     private Random random;
 
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
+
     public OreProcessingUnitBlockEntity(BlockPos pPos,
                                         BlockState pBlockState) {
         super(ModBlockEntities.ORE_PROCESSING_BE.get(), pPos, pBlockState);
@@ -51,6 +56,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                 return switch (pIndex) {
                     case 0 -> OreProcessingUnitBlockEntity.this.progress;
                     case 1 -> OreProcessingUnitBlockEntity.this.maxProgress;
+                    case 2 -> OreProcessingUnitBlockEntity.this.energyStorage.getEnergyStored();
+                    case 3 -> OreProcessingUnitBlockEntity.this.energyStorage.getMaxEnergyStored();
                     default -> 0;
                 };
             }
@@ -60,12 +67,13 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                 switch (pIndex) {
                     case 0 -> OreProcessingUnitBlockEntity.this.progress = pValue;
                     case 1 -> OreProcessingUnitBlockEntity.this.maxProgress = pValue;
+                    case 2 -> OreProcessingUnitBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
 
@@ -115,6 +123,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
                 // Default (GUI)
                 return allLazy.cast();
             }
+        } else if (cap == ForgeCapabilities.ENERGY) { // accept energy from all sides
+            return energyLazy.cast();
         }
         return super.getCapability(cap, side);
     }
@@ -125,6 +135,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         inputLazy = LazyOptional.of(() -> inputHandler);
         outputLazy = LazyOptional.of(() -> outputHandler);
         allLazy = LazyOptional.of(() -> allHandler);
+
+        energyLazy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
@@ -133,6 +145,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         inputLazy.invalidate();
         outputLazy.invalidate();
         allLazy.invalidate();
+
+        energyLazy.invalidate();
     }
 
     public void drops() {
@@ -160,6 +174,8 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         pTag.put("Input", inputHandler.serializeNBT());
         pTag.put("Output", outputHandler.serializeNBT());
         pTag.putInt("ore_processing_unit.progress", progress);
+
+        pTag.put("Energy", energyStorage.serializeNBT());
     }
 
     @Override
@@ -168,15 +184,18 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
         inputHandler.deserializeNBT(pTag.getCompound("Input"));
         outputHandler.deserializeNBT(pTag.getCompound("Output"));
         progress = pTag.getInt("ore_processing_unit.progress");
+
+        energyStorage.deserializeNBT(pTag.getCompound("Energy"));
     }
 
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        if(hasRecipe()) {
-            increaseCraftingProgress();
+        if(hasRecipe() && energyStorage.getEnergyStored() >= ModBlocks.ENERGY_CONSUMPTION_PER_TICK) {
+            energyStorage.extractEnergy(ModBlocks.ENERGY_CONSUMPTION_PER_TICK, false);
+            progress++;
             setChanged(pLevel, pPos, pState);
 
-            if(hasProgressFinished()) {
+            if(progress >= maxProgress) {
                 craftItem();
                 resetProgress();
             }
@@ -187,14 +206,6 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     private void resetProgress() {
         progress = 0;
-    }
-
-    private boolean hasProgressFinished() {
-        return progress >= maxProgress;
-    }
-
-    private void increaseCraftingProgress() {
-        progress++;
     }
 
     private boolean hasRecipe() {

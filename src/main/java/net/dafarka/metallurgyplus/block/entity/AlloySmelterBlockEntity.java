@@ -1,6 +1,8 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
 import net.dafarka.metallurgyplus.screen.AlloySmelterMenu;
 import net.minecraft.core.BlockPos;
@@ -40,6 +42,9 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     private final int INPUT_SLOT_COUNT = AlloySmelterMenu.INPUT_POSITIONS.length;
     private int outputSlot;
 
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
+
     public AlloySmelterBlockEntity(BlockPos pPos,
                                    BlockState pBlockState) {
         super(ModBlockEntities.ALLOY_SMELTER_BE.get(), pPos, pBlockState);
@@ -49,6 +54,8 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
                 return switch (pIndex) {
                     case 0 -> AlloySmelterBlockEntity.this.progress;
                     case 1 -> AlloySmelterBlockEntity.this.maxProgress;
+                    case 2 -> AlloySmelterBlockEntity.this.energyStorage.getEnergyStored();
+                    case 3 -> AlloySmelterBlockEntity.this.energyStorage.getMaxEnergyStored();
                     default -> 0;
                 };
             }
@@ -58,12 +65,13 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
                 switch (pIndex) {
                     case 0 -> AlloySmelterBlockEntity.this.progress = pValue;
                     case 1 -> AlloySmelterBlockEntity.this.maxProgress = pValue;
+                    case 2 -> AlloySmelterBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
     }
@@ -119,6 +127,8 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
                 // Default (GUI)
                 return allLazy.cast();
             }
+        } else if (cap == ForgeCapabilities.ENERGY) { // accept energy from all sides
+            return energyLazy.cast();
         }
         return super.getCapability(cap, side);
     }
@@ -130,6 +140,8 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         input2Lazy = LazyOptional.of(() -> inputHandler2);
         outputLazy = LazyOptional.of(() -> outputHandler);
         allLazy = LazyOptional.of(() -> allHandler);
+
+        energyLazy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
@@ -139,6 +151,8 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         input2Lazy.invalidate();
         outputLazy.invalidate();
         allLazy.invalidate();
+
+        energyLazy.invalidate();
     }
 
     public void drops() {
@@ -167,6 +181,8 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         pTag.put("Input2", inputHandler2.serializeNBT());
         pTag.put("Output", outputHandler.serializeNBT());
         pTag.putInt("alloy_smelter.progress", progress);
+
+        pTag.put("Energy", energyStorage.serializeNBT());
     }
 
     @Override
@@ -176,14 +192,17 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         inputHandler2.deserializeNBT(pTag.getCompound("Input2"));
         outputHandler.deserializeNBT(pTag.getCompound("Output"));
         progress = pTag.getInt("alloy_smelter.progress");
+
+        energyStorage.deserializeNBT(pTag.getCompound("Energy"));
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        if(hasRecipe()) {
-            increaseCraftingProgress();
+        if(hasRecipe() && energyStorage.getEnergyStored() >= ModBlocks.ENERGY_CONSUMPTION_PER_TICK ) {
+            energyStorage.extractEnergy(ModBlocks.ENERGY_CONSUMPTION_PER_TICK, false);
+            progress++;
             setChanged(pLevel, pPos, pState);
 
-            if(hasProgressFinished()) {
+            if(progress >= maxProgress) {
                 craftItem();
                 resetProgress();
             }
@@ -194,14 +213,6 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
 
     private void resetProgress() {
         progress = 0;
-    }
-
-    private boolean hasProgressFinished() {
-        return progress >= maxProgress;
-    }
-
-    private void increaseCraftingProgress() {
-        progress++;
     }
 
     private boolean hasRecipe() {

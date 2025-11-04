@@ -26,6 +26,8 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         {62, 39}, {80, 39}, {98, 39}, {116, 39}, {134, 39}, {152, 39}, {62, 57}, {80, 57}, {98, 57}, {116, 57}, {134, 57}, {152, 57}};
     public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 1 + OUTPUT_POSITIONS.length;
 
+    public UtilityMenu utilityMenu;
+
     public final OreProcessingUnitBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -40,6 +42,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         blockEntity = ((OreProcessingUnitBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
+        this.utilityMenu = new UtilityMenu(this.data);
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -57,14 +60,6 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
 
     public boolean isCrafting() {
         return data.get(0) > 0;
-    }
-
-    public int getScaledProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
-
-        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
