@@ -2,7 +2,6 @@ package net.dafarka.metallurgyplus.datagen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.util.Utility;
@@ -104,7 +103,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
             int i = 0;
             for (Item ingredient : inputItems) {
                 JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", utility.formatName(ingredient.getDescriptionId()));
+                ingredientObj.addProperty("item", utility.formatResourceName(ingredient.getDescriptionId()));
                 ingredientObj.addProperty("count", inputAmounts.get(i));
                 ingredientsArray.add(ingredientObj);
                 i++;
@@ -113,7 +112,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
 
             // Serialize output
             JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", utility.formatName(output.getDescriptionId()));
+            outputObj.addProperty("item", utility.formatResourceName(output.getDescriptionId()));
             outputObj.addProperty("count", output.getCount());
             pJson.add("output", outputObj);
 
@@ -122,7 +121,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
             if (extraOutputs != null) {
                 for (ItemStack extraOutput : extraOutputs) {
                     JsonObject ingredientObj = new JsonObject();
-                    ingredientObj.addProperty("item", utility.formatName(extraOutput.getItem().getDescriptionId()));
+                    ingredientObj.addProperty("item", utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
                     ingredientObj.addProperty("count", extraOutput.getCount());
                     extraOutputArray.add(ingredientObj);
                 }

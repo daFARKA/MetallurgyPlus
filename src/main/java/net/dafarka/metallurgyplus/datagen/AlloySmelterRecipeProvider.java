@@ -103,7 +103,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
             int i = 0;
             for (Item ingredient : inputItems) {
                 JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", utility.formatName(ingredient.getDescriptionId()));
+                ingredientObj.addProperty("item", utility.formatResourceName(ingredient.getDescriptionId()));
                 ingredientObj.addProperty("count", inputAmounts.get(i));
                 ingredientsArray.add(ingredientObj);
                 i++;
@@ -112,7 +112,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
 
             // Serialize output
             JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", utility.formatName(output.getDescriptionId()));
+            outputObj.addProperty("item", utility.formatResourceName(output.getDescriptionId()));
             outputObj.addProperty("count", output.getCount());
             pJson.add("output", outputObj);
         }

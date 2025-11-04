@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.block.entity;
 
+import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
 import net.dafarka.metallurgyplus.screen.AlloySmelterMenu;
 import net.minecraft.core.BlockPos;

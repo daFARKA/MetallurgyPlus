@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.block;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.custom.AlloySmelterBlock;
 import net.dafarka.metallurgyplus.block.custom.OreProcessingUnitBlock;
+import net.dafarka.metallurgyplus.block.custom.PowerSourceBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.world.item.BlockItem;
@@ -39,6 +40,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> ALLOY_SMELTER = registerBlock("alloy_smelter",
         () -> new AlloySmelterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+
+    public static final RegistryObject<Block> POWER_SOURCE = registerBlock("power_source",
+        () -> new PowerSourceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
     public static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

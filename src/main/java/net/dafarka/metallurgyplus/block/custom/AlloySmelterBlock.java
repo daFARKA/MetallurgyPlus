@@ -80,7 +80,6 @@ public class AlloySmelterBlock extends BaseEntityBlock {
             return null;
         }
 
-
         return createTickerHelper(pBlockEntityType, ModBlockEntities.ALLOY_SMELTER_BE.get(),
             (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
