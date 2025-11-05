@@ -40,6 +40,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.RARE_EARTH3);
         simpleItem(ModItems.SMALL_RARE_EARTH);
         simpleItem(ModItems.STONE_DUST);
+
+        simpleItem(ModItems.LLAMKANA);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

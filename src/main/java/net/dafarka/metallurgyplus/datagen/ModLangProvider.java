@@ -33,6 +33,8 @@ public class ModLangProvider extends LanguageProvider {
         add("item.metallurgyplus.small_rare_earth", "Small Pile of Rare Earth");
         add("item.metallurgyplus.stone_dust", "Stone Dust");
 
+        //add("item.metallurgyplus.llamkana", "Llamkana");
+
         add("block.metallurgyplus.clay_mineral", "Clay Mineral");
 
         add("block.metallurgyplus.ore_processing_unit", "Ore Processing Unit");

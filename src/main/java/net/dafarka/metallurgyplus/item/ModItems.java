@@ -3,7 +3,11 @@ package net.dafarka.metallurgyplus.item;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.util.OreRarity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -36,6 +40,15 @@ public class ModItems {
     public static final RegistryObject<Item> RARE_EARTH3 = ITEMS.register("rare_earth3", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SMALL_RARE_EARTH = ITEMS.register("small_rare_earth", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> STONE_DUST = ITEMS.register("stone_dust", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
+        () -> new ModTools(
+            Tiers.NETHERITE,
+            new Item.Properties().stacksTo(1).fireResistant().durability(0),
+            Component.literal("Llamkana").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD),
+            500,
+            true
+        ));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

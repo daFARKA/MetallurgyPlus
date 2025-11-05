@@ -41,12 +41,12 @@ public class OreProcessingUnitScreen extends AbstractContainerScreen<OreProcessi
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if(menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 31, y + 43, 177, 0, menu.utilityMenu.getScaledProgress(), 8);
+            guiGraphics.blit(TEXTURE, x + 31, y + 43, 176, 0, menu.utilityMenu.getScaledProgress(), 8);
         }
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(TEXTURE, x + 8, y + 60, 177, 16, menu.utilityMenu.getScaledEnergy(), 13);
+        guiGraphics.blit(TEXTURE, x + 8, y + 60, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
     }
 
     @Override
