@@ -2,9 +2,11 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -23,6 +25,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlocksWithItem();
 
         blockWithItem(ModBlocks.CLAY_MINERAL);
+
+        horizontalFacingBlock("alloy_smelter", ModBlocks.ALLOY_SMELTER.get());
+        horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
+        horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
+        horizontalFacingBlock("battery", ModBlocks.BATTERY.get());
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
@@ -54,5 +61,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         );
     }
 
+    private void horizontalFacingBlock(String name, Block block) {
+        ModelFile model = models().getExistingFile(modLoc("block/" + name));
 
+        getVariantBuilder(block)
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+            .modelForState().modelFile(model).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+            .modelForState().modelFile(model).rotationY(90).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+            .modelForState().modelFile(model).rotationY(180).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+            .modelForState().modelFile(model).rotationY(270).addModel();
+    }
 }

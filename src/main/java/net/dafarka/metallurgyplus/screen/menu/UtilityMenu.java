@@ -1,4 +1,4 @@
-package net.dafarka.metallurgyplus.screen;
+package net.dafarka.metallurgyplus.screen.menu;
 
 import net.minecraft.world.inventory.ContainerData;
 

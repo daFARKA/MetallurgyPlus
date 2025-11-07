@@ -23,6 +23,10 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("power_source_be", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new,
             ModBlocks.POWER_SOURCE.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<BatteryBlockEntity>> BATTERY_BE =
+        BLOCK_ENTITIES.register("battery_be", () -> BlockEntityType.Builder.of(BatteryBlockEntity::new,
+            ModBlocks.BATTERY.get()).build(null));
+
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "metallurgyplus:block/ore_processing_unit" },
-    "facing=east":  { "model": "metallurgyplus:block/ore_processing_unit", "y": 90 },
-    "facing=south": { "model": "metallurgyplus:block/ore_processing_unit", "y": 180 },
-    "facing=west":  { "model": "metallurgyplus:block/ore_processing_unit", "y": 270 }
-  }
-}

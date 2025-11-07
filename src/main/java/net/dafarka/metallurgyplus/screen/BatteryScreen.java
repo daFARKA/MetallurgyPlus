@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.menu.AlloySmelterMenu;
+import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -10,11 +11,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AlloySmelterScreen extends AbstractContainerScreen<AlloySmelterMenu> {
+public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/alloy_smelter_gui.png");
+        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/battery_gui.png");
 
-    public AlloySmelterScreen(AlloySmelterMenu pMenu, Inventory pPlayerInventory,
+    public BatteryScreen(BatteryMenu pMenu, Inventory pPlayerInventory,
                               Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
@@ -36,18 +37,11 @@ public class AlloySmelterScreen extends AbstractContainerScreen<AlloySmelterMenu
 
         pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        renderProgressArrow(pGuiGraphics, x, y);
         renderEnergyBar(pGuiGraphics, x, y);
     }
 
-    private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
-        if(menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 87, y + 39, 176, 0, menu.utilityMenu.getScaledProgress(), 8);
-        }
-    }
-
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(TEXTURE, x + 8, y + 65, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
+        guiGraphics.blit(TEXTURE, x + 64, y + 21, 176, 16, menu.getScaledEnergy(), 13);
     }
 
     @Override

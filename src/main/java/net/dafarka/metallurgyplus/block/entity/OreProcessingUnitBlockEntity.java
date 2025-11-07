@@ -3,7 +3,7 @@ package net.dafarka.metallurgyplus.block.entity;
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
-import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
+import net.dafarka.metallurgyplus.screen.menu.OreProcessingUnitMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -44,7 +44,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     private Random random;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, 0);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public OreProcessingUnitBlockEntity(BlockPos pPos,

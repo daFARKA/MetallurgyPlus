@@ -1,5 +1,6 @@
-package net.dafarka.metallurgyplus.screen;
+package net.dafarka.metallurgyplus.screen.menu;
 
+import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.entity.AlloySmelterBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,6 +40,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
         blockEntity = ((AlloySmelterBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
+        MetallurgyPlus.LOGGER.info("Alloy Smelter Menu created: " + data.get(2));
         this.utilityMenu = new UtilityMenu(this.data);
 
         addPlayerInventory(inv);

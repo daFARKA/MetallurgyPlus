@@ -42,6 +42,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.STONE_DUST);
 
         simpleItem(ModItems.LLAMKANA);
+
+        createBlockEntityItem("alloy_smelter");
+        createBlockEntityItem("ore_processing_unit");
+        createBlockEntityItem("power_source");
+        createBlockEntityItem("battery");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -79,5 +84,17 @@ public class ModItemModelProvider extends ItemModelProvider {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             simpleBlockItemModel(blockName);
         }
+    }
+
+    private void createBlockEntityItem(String name) {
+        getBuilder(name)
+            .parent(getExistingFile(modLoc("block/" + name)))
+            .transforms()
+            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+            .rotation(10, -45, 170)
+            .translation(0f, 1.5f, -2.75f)
+            .scale(0.375f)
+            .end()
+            .end();
     }
 }

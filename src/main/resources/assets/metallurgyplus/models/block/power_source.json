@@ -1,8 +1,0 @@
-{
-	"parent": "metallurgyplus:block/block_entity_orientable",
-	"textures": {
-		"top": "metallurgyplus:block/power_source",
-		"front": "metallurgyplus:block/power_source",
-		"side": "metallurgyplus:block/power_source"
-	}
-}

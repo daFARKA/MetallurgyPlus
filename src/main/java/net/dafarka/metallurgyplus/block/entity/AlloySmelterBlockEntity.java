@@ -1,10 +1,9 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
-import net.dafarka.metallurgyplus.screen.AlloySmelterMenu;
+import net.dafarka.metallurgyplus.screen.menu.AlloySmelterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +41,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     private final int INPUT_SLOT_COUNT = AlloySmelterMenu.INPUT_POSITIONS.length;
     private int outputSlot;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, 0);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public AlloySmelterBlockEntity(BlockPos pPos,

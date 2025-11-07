@@ -1,16 +1,14 @@
-package net.dafarka.metallurgyplus.screen;
+package net.dafarka.metallurgyplus.screen.menu;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.entity.OreProcessingUnitBlockEntity;
-import net.minecraft.core.BlockPos;
+import net.dafarka.metallurgyplus.block.entity.BatteryBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -18,28 +16,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.Nullable;
 
-public class OreProcessingUnitMenu extends AbstractContainerMenu {
-    public static final int[] INPUT_POSITION = {8, 39};
-    public static final int[][] OUTPUT_POSITIONS = {{62, 21}, {80, 21}, {98, 21}, {116, 21}, {134, 21}, {152, 21},
-        {62, 39}, {80, 39}, {98, 39}, {116, 39}, {134, 39}, {152, 39}, {62, 57}, {80, 57}, {98, 57}, {116, 57}, {134, 57}, {152, 57}};
-    public static final int ORE_PROCESSING_UNIT_SLOTS_COUNT = 1 + OUTPUT_POSITIONS.length;
+public class BatteryMenu extends AbstractContainerMenu {
+    private static final int BATTERY_SLOTS_COUNT = 0;
 
     public UtilityMenu utilityMenu;
 
-    public final OreProcessingUnitBlockEntity blockEntity;
+    public final BatteryBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
+    private ItemStack lastMovedStack = ItemStack.EMPTY;
+    private int lastSlotBundleTouched = 1;
 
-    public OreProcessingUnitMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
+    public BatteryMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(friendlyByteBuf.readBlockPos()), new SimpleContainerData(19));
     }
 
-    public OreProcessingUnitMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.ORE_PROCESSING_MENU.get(), pContainerId);
-        checkContainerSize(inv, ORE_PROCESSING_UNIT_SLOTS_COUNT);
-        blockEntity = ((OreProcessingUnitBlockEntity) entity);
+    public BatteryMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.BATTERY_MENU.get(), pContainerId);
+        blockEntity = ((BatteryBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
         this.utilityMenu = new UtilityMenu(this.data);
@@ -47,19 +42,17 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, INPUT_POSITION[0], INPUT_POSITION[1]));
+        /*this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
+            for (int i = 0; i < INPUT_POSITIONS.length; i++) {
+                this.addSlot(new SlotItemHandler(iItemHandler, i, INPUT_POSITIONS[i][0], INPUT_POSITIONS[i][1]));
+            }
 
             for (int i = 0; i < OUTPUT_POSITIONS.length; i++) {
-                this.addSlot(new SlotItemHandler(iItemHandler, i + 1, OUTPUT_POSITIONS[i][0], OUTPUT_POSITIONS[i][1]));
+                this.addSlot(new SlotItemHandler(iItemHandler, i + INPUT_POSITIONS.length, OUTPUT_POSITIONS[i][0], OUTPUT_POSITIONS[i][1]));
             }
-        });
+        });*/
 
         addDataSlots(data);
-    }
-
-    public boolean isCrafting() {
-        return data.get(0) > 0;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
@@ -78,7 +71,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = ORE_PROCESSING_UNIT_SLOTS_COUNT;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = BATTERY_SLOTS_COUNT;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
@@ -115,7 +108,7 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-            pPlayer, ModBlocks.ORE_PROCESSING_UNIT.get());
+            pPlayer, ModBlocks.BATTERY.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
@@ -130,5 +123,13 @@ public class OreProcessingUnitMenu extends AbstractContainerMenu {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+    }
+
+    public int getScaledEnergy() {
+        int energy = this.data.get(0);
+        int maxEnergy = this.data.get(1);
+        int energyBarSize = 48;
+
+        return maxEnergy != 0 && energy != 0 ? energy * energyBarSize / maxEnergy : 0;
     }
 }

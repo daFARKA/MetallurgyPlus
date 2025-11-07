@@ -1,8 +1,0 @@
-{
-	"parent": "metallurgyplus:block/block_entity_orientable",
-	"textures": {
-		"top": "metallurgyplus:block/ore_processing_unit_top",
-		"front": "metallurgyplus:block/ore_processing_unit_front",
-		"side": "metallurgyplus:block/ore_processing_unit_side"
-	}
-}

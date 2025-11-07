@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class GenericEnergyStorage extends  EnergyStorage{
+public class GenericEnergyStorage extends EnergyStorage{
   public GenericEnergyStorage(int capacity, int maxReceive, int maxExtract) {
     super(capacity, maxReceive, maxExtract);
   }

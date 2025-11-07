@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.screen.menu.OreProcessingUnitMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;

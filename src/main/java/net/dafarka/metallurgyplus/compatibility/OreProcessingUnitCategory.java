@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
-import net.dafarka.metallurgyplus.screen.OreProcessingUnitMenu;
+import net.dafarka.metallurgyplus.screen.menu.OreProcessingUnitMenu;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

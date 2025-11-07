@@ -7,7 +7,8 @@ import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.recipe.ModRecipes;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
-import net.dafarka.metallurgyplus.screen.ModMenuTypes;
+import net.dafarka.metallurgyplus.screen.BatteryScreen;
+import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
 import net.dafarka.metallurgyplus.util.color.ModDynamicAlloyBlockColor;
 import net.dafarka.metallurgyplus.util.color.ModDynamicMaterialBlockColor;
@@ -96,6 +97,7 @@ public class MetallurgyPlus
 
             MenuScreens.register(ModMenuTypes.ORE_PROCESSING_MENU.get(), OreProcessingUnitScreen::new);
             MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
+            MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
 
             for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
                 ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.translucent());

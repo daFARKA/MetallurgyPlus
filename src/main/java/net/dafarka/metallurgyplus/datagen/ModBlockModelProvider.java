@@ -37,6 +37,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerMaterialModel(blockName);
         }
+
+        registerOrientables();
     }
 
     private void registerMaterialModel(String blockName) {
@@ -91,6 +93,29 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .face(Direction.UP).tintindex(0).texture("#layer1").end()
             .face(Direction.DOWN).tintindex(0).texture("#layer1").end()
             .end();
+    }
+
+    private void registerOrientables() {
+        registerOrientable("alloy_smelter", false);
+        registerOrientable("ore_processing_unit", false);
+        registerOrientable("power_source", true);
+        registerOrientable("battery", true);
+    }
+
+    private void registerOrientable(String name, boolean allSidesSame) {
+        if (allSidesSame) {
+            getBuilder(name)
+                .parent(getExistingFile(modLoc("block_entity_orientable"))) // parent
+                .texture("top", modLoc("block/" + name))
+                .texture("front", modLoc("block/" + name))
+                .texture("side", modLoc("block/" + name));
+        } else {
+            getBuilder(name)
+                .parent(getExistingFile(modLoc("block_entity_orientable"))) // parent
+                .texture("top", modLoc("block/" + name + "_top"))
+                .texture("front", modLoc("block/" + name + "_front"))
+                .texture("side", modLoc("block/" + name + "_side"));
+        }
     }
 
 }
