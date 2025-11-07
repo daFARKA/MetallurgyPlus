@@ -100,6 +100,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("ore_processing_unit", false);
         registerOrientable("power_source", true);
         registerOrientable("battery", true);
+        registerOrientable("cable", true);
     }
 
     private void registerOrientable(String name, boolean allSidesSame) {

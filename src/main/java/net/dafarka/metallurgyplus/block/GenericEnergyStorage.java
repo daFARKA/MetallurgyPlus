@@ -16,14 +16,14 @@ public class GenericEnergyStorage extends EnergyStorage{
   @Override
   public CompoundTag serializeNBT() {
     CompoundTag tag = new CompoundTag();
-    tag.putInt("Energy", this.energy);
+    tag.putInt("energy", this.energy);
     return tag;
   }
 
   @Override
   public void deserializeNBT(Tag nbt) {
     if (nbt instanceof CompoundTag) {
-      this.energy = ((CompoundTag) nbt).getInt("Energy");
+      this.energy = ((CompoundTag) nbt).getInt("energy");
     }
   }
 }

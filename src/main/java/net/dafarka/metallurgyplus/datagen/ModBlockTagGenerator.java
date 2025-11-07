@@ -32,7 +32,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
                 ModBlocks.ALLOY_SMELTER.get(),
                 ModBlocks.POWER_SOURCE.get(),
-                ModBlocks.BATTERY.get());
+                ModBlocks.BATTERY.get(),
+                ModBlocks.CABLE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());

@@ -47,6 +47,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         createBlockEntityItem("ore_processing_unit");
         createBlockEntityItem("power_source");
         createBlockEntityItem("battery");
+        createBlockEntityItem("cable");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

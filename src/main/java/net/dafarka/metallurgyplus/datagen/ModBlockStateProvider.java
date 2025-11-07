@@ -30,6 +30,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         horizontalFacingBlock("battery", ModBlocks.BATTERY.get());
+        horizontalFacingBlock("cable", ModBlocks.CABLE.get());
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {

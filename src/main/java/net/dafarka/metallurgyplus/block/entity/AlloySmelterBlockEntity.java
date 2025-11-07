@@ -176,23 +176,23 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.put("Input1", inputHandler1.serializeNBT());
-        pTag.put("Input2", inputHandler2.serializeNBT());
-        pTag.put("Output", outputHandler.serializeNBT());
-        pTag.putInt("alloy_smelter.progress", progress);
+        pTag.put("input1", inputHandler1.serializeNBT());
+        pTag.put("input2", inputHandler2.serializeNBT());
+        pTag.put("output", outputHandler.serializeNBT());
+        pTag.putInt("progress", progress);
 
-        pTag.put("Energy", energyStorage.serializeNBT());
+        pTag.put("energy", energyStorage.serializeNBT());
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        inputHandler1.deserializeNBT(pTag.getCompound("Input1"));
-        inputHandler2.deserializeNBT(pTag.getCompound("Input2"));
-        outputHandler.deserializeNBT(pTag.getCompound("Output"));
-        progress = pTag.getInt("alloy_smelter.progress");
+        inputHandler1.deserializeNBT(pTag.getCompound("input1"));
+        inputHandler2.deserializeNBT(pTag.getCompound("input2"));
+        outputHandler.deserializeNBT(pTag.getCompound("output"));
+        progress = pTag.getInt("progress");
 
-        energyStorage.deserializeNBT(pTag.getCompound("Energy"));
+        energyStorage.deserializeNBT(pTag.getCompound("energy"));
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {

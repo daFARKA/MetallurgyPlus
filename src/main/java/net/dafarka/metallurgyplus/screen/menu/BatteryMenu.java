@@ -14,8 +14,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
+
 
 public class BatteryMenu extends AbstractContainerMenu {
     private static final int BATTERY_SLOTS_COUNT = 0;
@@ -41,16 +40,6 @@ public class BatteryMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
-        /*this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            for (int i = 0; i < INPUT_POSITIONS.length; i++) {
-                this.addSlot(new SlotItemHandler(iItemHandler, i, INPUT_POSITIONS[i][0], INPUT_POSITIONS[i][1]));
-            }
-
-            for (int i = 0; i < OUTPUT_POSITIONS.length; i++) {
-                this.addSlot(new SlotItemHandler(iItemHandler, i + INPUT_POSITIONS.length, OUTPUT_POSITIONS[i][0], OUTPUT_POSITIONS[i][1]));
-            }
-        });*/
 
         addDataSlots(data);
     }
@@ -128,8 +117,16 @@ public class BatteryMenu extends AbstractContainerMenu {
     public int getScaledEnergy() {
         int energy = this.data.get(0);
         int maxEnergy = this.data.get(1);
-        int energyBarSize = 48;
+        int energyBarSize = 160;
 
         return maxEnergy != 0 && energy != 0 ? energy * energyBarSize / maxEnergy : 0;
+    }
+
+    public int getEnergyStored() {
+        return this.data.get(0);
+    }
+
+    public int getMaxEnergy() {
+        return this.data.get(1);
     }
 }

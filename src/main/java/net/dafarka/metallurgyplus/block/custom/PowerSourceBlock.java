@@ -4,7 +4,6 @@ import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.PowerSourceBlockEntity;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -101,6 +100,6 @@ public class PowerSourceBlock extends BaseEntityBlock {
   @Override
   public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
     super.appendHoverText(stack, level, tooltip, flag);
-    tooltip.add(Component.literal("Generates " + Utility.formatWithSeparator(Integer.MAX_VALUE, ',') + " FE/tick").withStyle(ChatFormatting.GRAY));
+    tooltip.add(Component.literal("Generates " + Utility.formatWithSeparator(Integer.MAX_VALUE, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
   }
 }

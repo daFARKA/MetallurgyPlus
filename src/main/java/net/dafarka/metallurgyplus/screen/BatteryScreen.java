@@ -38,10 +38,21 @@ public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
         pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
         renderEnergyBar(pGuiGraphics, x, y);
+        renderEnergyText(pGuiGraphics, x ,y);
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(TEXTURE, x + 64, y + 21, 176, 16, menu.getScaledEnergy(), 13);
+        guiGraphics.blit(TEXTURE, x + 8, y + 61, 0, 176, menu.getScaledEnergy(), 13);
+    }
+
+    private void renderEnergyText(GuiGraphics guiGraphics, int x, int y) {
+        int energy = menu.getEnergyStored();
+        int maxEnergy = menu.getMaxEnergy();
+
+        String energyText = energy + " / " + maxEnergy + " FE";
+
+        // Draw centered or left-aligned text as you prefer
+        guiGraphics.drawString(font, energyText, x + 10, y + 20, 0x000000, false);
     }
 
     @Override

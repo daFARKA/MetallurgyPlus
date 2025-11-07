@@ -39,8 +39,9 @@ public class ModLangProvider extends LanguageProvider {
 
         add("block.metallurgyplus.ore_processing_unit", "Ore Processing Unit");
         add("block.metallurgyplus.alloy_smelter", "Alloy Smelter");
-        add("block.metallurgyplus.power_source", "Power Source");
+        add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.battery", "Battery");
+        add("block.metallurgyplus.cable", "Cable");
 
         add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
 

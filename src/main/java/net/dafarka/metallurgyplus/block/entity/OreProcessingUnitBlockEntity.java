@@ -171,21 +171,21 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.put("Input", inputHandler.serializeNBT());
-        pTag.put("Output", outputHandler.serializeNBT());
-        pTag.putInt("ore_processing_unit.progress", progress);
+        pTag.put("input", inputHandler.serializeNBT());
+        pTag.put("output", outputHandler.serializeNBT());
+        pTag.putInt("progress", progress);
 
-        pTag.put("Energy", energyStorage.serializeNBT());
+        pTag.put("energy", energyStorage.serializeNBT());
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        inputHandler.deserializeNBT(pTag.getCompound("Input"));
-        outputHandler.deserializeNBT(pTag.getCompound("Output"));
-        progress = pTag.getInt("ore_processing_unit.progress");
+        inputHandler.deserializeNBT(pTag.getCompound("input"));
+        outputHandler.deserializeNBT(pTag.getCompound("output"));
+        progress = pTag.getInt("progress");
 
-        energyStorage.deserializeNBT(pTag.getCompound("Energy"));
+        energyStorage.deserializeNBT(pTag.getCompound("energy"));
     }
 
 

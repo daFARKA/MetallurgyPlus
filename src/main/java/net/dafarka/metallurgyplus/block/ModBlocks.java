@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.block;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.custom.AlloySmelterBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.OreProcessingUnitBlock;
 import net.dafarka.metallurgyplus.block.custom.PowerSourceBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -53,6 +54,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> BATTERY = registerBlock("battery",
         () -> new BatteryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+
+    public static final RegistryObject<Block> CABLE = registerBlock("cable",
+        () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL).noOcclusion()));
 
     public static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

@@ -1,18 +1,15 @@
 package net.dafarka.metallurgyplus.block.custom;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.block.entity.BatteryBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.CableBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -32,16 +29,17 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BatteryBlock extends BaseEntityBlock {
+public class CableBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0,0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public BatteryBlock(Properties pProperties) {
+    public static final int TRANSFER = 10000;
+
+    public CableBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
     }
@@ -60,14 +58,8 @@ public class BatteryBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof BatteryBlockEntity batteryBlockEntity) {
-                ItemStack stack = new ItemStack(this);
-
-                CompoundTag nbt = new CompoundTag();
-                batteryBlockEntity.saveToItem(nbt);
-                stack.getOrCreateTag().put("BlockEntityTag", nbt);
-
-                popResource(pLevel, pPos, stack);
+            if (blockEntity instanceof CableBlockEntity) {
+                ((CableBlockEntity) blockEntity).drops();
             }
         }
 
@@ -76,16 +68,7 @@ public class BatteryBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof BatteryBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) pPlayer, (MenuProvider) entity, pPos);
-            } else {
-                throw new IllegalStateException("Our Container provider is missing!");
-            }
-        }
-
-        return InteractionResult.sidedSuccess(pLevel.isClientSide());
+        return InteractionResult.PASS;
     }
 
     @Nullable
@@ -95,14 +78,14 @@ public class BatteryBlock extends BaseEntityBlock {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.BATTERY_BE.get(),
+        return createTickerHelper(pBlockEntityType, ModBlockEntities.CABLE_BE.get(),
             (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new BatteryBlockEntity(pPos, pState);
+        return new CableBlockEntity(pPos, pState);
     }
 
     @Override
@@ -121,21 +104,6 @@ public class BatteryBlock extends BaseEntityBlock {
     public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag")) {
-            CompoundTag beTag = stack.getTag().getCompound("BlockEntityTag");
-
-            if (beTag.contains("energy")) {
-                CompoundTag energyTag = beTag.getCompound("energy");
-
-                int energy = energyTag.getInt("energy");
-
-                tooltip.add(Component.literal("Energy: " + Utility.formatWithSeparator(energy, ',') + " FE")
-                    .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
-                return;
-            }
-        }
-
-        tooltip.add(Component.literal("Energy: 0 FE")
-            .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
+        tooltip.add(Component.literal("Transfers " + Utility.formatWithSeparator(TRANSFER, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }
