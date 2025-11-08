@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen.loot;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -30,12 +31,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         mapBlocksDropSelf(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksRaw();
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
+        cableBlocksDropSelf();
 
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
         this.dropSelf(ModBlocks.BATTERY.get());
-        this.dropSelf(ModBlocks.CABLE.get());
 
         this.add(ModBlocks.CLAY_MINERAL.get(),
             block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CLAY_MINERAL_RAW.get()));
@@ -64,6 +65,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
             String currentMaterialName = ore.getId().getPath().split("_")[0];
             this.add(ore.get(), block -> createCopperLikeOreDrops(ore.get(), ModItems.ORE_MAP.get(currentMaterialName + "_raw").get()));
+        }
+    }
+
+    private void cableBlocksDropSelf() {
+        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            this.dropSelf(cable.get());
         }
     }
 }

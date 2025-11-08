@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -186,6 +187,10 @@ public class ModItems {
         registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
 
+        // Register Cables
+        registerCable(1, 0x0000ff);
+        registerCable(2, 0x00ff00);
+        registerCable(3, 0xff0000);
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
@@ -198,9 +203,10 @@ public class ModItems {
             MATERIAL_MAP.put(name, item);
             MATERIAL_COLOR_MAP.put(name, color);
         }
+
         String name = materialName + "_block";
         RegistryObject<Block> block = ModBlocks.registerBlock(name,
-            () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
 
         ModBlocks.MATERIAL_BLOCKS_MAP.put(name, block);
         ModBlocks.MATERIAL_COLOR_MAP.put(name, color);
@@ -221,7 +227,7 @@ public class ModItems {
         for (String base : ORE_BASE_NAME) {
             String name = oreName + "_" + base + "_block";
             RegistryObject<Block> block = ModBlocks.registerBlock(name,
-                () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
+                () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
 
             ModBlocks.ORE_BLOCKS_MAP.put(name, block);
             ModBlocks.ORE_COLOR_MAP.put(name, color);
@@ -239,11 +245,20 @@ public class ModItems {
             ALLOY_MAP.put(name, item);
             ALLOY_COLOR_MAP.put(name, color);
         }
+
         String name = materialName + "_block";
         RegistryObject<Block> block = ModBlocks.registerBlock(name,
-            () -> new net.minecraft.world.level.block.Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL)));
 
         ModBlocks.ALLOY_BLOCKS_MAP.put(name, block);
         ModBlocks.ALLOY_COLOR_MAP.put(name, color);
+    }
+
+    private static void registerCable(int tier, int color) {
+        String name = "cable" + tier + "_block";
+        RegistryObject<CableBlock> block = ModBlocks.registerBlock(name,
+            () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL), tier));
+        ModBlocks.CABLE_BLOCKS_MAP.put(tier, block);
+        ModBlocks.CABLE_COLOR_MAP.put(tier, color);
     }
 }

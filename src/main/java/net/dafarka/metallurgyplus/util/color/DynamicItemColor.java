@@ -5,10 +5,10 @@ import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;
 
-public class ModDynamicItemColor implements ItemColor {
+public class DynamicItemColor implements ItemColor {
 
 
-    public ModDynamicItemColor() {}
+    public DynamicItemColor() {}
 
     @Override
     public int getColor(ItemStack pStack, int pTintIndex) {
@@ -36,6 +36,6 @@ public class ModDynamicItemColor implements ItemColor {
 
             return -1;
         }
-        return -1; // -1 if nothing should change
+        return -1;
     }
 }

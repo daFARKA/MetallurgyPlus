@@ -34,9 +34,11 @@ public class ModBlocks {
     public static final Map<String, RegistryObject<Block>> MATERIAL_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ORE_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ALLOY_BLOCKS_MAP = new HashMap<>();
+    public static final Map<Integer, RegistryObject<CableBlock>> CABLE_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> CABLE_COLOR_MAP = new HashMap<>();
 
     public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
@@ -55,8 +57,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> BATTERY = registerBlock("battery",
         () -> new BatteryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
-    public static final RegistryObject<Block> CABLE = registerBlock("cable",
-        () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL).noOcclusion()));
 
     public static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

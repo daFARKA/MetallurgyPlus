@@ -7,10 +7,10 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class ModDynamicMaterialBlockColor implements BlockColor {
+public class DynamicMaterialBlockColor implements BlockColor {
 
 
-    public ModDynamicMaterialBlockColor() {}
+    public DynamicMaterialBlockColor() {}
 
     @Override
     public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos, int pTintIndex) {

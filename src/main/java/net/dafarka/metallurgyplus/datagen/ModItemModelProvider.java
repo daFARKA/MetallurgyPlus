@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +15,6 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -43,11 +42,12 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         simpleItem(ModItems.LLAMKANA);
 
-        createBlockEntityItem("alloy_smelter");
-        createBlockEntityItem("ore_processing_unit");
-        createBlockEntityItem("power_source");
-        createBlockEntityItem("battery");
-        createBlockEntityItem("cable");
+        simpleBlockItemModel("alloy_smelter");
+        simpleBlockItemModel("ore_processing_unit");
+        simpleBlockItemModel("power_source");
+        simpleBlockItemModel("battery");
+
+        createCableBlockEntityItems();
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -87,15 +87,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void createBlockEntityItem(String name) {
-        getBuilder(name)
-            .parent(getExistingFile(modLoc("block/" + name)))
-            .transforms()
-            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-            .rotation(10, -45, 170)
-            .translation(0f, 1.5f, -2.75f)
-            .scale(0.375f)
-            .end()
-            .end();
+    private void createCableBlockEntityItems() {
+        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            String name = block.get().getDescriptionId().split("\\.")[2];
+            simpleBlockItemModel(name);
+        }
     }
 }

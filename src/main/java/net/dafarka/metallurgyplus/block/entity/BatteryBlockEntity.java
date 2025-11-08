@@ -87,7 +87,6 @@ public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void saveToItem(CompoundTag tag) {
-        MetallurgyPlus.LOGGER.info("Saving BatteryBlockEntity: " + this.energyStorage.getEnergyStored());
         CompoundTag energyTag = this.energyStorage.serializeNBT();
         tag.put("energy", energyTag);
     }

@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +31,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         horizontalFacingBlock("battery", ModBlocks.BATTERY.get());
-        horizontalFacingBlock("cable", ModBlocks.CABLE.get());
+
+        cableBlocks();
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
@@ -74,5 +76,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
             .modelForState().modelFile(model).rotationY(180).addModel()
             .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
             .modelForState().modelFile(model).rotationY(270).addModel();
+    }
+
+    private void cableBlocks() {
+        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+        }
     }
 }

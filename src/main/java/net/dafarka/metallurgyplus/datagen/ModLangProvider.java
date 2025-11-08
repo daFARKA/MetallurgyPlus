@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -41,13 +42,13 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.alloy_smelter", "Alloy Smelter");
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.battery", "Battery");
-        add("block.metallurgyplus.cable", "Cable");
 
         add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
 
         addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
+        addCableTranslations();
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
@@ -80,6 +81,16 @@ public class ModLangProvider extends LanguageProvider {
                 }
             }
             add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+        }
+    }
+
+    private void addCableTranslations() {
+        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            String fullName = cable.getId().getPath();
+            String name = cable.get().getDescriptionId().split("\\.")[2];
+            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+
+            add("block." + MetallurgyPlus.MODID + "." + fullName, "Cable Tier " + tier);
         }
     }
 

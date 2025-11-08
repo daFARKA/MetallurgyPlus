@@ -21,13 +21,20 @@ public class CableBlockEntity extends BlockEntity {
 
     protected final ContainerData data;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(CableBlock.TRANSFER * 2, CableBlock.TRANSFER, CableBlock.TRANSFER);
-    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
+    private final GenericEnergyStorage energyStorage;
+    private final LazyOptional<IEnergyStorage> energy;
 
 
-    public CableBlockEntity(BlockPos pPos,
-                              BlockState pBlockState) {
-        super(ModBlockEntities.CABLE_BE.get(), pPos, pBlockState);
+    public CableBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
+        super(ModBlockEntities.CABLE_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
+        if (tier <= 0) {
+            throw new IllegalArgumentException("Cable tier must be greater than 0! Found: " + tier);
+        }
+
+        int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
+        this.energyStorage = new GenericEnergyStorage(transfer * 2, transfer, transfer);
+        this.energy = LazyOptional.of(() -> energyStorage);
+
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {

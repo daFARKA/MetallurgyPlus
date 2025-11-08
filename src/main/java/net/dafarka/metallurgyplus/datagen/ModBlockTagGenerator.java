@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -27,13 +28,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksAddTags();
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
+        cableBlockAddTags();
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
                 ModBlocks.ALLOY_SMELTER.get(),
                 ModBlocks.POWER_SOURCE.get(),
-                ModBlocks.BATTERY.get(),
-                ModBlocks.CABLE.get());
+                ModBlocks.BATTERY.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());
@@ -57,6 +58,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ore.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(ore.get());
             this.tag(Tags.Blocks.ORES).add(ore.get());
+        }
+    }
+
+    private void cableBlockAddTags() {
+        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(cable.get());
         }
     }
 }

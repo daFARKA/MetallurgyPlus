@@ -7,16 +7,16 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class ModDynamicAlloyBlockColor implements BlockColor {
+public class DynamicOreBlockColor implements BlockColor {
 
 
-    public ModDynamicAlloyBlockColor() {}
+    public DynamicOreBlockColor() {}
 
     @Override
     public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos, int pTintIndex) {
         if (pTintIndex == 0) {
             String fullName = pState.getBlock().getDescriptionId();
-            return ModBlocks.ALLOY_COLOR_MAP.get(fullName.split("\\.")[2]) != null ? ModBlocks.ALLOY_COLOR_MAP.get(fullName.split("\\.")[2]) : -1;
+            return ModBlocks.ORE_COLOR_MAP.get(fullName.split("\\.")[2]) != null ? ModBlocks.ORE_COLOR_MAP.get(fullName.split("\\.")[2]) : -1;
         }
         return -1;
     }

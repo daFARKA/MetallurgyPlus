@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -36,6 +37,11 @@ public class ModBlockModelProvider extends BlockModelProvider {
         for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerMaterialModel(blockName);
+        }
+
+        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerCable(blockName);
         }
 
         registerOrientables();
@@ -100,23 +106,40 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("ore_processing_unit", false);
         registerOrientable("power_source", true);
         registerOrientable("battery", true);
-        registerOrientable("cable", true);
     }
 
     private void registerOrientable(String name, boolean allSidesSame) {
         if (allSidesSame) {
             getBuilder(name)
-                .parent(getExistingFile(modLoc("block_entity_orientable"))) // parent
+                .parent(getExistingFile(modLoc("block_entity_orientable")))
                 .texture("top", modLoc("block/" + name))
                 .texture("front", modLoc("block/" + name))
                 .texture("side", modLoc("block/" + name));
         } else {
             getBuilder(name)
-                .parent(getExistingFile(modLoc("block_entity_orientable"))) // parent
+                .parent(getExistingFile(modLoc("block_entity_orientable")))
                 .texture("top", modLoc("block/" + name + "_top"))
                 .texture("front", modLoc("block/" + name + "_front"))
                 .texture("side", modLoc("block/" + name + "_side"));
         }
+    }
+
+    private void registerCable(String name) {
+        getBuilder(name)
+            .parent(getExistingFile(modLoc("block_entity_orientable")))
+            .texture("top", modLoc("block/base_cable"))
+            .texture("front", modLoc("block/base_cable"))
+            .texture("side", modLoc("block/base_cable"))
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).texture("#front").tintindex(0).end()
+            .face(Direction.SOUTH).texture("#front").tintindex(0).end()
+            .face(Direction.EAST).texture("#side").tintindex(0).end()
+            .face(Direction.WEST).texture("#side").tintindex(0).end()
+            .face(Direction.UP).texture("#top").tintindex(0).end()
+            .face(Direction.DOWN).texture("#top").tintindex(0).end()
+            .end();
     }
 
 }
