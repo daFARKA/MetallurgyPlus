@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen.loot;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -32,6 +33,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         oreBlocksRaw();
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
         cableBlocksDropSelf();
+        solarPanelBlocksDropSelf();
 
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
@@ -70,6 +72,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     private void cableBlocksDropSelf() {
         for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            this.dropSelf(cable.get());
+        }
+    }
+
+    private void solarPanelBlocksDropSelf() {
+        for (RegistryObject<SolarPanelBlock> cable : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             this.dropSelf(cable.get());
         }
     }

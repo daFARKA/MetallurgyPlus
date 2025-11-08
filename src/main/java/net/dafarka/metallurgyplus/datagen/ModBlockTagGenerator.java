@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -29,6 +30,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         oreBlocksAddTags();
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         cableBlockAddTags();
+        solarPanelBlockAddTags();
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
@@ -64,6 +66,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     private void cableBlockAddTags() {
         for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(cable.get());
+        }
+    }
+
+    private void solarPanelBlockAddTags() {
+        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(panel.get());
         }
     }
 }

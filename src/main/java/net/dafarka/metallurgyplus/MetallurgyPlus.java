@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus;
 import com.mojang.logging.LogUtils;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -16,6 +17,7 @@ import net.dafarka.metallurgyplus.util.color.DynamicCableColor;
 import net.dafarka.metallurgyplus.util.color.DynamicMaterialBlockColor;
 import net.dafarka.metallurgyplus.util.color.DynamicItemColor;
 import net.dafarka.metallurgyplus.util.color.DynamicOreBlockColor;
+import net.dafarka.metallurgyplus.util.color.DynamicSolarPanelColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
@@ -123,6 +125,10 @@ public class MetallurgyPlus
             for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
                 blockColors.register(new DynamicCableColor(), block.get());
                 itemColors.register(new DynamicCableColor(), block.get().asItem());
+            }
+            for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+                blockColors.register(new DynamicSolarPanelColor(), block.get());
+                itemColors.register(new DynamicSolarPanelColor(), block.get().asItem());
             }
         }
     }

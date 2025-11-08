@@ -3,11 +3,11 @@ package net.dafarka.metallurgyplus.item;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,10 +19,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
+
+    private static final List<Integer> TIER_COLORS = List.of(0x000000, 0x0000ff, 0x00ff00, 0xff0000, 0xffff00, 0x00ffff, 0xff00ff);
+
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
@@ -54,7 +58,7 @@ public class ModItems {
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
 
-        // Register Base Materials
+        // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
         registerMaterial("antimony", 0x5465c4);
         registerMaterial("barium", 0x8c8f85);
@@ -113,7 +117,7 @@ public class ModItems {
         registerMaterial("zinc", 0xc7fff8);
         registerMaterial("zirconium", 0x705a43);
 
-        // Register Ores
+        // Ores
         registerOre("gibbsite", 0x52695a, OreRarity.UNCOMMON);  //Aluminum
         registerOre("bauxite", 0x916b4d, OreRarity.COMMON);   //Aluminum
         registerOre("stibnite", 0x5465c4, OreRarity.UNCOMMON);  //Antimony, Sulphur
@@ -155,7 +159,7 @@ public class ModItems {
         registerOre("uraninite", 0x91b572, OreRarity.RARE); //Uranium, Thorium, Technetium
         registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); //Selenium
 
-        // Register Alloys
+        // Alloys
         registerAlloy("steel", 0x707070); // Iron, Coal
         registerAlloy("wrought-iron", 0x242020); // Steel, Iron
         registerAlloy("pig-iron", 0xe3ccb1); // Wrought Iron, Sand
@@ -187,13 +191,21 @@ public class ModItems {
         registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
 
-        // Register Cables
-        registerCable(1, 0x0000ff);
-        registerCable(2, 0x00ff00);
-        registerCable(3, 0xff0000);
-        registerCable(4, 0xffff00);
-        registerCable(5, 0x00ffff);
-        registerCable(6, 0xff00ff);
+        // Cables
+        registerCable(1, TIER_COLORS.get(1));
+        registerCable(2, TIER_COLORS.get(2));
+        registerCable(3, TIER_COLORS.get(3));
+        registerCable(4, TIER_COLORS.get(4));
+        registerCable(5, TIER_COLORS.get(5));
+        registerCable(6, TIER_COLORS.get(6));
+
+        // Solar Panels
+        registerSolarPanel(1, TIER_COLORS.get(1));
+        registerSolarPanel(2, TIER_COLORS.get(2));
+        registerSolarPanel(3, TIER_COLORS.get(3));
+        registerSolarPanel(4, TIER_COLORS.get(4));
+        registerSolarPanel(5, TIER_COLORS.get(5));
+        registerSolarPanel(6, TIER_COLORS.get(6));
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
@@ -263,5 +275,13 @@ public class ModItems {
             () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL), tier));
         ModBlocks.CABLE_BLOCKS_MAP.put(tier, block);
         ModBlocks.CABLE_COLOR_MAP.put(tier, color);
+    }
+
+    private static void registerSolarPanel(int tier, int color) {
+        String name = "solar_panel" + tier + "_block";
+        RegistryObject<SolarPanelBlock> block = ModBlocks.registerBlock(name,
+            () -> new SolarPanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL), tier));
+        ModBlocks.SOLAR_PANEL_BLOCK_MAP.put(tier, block);
+        ModBlocks.SOLAR_PANEL_COLOR_MAP.put(tier, color);
     }
 }

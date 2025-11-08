@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -42,6 +43,11 @@ public class ModBlockModelProvider extends BlockModelProvider {
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerCable(blockName);
+        }
+
+        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerSolarPanel(blockName);
         }
 
         registerOrientables();
@@ -113,7 +119,6 @@ public class ModBlockModelProvider extends BlockModelProvider {
             getBuilder(name)
                 .parent(getExistingFile(modLoc("block_entity_orientable")))
                 .texture("top", modLoc("block/" + name))
-                .texture("front", modLoc("block/" + name))
                 .texture("side", modLoc("block/" + name));
         } else {
             getBuilder(name)
@@ -128,18 +133,34 @@ public class ModBlockModelProvider extends BlockModelProvider {
         getBuilder(name)
             .parent(getExistingFile(modLoc("block_entity_orientable")))
             .texture("top", modLoc("block/base_cable"))
-            .texture("front", modLoc("block/base_cable"))
             .texture("side", modLoc("block/base_cable"))
             .element()
             .from(0, 0, 0)
             .to(16, 16, 16)
             .face(Direction.NORTH).texture("#front").tintindex(0).end()
-            .face(Direction.SOUTH).texture("#front").tintindex(0).end()
+            .face(Direction.SOUTH).texture("#side").tintindex(0).end()
             .face(Direction.EAST).texture("#side").tintindex(0).end()
             .face(Direction.WEST).texture("#side").tintindex(0).end()
             .face(Direction.UP).texture("#top").tintindex(0).end()
-            .face(Direction.DOWN).texture("#top").tintindex(0).end()
+            .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
             .end();
     }
 
+    private void registerSolarPanel(String name) {
+        getBuilder(name)
+            .parent(getExistingFile(modLoc("block_entity_orientable")))
+            .texture("top", modLoc("block/solar_panel_top"))
+            .texture("side", modLoc("block/solar_panel_side"))
+            .texture("bottom", modLoc("block/solar_panel_bottom"))
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).texture("#side").tintindex(0).end()
+            .face(Direction.SOUTH).texture("#side").tintindex(0).end()
+            .face(Direction.EAST).texture("#side").tintindex(0).end()
+            .face(Direction.WEST).texture("#side").tintindex(0).end()
+            .face(Direction.UP).texture("#top").tintindex(1).end()
+            .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
+            .end();
+    }
 }

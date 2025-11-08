@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -49,6 +50,7 @@ public class ModLangProvider extends LanguageProvider {
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
         addCableTranslations();
+        addSolarPanelTranslations();
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
@@ -91,6 +93,16 @@ public class ModLangProvider extends LanguageProvider {
             int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
 
             add("block." + MetallurgyPlus.MODID + "." + fullName, "Cable Tier " + tier);
+        }
+    }
+
+    private void addSolarPanelTranslations() {
+        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            String fullName = panel.getId().getPath();
+            String name = panel.get().getDescriptionId().split("\\.")[2];
+            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+
+            add("block." + MetallurgyPlus.MODID + "." + fullName, "Solar Panel Tier " + tier);
         }
     }
 

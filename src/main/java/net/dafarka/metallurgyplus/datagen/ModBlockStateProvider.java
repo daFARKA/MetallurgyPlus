@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +34,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("battery", ModBlocks.BATTERY.get());
 
         cableBlocks();
+        solarPanelBlocks();
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
@@ -80,6 +82,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void cableBlocks() {
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+        }
+    }
+
+    private void solarPanelBlocks() {
+        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
         }
     }

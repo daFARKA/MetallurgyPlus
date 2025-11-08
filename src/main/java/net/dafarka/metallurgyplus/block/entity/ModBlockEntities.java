@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.minecraft.world.level.block.Block;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,6 +17,7 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MetallurgyPlus.MODID);
 
     public static final Map<Integer, RegistryObject<BlockEntityType<CableBlockEntity>>> CABLE_BLOCK_ENTITIES = Maps.newHashMap();
+    public static final Map<Integer, RegistryObject<BlockEntityType<SolarPanelBlockEntity>>> SOLAR_BLOCK_ENTITIES = Maps.newHashMap();
 
     public static final RegistryObject<BlockEntityType<OreProcessingUnitBlockEntity>> ORE_PROCESSING_BE =
         BLOCK_ENTITIES.register("ore_processing_be", () -> BlockEntityType.Builder.of(OreProcessingUnitBlockEntity::new,
@@ -38,6 +39,7 @@ public class ModBlockEntities {
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
         registerCableBlocks();
+        registerSolarBlocks();
     }
 
     public static void registerCableBlocks() {
@@ -46,7 +48,6 @@ public class ModBlockEntities {
             String digits = path.replaceAll("\\D+", "");
             int tier = digits.isEmpty() ? 0 : Integer.parseInt(digits);
 
-            // Register the BlockEntityType using a Supplier (so it runs at the right time)
             RegistryObject<BlockEntityType<CableBlockEntity>> cableBE =
                 BLOCK_ENTITIES.register("cable" + tier + "_be",
                     () -> BlockEntityType.Builder
@@ -58,4 +59,20 @@ public class ModBlockEntities {
         }
     }
 
+    public static void registerSolarBlocks() {
+        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            String path = panel.getId().getPath();
+            String digits = path.replaceAll("\\D+", "");
+            int tier = digits.isEmpty() ? 0 : Integer.parseInt(digits);
+
+            RegistryObject<BlockEntityType<SolarPanelBlockEntity>> panelBE =
+                BLOCK_ENTITIES.register("solar_panel" + tier + "_be",
+                    () -> BlockEntityType.Builder
+                        .of((pos, state) -> new SolarPanelBlockEntity(pos, state, tier), panel.get())
+                        .build(null)
+                );
+
+            SOLAR_BLOCK_ENTITIES.put(tier, panelBE);
+        }
+    }
 }

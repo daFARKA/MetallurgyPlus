@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -48,6 +49,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("battery");
 
         createCableBlockEntityItems();
+        createSolarPanelBlockEntityItems();
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -89,6 +91,13 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private void createCableBlockEntityItems() {
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            String name = block.get().getDescriptionId().split("\\.")[2];
+            simpleBlockItemModel(name);
+        }
+    }
+
+    private void createSolarPanelBlockEntityItems() {
+        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String name = block.get().getDescriptionId().split("\\.")[2];
             simpleBlockItemModel(name);
         }

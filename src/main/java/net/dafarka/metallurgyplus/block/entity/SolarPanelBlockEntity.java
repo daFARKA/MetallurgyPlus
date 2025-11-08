@@ -1,7 +1,8 @@
 package net.dafarka.metallurgyplus.block.entity;
 
+import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,33 +17,33 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
-public class CableBlockEntity extends BlockEntity {
+public class SolarPanelBlockEntity extends BlockEntity {
 
     protected final ContainerData data;
 
     private final GenericEnergyStorage energyStorage;
     private final LazyOptional<IEnergyStorage> energy;
 
+    private int generation = 0;
 
-    public CableBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
-        super(ModBlockEntities.CABLE_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
+
+    public SolarPanelBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
+        super(ModBlockEntities.SOLAR_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
         if (tier <= 0) {
             throw new IllegalArgumentException("Tier must be greater than 0! Found: " + tier);
         }
 
-        int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
-        this.energyStorage = new GenericEnergyStorage(transfer, transfer, transfer);
+        this.generation = SolarPanelBlock.GENERATION * (int) Math.pow(2, tier - 1);
+        this.energyStorage = new GenericEnergyStorage(generation, 0, generation);
         this.energy = LazyOptional.of(() -> energyStorage);
 
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> CableBlockEntity.this.energyStorage.getEnergyStored();
-                    case 1 -> CableBlockEntity.this.energyStorage.getMaxEnergyStored();
+                    case 0 -> SolarPanelBlockEntity.this.energyStorage.getEnergyStored();
+                    case 1 -> SolarPanelBlockEntity.this.energyStorage.getMaxEnergyStored();
                     default -> 0;
                 };
             }
@@ -50,7 +51,7 @@ public class CableBlockEntity extends BlockEntity {
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> CableBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
+                    case 0 -> SolarPanelBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
                 }
             }
 
@@ -62,27 +63,17 @@ public class CableBlockEntity extends BlockEntity {
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        Map<IEnergyStorage, Direction> receivers = new HashMap<>();
-        for (Direction direction : Direction.values()) {
-            BlockPos neighborPos = pPos.relative(direction);
-            BlockEntity neighbor = pLevel.getBlockEntity(neighborPos);
-            if (neighbor != null) {
-                neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(cap -> {
-                    if (cap.canReceive()) {
-                        receivers.put(cap, direction);
-                    }
-                });
-            }
+        if (pLevel.isDay() && pLevel.canSeeSky(pPos.above())) {
+            energyStorage.generateEnergy(generation);
         }
 
-        if (receivers.isEmpty()) return;
-
-        int energyAvailable = energyStorage.getEnergyStored();
-        int energyPerReceiver = energyAvailable / receivers.size();
-
-        for (IEnergyStorage receiver : receivers.keySet()) {
-            int accepted = receiver.receiveEnergy(energyPerReceiver, false);
-            energyStorage.extractEnergy(accepted, false);
+        BlockPos belowPos = pPos.below();
+        if (pLevel.getBlockEntity(belowPos) != null) {
+            pLevel.getBlockEntity(belowPos).getCapability(ForgeCapabilities.ENERGY, null).ifPresent(storage -> {
+                int energyToSend = energyStorage.extractEnergy(generation, true);
+                int accepted = storage.receiveEnergy(energyToSend, false);
+                energyStorage.extractEnergy(accepted, false);
+            });
         }
 
         setChanged(pLevel, pPos, pState);

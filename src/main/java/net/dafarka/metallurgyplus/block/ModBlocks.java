@@ -6,6 +6,7 @@ import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.OreProcessingUnitBlock;
 import net.dafarka.metallurgyplus.block.custom.PowerSourceBlock;
+import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.world.item.BlockItem;
@@ -35,10 +36,12 @@ public class ModBlocks {
     public static final Map<String, RegistryObject<Block>> ORE_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ALLOY_BLOCKS_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<CableBlock>> CABLE_BLOCKS_MAP = new HashMap<>();
+    public static final Map<Integer, RegistryObject<SolarPanelBlock>> SOLAR_PANEL_BLOCK_MAP = new HashMap<>();
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> CABLE_COLOR_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> SOLAR_PANEL_COLOR_MAP = new HashMap<>();
 
     public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
