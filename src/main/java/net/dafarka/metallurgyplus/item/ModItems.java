@@ -191,6 +191,9 @@ public class ModItems {
         registerCable(1, 0x0000ff);
         registerCable(2, 0x00ff00);
         registerCable(3, 0xff0000);
+        registerCable(4, 0xffff00);
+        registerCable(5, 0x00ffff);
+        registerCable(6, 0xff00ff);
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};

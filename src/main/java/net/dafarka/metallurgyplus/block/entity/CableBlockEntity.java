@@ -16,6 +16,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CableBlockEntity extends BlockEntity {
 
@@ -32,7 +34,7 @@ public class CableBlockEntity extends BlockEntity {
         }
 
         int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
-        this.energyStorage = new GenericEnergyStorage(transfer * 2, transfer, transfer);
+        this.energyStorage = new GenericEnergyStorage(transfer, transfer, transfer);
         this.energy = LazyOptional.of(() -> energyStorage);
 
         this.data = new ContainerData() {
@@ -60,28 +62,29 @@ public class CableBlockEntity extends BlockEntity {
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        // Try sending energy to neighbors
+        if (level.isClientSide) return;
+
+        Map<IEnergyStorage, Direction> receivers = new HashMap<>();
         for (Direction direction : Direction.values()) {
-            BlockEntity neighbor = pLevel.getBlockEntity(pPos.relative(direction));
+            BlockPos neighborPos = pPos.relative(direction);
+            BlockEntity neighbor = pLevel.getBlockEntity(neighborPos);
             if (neighbor != null) {
-                neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(neighborEnergy -> {
-                    int energyExtracted = this.energyStorage.extractEnergy(Integer.MAX_VALUE, true);
-                    int energyReceived = neighborEnergy.receiveEnergy(energyExtracted, false);
-                    this.energyStorage.extractEnergy(energyReceived, false);
+                neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(cap -> {
+                    if (cap.canReceive()) {
+                        receivers.put(cap, direction);
+                    }
                 });
             }
         }
 
-        // Try pulling energy from neighbors
-        for (Direction direction : Direction.values()) {
-            BlockEntity neighbor = pLevel.getBlockEntity(pPos.relative(direction));
-            if (neighbor != null) {
-                neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(neighborEnergy -> {
-                    int energyPulled = neighborEnergy.extractEnergy(Integer.MAX_VALUE, true);
-                    int accepted = this.energyStorage.receiveEnergy(energyPulled, false);
-                    neighborEnergy.extractEnergy(accepted, false);
-                });
-            }
+        if (receivers.isEmpty()) return;
+
+        int energyAvailable = energyStorage.getEnergyStored();
+        int energyPerReceiver = energyAvailable / receivers.size();
+
+        for (IEnergyStorage receiver : receivers.keySet()) {
+            int accepted = receiver.receiveEnergy(energyPerReceiver, false);
+            energyStorage.extractEnergy(accepted, false);
         }
 
         setChanged(pLevel, pPos, pState);
