@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen.loot;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -34,14 +35,15 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
         cableBlocksDropSelf();
         solarPanelBlocksDropSelf();
+        batteryBlocksDropSelf();
+        customBlocksDropSelf();
 
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
-        this.dropSelf(ModBlocks.BATTERY.get());
 
         this.add(ModBlocks.CLAY_MINERAL.get(),
-            block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CLAY_MINERAL_RAW.get()));
+            block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
@@ -77,8 +79,20 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     }
 
     private void solarPanelBlocksDropSelf() {
-        for (RegistryObject<SolarPanelBlock> cable : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            this.dropSelf(cable.get());
+        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            this.dropSelf(panel.get());
+        }
+    }
+
+    private void batteryBlocksDropSelf() {
+        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            this.dropSelf(battery.get());
+        }
+    }
+
+    private void customBlocksDropSelf() {
+        for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
+            this.dropSelf(block.get());
         }
     }
 }

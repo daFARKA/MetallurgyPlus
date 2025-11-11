@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.HolderLookup;
@@ -31,12 +32,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         cableBlockAddTags();
         solarPanelBlockAddTags();
+        batteryBlockAddTags();
+        mapBlocksAddTags(ModBlocks.CUSTOM_BLOCKS_MAP);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
                 ModBlocks.ALLOY_SMELTER.get(),
-                ModBlocks.POWER_SOURCE.get(),
-                ModBlocks.BATTERY.get());
+                ModBlocks.POWER_SOURCE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());
@@ -72,6 +74,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     private void solarPanelBlockAddTags() {
         for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(panel.get());
+        }
+    }
+
+    private void batteryBlockAddTags() {
+        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(battery.get());
         }
     }
 }

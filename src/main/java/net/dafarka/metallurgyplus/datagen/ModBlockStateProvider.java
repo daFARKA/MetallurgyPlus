@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.Direction;
@@ -25,16 +26,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlocksWithItem();
+        customBlocksWithItem();
 
         blockWithItem(ModBlocks.CLAY_MINERAL);
 
         horizontalFacingBlock("alloy_smelter", ModBlocks.ALLOY_SMELTER.get());
         horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
-        horizontalFacingBlock("battery", ModBlocks.BATTERY.get());
 
         cableBlocks();
         solarPanelBlocks();
+        batteryBlocks();
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
@@ -52,6 +54,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             simpleBlockState(block.get());
+        }
+    }
+
+    private void customBlocksWithItem() {
+        for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
+            blockWithItem(block);
         }
     }
 
@@ -88,6 +96,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void solarPanelBlocks() {
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
+            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+        }
+    }
+
+    private void batteryBlocks() {
+        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
             horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
         }
     }

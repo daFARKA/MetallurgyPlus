@@ -97,7 +97,7 @@ public class BatteryMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-            pPlayer, ModBlocks.BATTERY.get());
+            pPlayer, ModBlocks.BATTERY_BLOCK_MAP.get(this.data.get(2)).get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
@@ -119,7 +119,13 @@ public class BatteryMenu extends AbstractContainerMenu {
         int maxEnergy = this.data.get(1);
         int energyBarSize = 160;
 
-        return maxEnergy != 0 && energy != 0 ? energy * energyBarSize / maxEnergy : 0;
+        if (maxEnergy <= 0 || energy <= 0) {
+            return 0;
+        }
+
+        double scaled = ((double) energy / maxEnergy) * energyBarSize;
+
+        return (int) Math.round(scaled);
     }
 
     public int getEnergyStored() {

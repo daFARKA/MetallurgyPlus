@@ -34,6 +34,7 @@ public class CableBlockEntity extends BlockEntity {
         }
 
         int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
+        if (tier == 8) transfer = Integer.MAX_VALUE;
         this.energyStorage = new GenericEnergyStorage(transfer, transfer, transfer);
         this.energy = LazyOptional.of(() -> energyStorage);
 

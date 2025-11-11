@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.menu.AlloySmelterMenu;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -49,7 +50,7 @@ public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
         int energy = menu.getEnergyStored();
         int maxEnergy = menu.getMaxEnergy();
 
-        String energyText = energy + " / " + maxEnergy + " FE";
+        String energyText = Utility.formatWithSeparator(energy, ',') + " / " + Utility.formatWithSeparator(maxEnergy, ',') + " FE";
 
         // Draw centered or left-aligned text as you prefer
         guiGraphics.drawString(font, energyText, x + 10, y + 20, 0x000000, false);

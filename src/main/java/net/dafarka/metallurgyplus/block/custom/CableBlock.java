@@ -37,7 +37,7 @@ public class CableBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0,0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public static final int TRANSFER = 10000;
+    public static final int TRANSFER = 1000;
 
     private int tier = 0;
 
@@ -108,6 +108,7 @@ public class CableBlock extends BaseEntityBlock {
         super.appendHoverText(stack, level, tooltip, flag);
 
         int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
+        if (tier == 8) transfer = Integer.MAX_VALUE;
         tooltip.add(Component.literal("Transfers " + Utility.formatWithSeparator(transfer, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

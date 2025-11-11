@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.block.entity;
 import com.google.common.collect.Maps;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,13 +12,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MetallurgyPlus.MODID);
 
-    public static final Map<Integer, RegistryObject<BlockEntityType<CableBlockEntity>>> CABLE_BLOCK_ENTITIES = Maps.newHashMap();
-    public static final Map<Integer, RegistryObject<BlockEntityType<SolarPanelBlockEntity>>> SOLAR_BLOCK_ENTITIES = Maps.newHashMap();
+    public static final Map<Integer, RegistryObject<BlockEntityType<CableBlockEntity>>> CABLE_BLOCK_ENTITIES = new HashMap<>();
+    public static final Map<Integer, RegistryObject<BlockEntityType<SolarPanelBlockEntity>>> SOLAR_BLOCK_ENTITIES = new HashMap<>();
+    public static final Map<Integer, RegistryObject<BlockEntityType<BatteryBlockEntity>>> BATTERY_BLOCK_ENTITIES = new HashMap<>();
 
     public static final RegistryObject<BlockEntityType<OreProcessingUnitBlockEntity>> ORE_PROCESSING_BE =
         BLOCK_ENTITIES.register("ore_processing_be", () -> BlockEntityType.Builder.of(OreProcessingUnitBlockEntity::new,
@@ -31,18 +34,15 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("power_source_be", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new,
             ModBlocks.POWER_SOURCE.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BatteryBlockEntity>> BATTERY_BE =
-        BLOCK_ENTITIES.register("battery_be", () -> BlockEntityType.Builder.of(BatteryBlockEntity::new,
-            ModBlocks.BATTERY.get()).build(null));
-
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
         registerCableBlocks();
         registerSolarBlocks();
+        registerBatteryBlocks();
     }
 
-    public static void registerCableBlocks() {
+    private static void registerCableBlocks() {
         for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String path = cable.getId().getPath();
             String digits = path.replaceAll("\\D+", "");
@@ -59,7 +59,7 @@ public class ModBlockEntities {
         }
     }
 
-    public static void registerSolarBlocks() {
+    private static void registerSolarBlocks() {
         for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String path = panel.getId().getPath();
             String digits = path.replaceAll("\\D+", "");
@@ -73,6 +73,23 @@ public class ModBlockEntities {
                 );
 
             SOLAR_BLOCK_ENTITIES.put(tier, panelBE);
+        }
+    }
+
+    private static void registerBatteryBlocks() {
+        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            String path = battery.getId().getPath();
+            String digits = path.replaceAll("\\D+", "");
+            int tier = digits.isEmpty() ? 0 : Integer.parseInt(digits);
+
+            RegistryObject<BlockEntityType<BatteryBlockEntity>> batteryBE =
+                    BLOCK_ENTITIES.register("battery" + tier + "_be",
+                            () -> BlockEntityType.Builder
+                                    .of((pos, state) -> new BatteryBlockEntity(pos, state, tier), battery.get())
+                                    .build(null)
+                    );
+
+            BATTERY_BLOCK_ENTITIES.put(tier, batteryBE);
         }
     }
 }

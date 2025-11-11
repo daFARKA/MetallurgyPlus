@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.util.OreRarity;
@@ -25,26 +26,38 @@ import java.util.Map;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
 
-    private static final List<Integer> TIER_COLORS = List.of(0x000000, 0x0000ff, 0x00ff00, 0xff0000, 0xffff00, 0x00ffff, 0xff00ff);
+    private static final List<Integer> TIER_COLORS = List.of(0x000000,
+            0x0000ff, 0x0040ff, 0x0070ff, 0x00a0ff, 0x40d0ff, 0x80f0ff,   // Blue family
+            0x00ff00, 0x40ff20, 0x80ff30, 0xbfff60, 0x7fff80, 0xc0ffb0,   // Green family
+            0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red → Brown family
+            0xffff00, 0xffdf20, 0xffbf40, 0xffa040, 0xffd080, 0xfff0a0,   // Yellow/Gold family
+            0x6a00ff, 0x7f40ff, 0x9966ff, 0xb080ff, 0xc0a0ff, 0xd0bfff,   // Purple/Violet family
+            0xff00ff, 0xff40df, 0xff80bf, 0xffa0ff, 0xff80cf, 0xffb0e0    // Magenta/Pink family
+            );
+
+    private static final List<Integer> MAJOR_TIER_COLORS = List.of(
+        0x000000,
+        TIER_COLORS.get(1),
+        TIER_COLORS.get(7),
+        TIER_COLORS.get(13),
+        TIER_COLORS.get(19),
+        TIER_COLORS.get(15),
+        TIER_COLORS.get(17),
+        TIER_COLORS.get(28),
+        TIER_COLORS.get(31)
+    );
+
+    public static final Map<String, RegistryObject<Item>> CUSTOM_ITEM_MAP = new HashMap<>();
+
 
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
+    public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
-
-    public static final RegistryObject<Item> CLAY_MINERAL_RAW = ITEMS.register("clay_mineral_raw", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> KAOLINITE = ITEMS.register("kaolinite", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> PLATINUM_LIKE_METALS = ITEMS.register("platinum_like_metals", () -> new Item(new Item.Properties()));
-
-    public static final RegistryObject<Item> SILICON = ITEMS.register("silicon", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> SULPHUR = ITEMS.register("sulphur", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> RARE_EARTH1 = ITEMS.register("rare_earth1", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> RARE_EARTH2 = ITEMS.register("rare_earth2", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> RARE_EARTH3 = ITEMS.register("rare_earth3", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> SMALL_RARE_EARTH = ITEMS.register("small_rare_earth", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> STONE_DUST = ITEMS.register("stone_dust", () -> new Item(new Item.Properties()));
+    public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
 
     public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
         () -> new ModTools(
@@ -57,6 +70,18 @@ public class ModItems {
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
+
+        // Custom Items
+        registerCustomItem("silicon");
+        registerCustomItem("clay_mineral_raw");
+        registerCustomItem("kaolinite");
+        registerCustomItem("platinum_like_metals");
+        registerCustomItem("sulphur");
+        registerCustomItem("rare_earth1");
+        registerCustomItem("rare_earth2");
+        registerCustomItem("rare_earth3");
+        registerCustomItem("small_rare_earth");
+        registerCustomItem("stone_dust");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -192,20 +217,21 @@ public class ModItems {
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
 
         // Cables
-        registerCable(1, TIER_COLORS.get(1));
-        registerCable(2, TIER_COLORS.get(2));
-        registerCable(3, TIER_COLORS.get(3));
-        registerCable(4, TIER_COLORS.get(4));
-        registerCable(5, TIER_COLORS.get(5));
-        registerCable(6, TIER_COLORS.get(6));
+        registerCables();
 
         // Solar Panels
-        registerSolarPanel(1, TIER_COLORS.get(1));
-        registerSolarPanel(2, TIER_COLORS.get(2));
-        registerSolarPanel(3, TIER_COLORS.get(3));
-        registerSolarPanel(4, TIER_COLORS.get(4));
-        registerSolarPanel(5, TIER_COLORS.get(5));
-        registerSolarPanel(6, TIER_COLORS.get(6));
+        registerSolarPanels();
+
+        // Batteries
+        registerBatteries();
+
+        // Coils
+        registerCoils();
+    }
+
+    private static void registerCustomItem(String name) {
+        RegistryObject<Item> item = ITEMS.register(name, () -> new Item(new Item.Properties()));
+        CUSTOM_ITEM_MAP.put(name, item);
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
@@ -241,8 +267,9 @@ public class ModItems {
 
         for (String base : ORE_BASE_NAME) {
             String name = oreName + "_" + base + "_block";
-            RegistryObject<Block> block = ModBlocks.registerBlock(name,
-                () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)));
+            RegistryObject<Block> block = ModBlocks.registerOreBlock(name,
+                () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.STONE)),
+                oreRarity);
 
             ModBlocks.ORE_BLOCKS_MAP.put(name, block);
             ModBlocks.ORE_COLOR_MAP.put(name, color);
@@ -277,11 +304,51 @@ public class ModItems {
         ModBlocks.CABLE_COLOR_MAP.put(tier, color);
     }
 
+    private static void registerCables() {
+        for (int i = 1; i <= 8; i++) {
+            registerCable(i, MAJOR_TIER_COLORS.get(i));
+        }
+    }
+
     private static void registerSolarPanel(int tier, int color) {
         String name = "solar_panel" + tier + "_block";
         RegistryObject<SolarPanelBlock> block = ModBlocks.registerBlock(name,
             () -> new SolarPanelBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL), tier));
         ModBlocks.SOLAR_PANEL_BLOCK_MAP.put(tier, block);
         ModBlocks.SOLAR_PANEL_COLOR_MAP.put(tier, color);
+    }
+
+    private static void registerSolarPanels() {
+        for (int i = 1; i <= 26; i++) {
+            registerSolarPanel(i, TIER_COLORS.get(i));
+        }
+    }
+
+    private static void registerBattery(int tier, int color) {
+        String name = "battery" + tier + "_block";
+        RegistryObject<BatteryBlock> block = ModBlocks.registerBlock(name,
+                () -> new BatteryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL), tier));
+        ModBlocks.BATTERY_BLOCK_MAP.put(tier, block);
+        ModBlocks.BATTERY_COLOR_MAP.put(tier, color);
+    }
+
+    private static void registerBatteries() {
+        for (int i = 1; i <= 7; i++) {
+            registerBattery(i, MAJOR_TIER_COLORS.get(i));
+        }
+    }
+
+    private static void registerCoil(int tier, int color) {
+        String name = "coil" + tier;
+        RegistryObject<Item> item = ITEMS.register(name, () -> new Item(new Item.Properties()));
+
+        COIL_MAP.put(tier, item);
+        COIL_COLOR_MAP.put(tier, color);
+    }
+
+    private static void registerCoils() {
+        for (int i = 1; i <= 8; i++) {
+            registerCoil(i, MAJOR_TIER_COLORS.get(i));
+        }
     }
 }

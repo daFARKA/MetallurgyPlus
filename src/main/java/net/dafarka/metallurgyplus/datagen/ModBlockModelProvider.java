@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -48,6 +49,11 @@ public class ModBlockModelProvider extends BlockModelProvider {
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerSolarPanel(blockName);
+        }
+
+        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerBattery(blockName);
         }
 
         registerOrientables();
@@ -111,7 +117,6 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("alloy_smelter", false);
         registerOrientable("ore_processing_unit", false);
         registerOrientable("power_source", true);
-        registerOrientable("battery", true);
     }
 
     private void registerOrientable(String name, boolean allSidesSame) {
@@ -162,5 +167,22 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .face(Direction.UP).texture("#top").tintindex(1).end()
             .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
             .end();
+    }
+
+    private void registerBattery(String name) {
+        getBuilder(name)
+                .parent(getExistingFile(modLoc("block_entity_orientable")))
+                .texture("top", modLoc("block/base_battery"))
+                .texture("side", modLoc("block/base_battery"))
+                .element()
+                .from(0, 0, 0)
+                .to(16, 16, 16)
+                .face(Direction.NORTH).texture("#front").tintindex(0).end()
+                .face(Direction.SOUTH).texture("#side").tintindex(0).end()
+                .face(Direction.EAST).texture("#side").tintindex(0).end()
+                .face(Direction.WEST).texture("#side").tintindex(0).end()
+                .face(Direction.UP).texture("#top").tintindex(0).end()
+                .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
+                .end();
     }
 }

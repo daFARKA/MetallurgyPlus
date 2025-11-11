@@ -109,6 +109,7 @@ public class SolarPanelBlock extends BaseEntityBlock {
         super.appendHoverText(stack, level, tooltip, flag);
 
         int generation = GENERATION * (int) Math.pow(2, tier - 1);
+        if (tier == 26) generation = Integer.MAX_VALUE;
         tooltip.add(Component.literal("Generates " + Utility.formatWithSeparator(generation, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

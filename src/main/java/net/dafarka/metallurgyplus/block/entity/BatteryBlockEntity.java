@@ -2,6 +2,8 @@ package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,19 +29,32 @@ public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(10000000, 10000, 10000);
-    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
+    private final GenericEnergyStorage energyStorage;
+    private final LazyOptional<IEnergyStorage> energy;
 
+    private int tier = 0;
 
-    public BatteryBlockEntity(BlockPos pPos,
-                                  BlockState pBlockState) {
-        super(ModBlockEntities.BATTERY_BE.get(), pPos, pBlockState);
+    public BatteryBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
+        super(ModBlockEntities.BATTERY_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
+        if (tier <= 0) {
+            throw new IllegalArgumentException("Tier must be greater than 0! Found: " + tier);
+        }
+
+        this.tier = tier;
+        int capacity = BatteryBlock.CAPACITY * (int) Math.pow(10, tier - 1);
+        double transfer_d = BatteryBlock.CAPACITY * Math.pow(10, tier - 2);
+        int transfer = (int) transfer_d;
+        if (tier == 7) capacity = Integer.MAX_VALUE;
+        this.energyStorage = new GenericEnergyStorage(capacity, transfer, transfer);
+        this.energy = LazyOptional.of(() -> energyStorage);
+
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
                     case 0 -> BatteryBlockEntity.this.energyStorage.getEnergyStored();
                     case 1 -> BatteryBlockEntity.this.energyStorage.getMaxEnergyStored();
+                    case 2 -> BatteryBlockEntity.this.tier;
                     default -> 0;
                 };
             }

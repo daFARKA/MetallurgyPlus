@@ -41,9 +41,14 @@ public class BatteryBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0,0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public BatteryBlock(Properties pProperties) {
+    public static final int CAPACITY = 10000;
+
+    private int tier = 0;
+
+    public BatteryBlock(Properties pProperties, int tier) {
         super(pProperties);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+        this.tier = tier;
     }
 
     @Override
@@ -95,14 +100,14 @@ public class BatteryBlock extends BaseEntityBlock {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.BATTERY_BE.get(),
+        return createTickerHelper(pBlockEntityType, ModBlockEntities.BATTERY_BLOCK_ENTITIES.get(tier).get(),
             (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new BatteryBlockEntity(pPos, pState);
+        return new BatteryBlockEntity(pPos, pState, tier);
     }
 
     @Override
@@ -137,5 +142,12 @@ public class BatteryBlock extends BaseEntityBlock {
 
         tooltip.add(Component.literal("Energy: 0 FE")
             .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
+
+        int capacity = BatteryBlock.CAPACITY * (int) Math.pow(10, tier - 1);
+        if (tier == 7) capacity = Integer.MAX_VALUE;
+        double transfer_d = BatteryBlock.CAPACITY * Math.pow(10, tier - 2);
+        int transfer = (int) transfer_d;
+        tooltip.add(Component.literal("Max Capacity " + Utility.formatWithSeparator(capacity, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        tooltip.add(Component.literal("Max Transfer " + Utility.formatWithSeparator(transfer, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -23,19 +24,7 @@ public class ModLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add("item.metallurgyplus.clay_mineral_raw", "Clay Mineral");
-        add("item.metallurgyplus.kaolinite", "Kaolinite");
-        add("item.metallurgyplus.platinum_like_metals", "Platinum Like Metals");
-
-        add("item.metallurgyplus.silicon", "Silicon");
-        add("item.metallurgyplus.sulphur", "Sulphur");
-        add("item.metallurgyplus.rare_earth1", "Rare Earth I");
-        add("item.metallurgyplus.rare_earth2", "Rare Earth II");
-        add("item.metallurgyplus.rare_earth3", "Rare Earth III");
-        add("item.metallurgyplus.small_rare_earth", "Small Pile of Rare Earth");
-        add("item.metallurgyplus.stone_dust", "Stone Dust");
-
-        //add("item.metallurgyplus.llamkana", "Llamkana");
+        add("item.metallurgyplus.llamkana", "Llamkana");
 
         add("block.metallurgyplus.clay_mineral", "Clay Mineral");
 
@@ -46,24 +35,49 @@ public class ModLangProvider extends LanguageProvider {
 
         add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
 
+        add("tooltip.metallurgyplus.common", "Y-Level: 80 to -64");
+        add("tooltip.metallurgyplus.uncommon", "Y-Level: 50 to -64");
+        add("tooltip.metallurgyplus.rare", "Y-Level: 20 to -64");
+        add("tooltip.metallurgyplus.very_rare", "Y-Level: -10 to -64");
+        add("tooltip.metallurgyplus.extremely_rare", "Y-Level: -30 to -64");
+
         addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
         addCableTranslations();
         addSolarPanelTranslations();
+        addBatteryTranslations();
+        addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
+        addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
+        addTieredItemTranslations(ModItems.COIL_MAP);
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
+        addItemMapTranslations(itemMap);
+        addBlockMapTranslations(blockMap);
+    }
+
+    private void addBlockMapTranslations(Map<String, RegistryObject<Block>> blockMap) {
+        for (RegistryObject<Block> block : blockMap.values()) {
+            String fullName = block.getId().getPath();
+            String name = getName(fullName);
+            add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+        }
+    }
+
+    private void addItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = getName(fullName);
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
+    }
 
-        for (RegistryObject<Block> block : blockMap.values()) {
-            String fullName = block.getId().getPath();
-            String name = getName(fullName);
-            add("block." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+    private void addCustomItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            String fullName = item.getId().getPath();
+            String name = fullName.replace('_', ' ');
+            add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
 
@@ -103,6 +117,26 @@ public class ModLangProvider extends LanguageProvider {
             int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
 
             add("block." + MetallurgyPlus.MODID + "." + fullName, "Solar Panel Tier " + tier);
+        }
+    }
+
+    private void addBatteryTranslations() {
+        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            String fullName = battery.getId().getPath();
+            String name = battery.get().getDescriptionId().split("\\.")[2];
+            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+
+            add("block." + MetallurgyPlus.MODID + "." + fullName, "Battery Tier " + tier);
+        }
+    }
+
+    private void addTieredItemTranslations(Map<Integer, RegistryObject<Item>> itemMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            String fullName = item.getId().getPath();
+            String name = item.get().getDescriptionId().split("\\.")[2];
+            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+
+            add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name.split("_")[0].replaceAll("\\d+$", "")) + " Tier " + tier);
         }
     }
 

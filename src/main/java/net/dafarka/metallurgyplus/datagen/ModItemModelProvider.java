@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
@@ -28,28 +29,18 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateMaps(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP);
         generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
-
-        simpleItem(ModItems.CLAY_MINERAL_RAW);
-        simpleItem(ModItems.KAOLINITE);
-        simpleItem(ModItems.PLATINUM_LIKE_METALS);
-
-        simpleItem(ModItems.SILICON);
-        simpleItem(ModItems.SULPHUR);
-        simpleItem(ModItems.RARE_EARTH1);
-        simpleItem(ModItems.RARE_EARTH2);
-        simpleItem(ModItems.RARE_EARTH3);
-        simpleItem(ModItems.SMALL_RARE_EARTH);
-        simpleItem(ModItems.STONE_DUST);
+        generateItemMap(ModItems.CUSTOM_ITEM_MAP);
 
         simpleItem(ModItems.LLAMKANA);
 
         simpleBlockItemModel("alloy_smelter");
         simpleBlockItemModel("ore_processing_unit");
         simpleBlockItemModel("power_source");
-        simpleBlockItemModel("battery");
 
-        createCableBlockEntityItems();
-        createSolarPanelBlockEntityItems();
+        createCableBlockItems();
+        createSolarPanelBlockItems();
+        createBatteryBlockItems();
+        createCoilItems();
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -89,17 +80,39 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void createCableBlockEntityItems() {
+    private void generateItemMap(Map<String, RegistryObject<Item>> itemMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            simpleItem(item);
+        }
+    }
+
+    private void createCableBlockItems() {
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String name = block.get().getDescriptionId().split("\\.")[2];
             simpleBlockItemModel(name);
         }
     }
 
-    private void createSolarPanelBlockEntityItems() {
+    private void createSolarPanelBlockItems() {
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String name = block.get().getDescriptionId().split("\\.")[2];
             simpleBlockItemModel(name);
+        }
+    }
+
+    private void createBatteryBlockItems() {
+        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
+            String name = block.get().getDescriptionId().split("\\.")[2];
+            simpleBlockItemModel(name);
+        }
+    }
+
+    public void createCoilItems() {
+        for (RegistryObject<Item> item : ModItems.COIL_MAP.values()) {
+            getBuilder(item.getId().getPath())
+                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                    .texture("layer0", modLoc("item/base_coil"))
+                    .texture("layer1", modLoc("item/base_coil_spindle"));
         }
     }
 }

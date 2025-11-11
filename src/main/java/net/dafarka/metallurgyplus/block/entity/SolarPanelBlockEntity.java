@@ -35,6 +35,7 @@ public class SolarPanelBlockEntity extends BlockEntity {
         }
 
         this.generation = SolarPanelBlock.GENERATION * (int) Math.pow(2, tier - 1);
+        if (tier == 26) generation = Integer.MAX_VALUE;
         this.energyStorage = new GenericEnergyStorage(generation, 0, generation);
         this.energy = LazyOptional.of(() -> energyStorage);
 

@@ -44,7 +44,7 @@ public class ModTools extends TieredItem {
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
         if (!stack.hasTag() || !stack.getOrCreateTag().getBoolean("Unbreakable")) {
             stack.getOrCreateTag().putBoolean("Unbreakable", true);
-            stack.getOrCreateTag().putInt("HideFlags", 4); // hide vanilla "Unbreakable" text
+            stack.getOrCreateTag().putInt("HideFlags", 4);
         }
         super.inventoryTick(stack, level, entity, slot, selected);
     }

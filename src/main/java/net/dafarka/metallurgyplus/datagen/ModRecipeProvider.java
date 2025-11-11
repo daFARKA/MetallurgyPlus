@@ -28,7 +28,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private AlloySmelterRecipeProvider alloySmelterRecipeProvider;
     private OreProcessingUnitRecipeProvider oreProcessingUnitRecipeProvider;
 
-    private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CLAY_MINERAL_RAW.get());
+    private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get());
 
     public ModRecipeProvider(PackOutput pOutput) {
         super(pOutput);
@@ -192,13 +192,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private void buildCustomRecipes(Consumer<FinishedRecipe> pWriter) {
         oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.SMALL_RARE_EARTH.get(), 1)
-            .requires(ModItems.RARE_EARTH1.get())
-            .requires(ModItems.RARE_EARTH2.get())
-            .requires(ModItems.RARE_EARTH3.get())
-            .unlockedBy(getHasName(ModItems.RARE_EARTH1.get()), has(ModItems.RARE_EARTH1.get()))
-            .unlockedBy(getHasName(ModItems.RARE_EARTH2.get()), has(ModItems.RARE_EARTH2.get()))
-            .unlockedBy(getHasName(ModItems.RARE_EARTH3.get()), has(ModItems.RARE_EARTH3.get()))
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("small_rare_earth").get(), 1)
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get())
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get())
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get())
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get()))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get()))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()))
             .save(pWriter);
     }
 
