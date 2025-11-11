@@ -20,6 +20,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<AlloySmelterMenu>> ALLOY_SMELTER_MENU =
         registerMenuType("alloy_smelter_menu", AlloySmelterMenu::new);
 
+    public static final RegistryObject<MenuType<GrinderMenu>> GRINDER_MENU =
+        registerMenuType("grinder_menu", GrinderMenu::new);
+
     public static final RegistryObject<MenuType<BatteryMenu>> BATTERY_MENU =
         registerMenuType("battery_menu", BatteryMenu::new);
 

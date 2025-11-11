@@ -53,6 +53,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> ALLOY_SMELTER = registerBlock("alloy_smelter",
         () -> new AlloySmelterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
+    public static final RegistryObject<Block> GRINDER = registerBlock("grinder",
+        () -> new GrinderBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+
     public static final RegistryObject<Block> POWER_SOURCE = registerBlock("power_source",
         () -> new PowerSourceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 

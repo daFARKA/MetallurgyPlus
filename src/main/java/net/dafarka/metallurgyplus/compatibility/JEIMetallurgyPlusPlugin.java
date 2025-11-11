@@ -9,8 +9,10 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
+import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
+import net.dafarka.metallurgyplus.screen.GrinderScreen;
 import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +32,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new AlloySmelterCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new OreProcessingUnitCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new GrinderCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -38,8 +41,10 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
 
         List<AlloySmelterRecipe> alloySmelterRecipes = recipeManager.getAllRecipesFor(AlloySmelterRecipe.Type.INSTANCE);
         List<OreProcessingUnitRecipe> oreProcessingUnitRecipes = recipeManager.getAllRecipesFor(OreProcessingUnitRecipe.Type.INSTANCE);
+        List<GrinderRecipe> grinderRecipes = recipeManager.getAllRecipesFor(GrinderRecipe.Type.INSTANCE);
         registration.addRecipes(AlloySmelterCategory.ALLOY_SMELTER_TYPE, alloySmelterRecipes);
         registration.addRecipes(OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE, oreProcessingUnitRecipes);
+        registration.addRecipes(GrinderCategory.GRINDER_TYPE, grinderRecipes);
     }
 
     @Override
@@ -48,6 +53,8 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             AlloySmelterCategory.ALLOY_SMELTER_TYPE);
         registration.addRecipeClickArea(OreProcessingUnitScreen.class, 32, 43, 30, 20,
             OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE);
+        registration.addRecipeClickArea(GrinderScreen.class, 48, 34, 30, 20,
+            GrinderCategory.GRINDER_TYPE);
     }
 
     @Override
@@ -60,6 +67,11 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipeCatalyst(
             new net.minecraft.world.item.ItemStack(ModBlocks.ORE_PROCESSING_UNIT.get()),
             OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE
+        );
+
+        registration.addRecipeCatalyst(
+            new net.minecraft.world.item.ItemStack(ModBlocks.GRINDER.get()),
+            GrinderCategory.GRINDER_TYPE
         );
     }
 }

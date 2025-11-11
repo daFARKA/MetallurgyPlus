@@ -4,6 +4,7 @@ import net.dafarka.metallurgyplus.Config;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -27,6 +28,7 @@ import java.util.function.Consumer;
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
     private AlloySmelterRecipeProvider alloySmelterRecipeProvider;
     private OreProcessingUnitRecipeProvider oreProcessingUnitRecipeProvider;
+    private GrinderRecipeProvider grinderRecipeProvider;
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get());
 
@@ -34,6 +36,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         super(pOutput);
         alloySmelterRecipeProvider = new AlloySmelterRecipeProvider(pOutput);
         oreProcessingUnitRecipeProvider = new OreProcessingUnitRecipeProvider(pOutput);
+        grinderRecipeProvider = new GrinderRecipeProvider(pOutput);
     }
 
     @Override
@@ -43,6 +46,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildAlloyRecipes(pWriter);
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
+        grinderRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
 
         buildBlockEntitiesRecipes(pWriter);
@@ -109,6 +113,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .save(pWriter);
 
                 oreSmelting(pWriter, List.of(raw), RecipeCategory.MISC, ingot, 0.25f, 100, currentMaterialName);
+                oreSmelting(pWriter, List.of(dust), RecipeCategory.MISC, ingot, 0.25f, 100, currentMaterialName);
             }
         }
     }

@@ -2,8 +2,11 @@ package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.GrinderBlock;
 import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
-import net.dafarka.metallurgyplus.screen.menu.AlloySmelterMenu;
+import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
+import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
+import net.dafarka.metallurgyplus.screen.menu.GrinderMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -31,29 +34,32 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.Random;
 
-public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider {
+public class GrinderBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 100;
 
-    private final int INPUT_SLOT_COUNT = AlloySmelterMenu.INPUT_POSITIONS.length;
+    private final int INPUT_SLOT_COUNT = GrinderMenu.INPUT_POSITIONS.length;
     private int outputSlot;
+
+    private Random random;
 
     private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, 0);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
-    public AlloySmelterBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ALLOY_SMELTER_BE.get(), pPos, pBlockState);
+    public GrinderBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(ModBlockEntities.GRINDER_BE.get(), pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> AlloySmelterBlockEntity.this.progress;
-                    case 1 -> AlloySmelterBlockEntity.this.maxProgress;
-                    case 2 -> AlloySmelterBlockEntity.this.energyStorage.getEnergyStored();
-                    case 3 -> AlloySmelterBlockEntity.this.energyStorage.getMaxEnergyStored();
+                    case 0 -> GrinderBlockEntity.this.progress;
+                    case 1 -> GrinderBlockEntity.this.maxProgress;
+                    case 2 -> GrinderBlockEntity.this.energyStorage.getEnergyStored();
+                    case 3 -> GrinderBlockEntity.this.energyStorage.getMaxEnergyStored();
                     default -> 0;
                 };
             }
@@ -61,9 +67,9 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> AlloySmelterBlockEntity.this.progress = pValue;
-                    case 1 -> AlloySmelterBlockEntity.this.maxProgress = pValue;
-                    case 2 -> AlloySmelterBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
+                    case 0 -> GrinderBlockEntity.this.progress = pValue;
+                    case 1 -> GrinderBlockEntity.this.maxProgress = pValue;
+                    case 2 -> GrinderBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
                 }
             }
 
@@ -72,24 +78,19 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
                 return 4;
             }
         };
+
+        random = new Random();
     }
 
     // --- Slot Groups ---
-    private final ItemStackHandler inputHandler1 = new ItemStackHandler(4) {
+    private final ItemStackHandler inputHandler = new ItemStackHandler(4) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
 
-    private final ItemStackHandler inputHandler2 = new ItemStackHandler(4) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-        }
-    };
-
-    private final ItemStackHandler outputHandler = new ItemStackHandler(9) {
+    private final ItemStackHandler outputHandler = new ItemStackHandler(15) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -101,11 +102,10 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         }
     };
 
-    CombinedInvWrapper allHandler = new CombinedInvWrapper(inputHandler1, inputHandler2, outputHandler);
+    CombinedInvWrapper allHandler = new CombinedInvWrapper(inputHandler, outputHandler);
     private UtilBlockEntity utilBlockEntity = new UtilBlockEntity(allHandler);
 
-    private LazyOptional<IItemHandler> input1Lazy = LazyOptional.empty();
-    private LazyOptional<IItemHandler> input2Lazy = LazyOptional.empty();
+    private LazyOptional<IItemHandler> inputLazy = LazyOptional.empty();
     private LazyOptional<IItemHandler> outputLazy = LazyOptional.empty();
     private LazyOptional<IItemHandler> allLazy = LazyOptional.empty();
 
@@ -113,19 +113,15 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             if (side == Direction.UP) {
-                // Hopper above -> Input 1
-                return input1Lazy.cast();
+                return inputLazy.cast();
             } else if (side == Direction.DOWN) {
-                // Hopper below -> Output
                 return outputLazy.cast();
             } else if (side != null) {
-                // Hopper from side -> Input 2
-                return input2Lazy.cast();
+                return inputLazy.cast();
             } else {
-                // Default (GUI)
                 return allLazy.cast();
             }
-        } else if (cap == ForgeCapabilities.ENERGY) { // accept energy from all sides
+        } else if (cap == ForgeCapabilities.ENERGY) {
             return energyLazy.cast();
         }
         return super.getCapability(cap, side);
@@ -134,8 +130,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     @Override
     public void onLoad() {
         super.onLoad();
-        input1Lazy = LazyOptional.of(() -> inputHandler1);
-        input2Lazy = LazyOptional.of(() -> inputHandler2);
+        inputLazy = LazyOptional.of(() -> inputHandler);
         outputLazy = LazyOptional.of(() -> outputHandler);
         allLazy = LazyOptional.of(() -> allHandler);
 
@@ -145,8 +140,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        input1Lazy.invalidate();
-        input2Lazy.invalidate();
+        inputLazy.invalidate();
         outputLazy.invalidate();
         allLazy.invalidate();
 
@@ -163,20 +157,19 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.metallurgyplus.alloy_smelter");
+        return Component.translatable("block.metallurgyplus.grinder");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new AlloySmelterMenu(pContainerId, pPlayerInventory, this, this.data);
+        return new GrinderMenu(pContainerId, pPlayerInventory, this, this.data);
     }
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.put("input1", inputHandler1.serializeNBT());
-        pTag.put("input2", inputHandler2.serializeNBT());
+        pTag.put("input", inputHandler.serializeNBT());
         pTag.put("output", outputHandler.serializeNBT());
         pTag.putInt("progress", progress);
 
@@ -186,8 +179,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        inputHandler1.deserializeNBT(pTag.getCompound("input1"));
-        inputHandler2.deserializeNBT(pTag.getCompound("input2"));
+        inputHandler.deserializeNBT(pTag.getCompound("input"));
         outputHandler.deserializeNBT(pTag.getCompound("output"));
         progress = pTag.getInt("progress");
 
@@ -214,7 +206,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private boolean hasRecipe() {
-        Optional<AlloySmelterRecipe> recipe = getCurrentRecipe();
+        Optional<GrinderRecipe> recipe = getCurrentRecipe();
 
         if (recipe.isEmpty()) {
             return false;
@@ -223,39 +215,67 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
-            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return false;
-            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8)).getCount() < amounts.get(i)) {
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return false;
+            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0)).getCount() < amounts.get(i)) {
                 return false;
             }
         }
 
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
-        outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), 8);
+        NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
+        if (extraOutputs != null) {
+            for (ItemStack currentItemStack : extraOutputs) {
+                outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 4);
+                if (outputSlot == -1) {
+                    return false;
+                }
+            }
+        }
+        outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), 4);
 
         return outputSlot != -1;
     }
 
-    private Optional<AlloySmelterRecipe> getCurrentRecipe() {
+    private Optional<GrinderRecipe> getCurrentRecipe() {
         SimpleContainer inventory = new SimpleContainer(INPUT_SLOT_COUNT);
         for (int i = 0; i < INPUT_SLOT_COUNT; i++) {
             inventory.setItem(i, this.allHandler.getStackInSlot(i));
         }
 
-        return this.level.getRecipeManager().getRecipeFor(AlloySmelterRecipe.Type.INSTANCE, inventory, level);
+        return this.level.getRecipeManager().getRecipeFor(GrinderRecipe.Type.INSTANCE, inventory, level);
     }
 
     private void craftItem() {
-        Optional<AlloySmelterRecipe> recipe = getCurrentRecipe();
+        Optional<GrinderRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
 
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
-            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return;
-            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8), amounts.get(i), false);
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return;
+            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0), amounts.get(i), false);
         }
 
         this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
             this.allHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
+
+        NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
+        NonNullList<Double> extraOutputChances = recipe.get().getExtraOutputChances();
+        if (extraOutputs != null) {
+            int i = 0;
+            for (ItemStack currentItemStack : extraOutputs) {
+                boolean success = true;
+                double chance = extraOutputChances.get(i);
+                if (chance < 1.0) {
+                    success =  random.nextDouble() < chance;
+                }
+                if (success) {
+                    outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 4);
+                    this.allHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
+                        this.allHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
+                }
+                i++;
+            }
+        }
     }
 }

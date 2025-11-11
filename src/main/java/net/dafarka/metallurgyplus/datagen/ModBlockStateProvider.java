@@ -32,6 +32,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         horizontalFacingBlock("alloy_smelter", ModBlocks.ALLOY_SMELTER.get());
         horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
+        horizontalFacingBlock("grinder", ModBlocks.GRINDER.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
 
         cableBlocks();

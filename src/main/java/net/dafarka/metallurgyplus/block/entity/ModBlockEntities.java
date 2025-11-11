@@ -30,6 +30,10 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("alloy_smelter_be", () -> BlockEntityType.Builder.of(AlloySmelterBlockEntity::new,
             ModBlocks.ALLOY_SMELTER.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<GrinderBlockEntity>> GRINDER_BE =
+        BLOCK_ENTITIES.register("grinder_be", () -> BlockEntityType.Builder.of(GrinderBlockEntity::new,
+            ModBlocks.GRINDER.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<PowerSourceBlockEntity>> POWER_SOURCE_BE =
         BLOCK_ENTITIES.register("power_source_be", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new,
             ModBlocks.POWER_SOURCE.get()).build(null));

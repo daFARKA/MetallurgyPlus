@@ -19,7 +19,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
+public class GrinderRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<Ingredient> inputItems;
     private final NonNullList<Integer> inputAmounts;
     private final ItemStack output;
@@ -30,8 +30,8 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
     private UtilRecipe utilRecipe = new UtilRecipe();
     private static Utility utility = new Utility();
 
-    public OreProcessingUnitRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs,
-                                   NonNullList<Double> extraOutputChances, ResourceLocation id) {
+    public GrinderRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs,
+                         NonNullList<Double> extraOutputChances, ResourceLocation id) {
         this.inputItems = inputItems;
         this.inputAmounts = inputAmounts;
         this.output = output;
@@ -69,11 +69,6 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
         return true;
     }
 
-    @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return output.copy();
-    }
-
     public NonNullList<ItemStack> getExtraOutputs() {
         return extraOutputs;
     }
@@ -83,8 +78,17 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+        return output.copy();
+    }
+
+    @Override
     public NonNullList<Ingredient> getIngredients() {
         return inputItems;
+    }
+
+    public NonNullList<Integer> getInputAmounts() {
+        return inputAmounts;
     }
 
     public int getInputAmountForIngredient(Ingredient ingredient) {
@@ -93,10 +97,6 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
             return inputAmounts.get(index);
         }
         return 1;
-    }
-
-    public NonNullList<Integer> getInputAmounts() {
-        return inputAmounts;
     }
 
     @Override
@@ -114,16 +114,16 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
         return Type.INSTANCE;
     }
 
-    public static class Type implements RecipeType<OreProcessingUnitRecipe> {
+    public static class Type implements RecipeType<GrinderRecipe> {
         public static final Type INSTANCE = new Type();
     }
 
-    public static class Serializer implements  RecipeSerializer<OreProcessingUnitRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID = new ResourceLocation(MetallurgyPlus.MODID, "ore_processing_unit");
+    public static class Serializer implements  RecipeSerializer<GrinderRecipe> {
+        public static final GrinderRecipe.Serializer INSTANCE = new GrinderRecipe.Serializer();
+        public static final ResourceLocation ID = new ResourceLocation(MetallurgyPlus.MODID, "grinder");
 
         @Override
-        public OreProcessingUnitRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        public GrinderRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
@@ -150,11 +150,11 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
                 }
             }
 
-            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
+            return new GrinderRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
         }
 
         @Override
-        public @Nullable OreProcessingUnitRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public @Nullable GrinderRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
             int inputSize = pBuffer.readInt();
             NonNullList<Ingredient> inputs = NonNullList.withSize(inputSize, Ingredient.EMPTY);
             NonNullList<Integer> inputAmounts = NonNullList.withSize(inputSize, 1);
@@ -178,11 +178,11 @@ public class OreProcessingUnitRecipe implements Recipe<SimpleContainer> {
                 }
             }
 
-            return new OreProcessingUnitRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
+            return new GrinderRecipe(inputs, inputAmounts, output, extraOutputs, extraOutputChances, pRecipeId);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, OreProcessingUnitRecipe pRecipe) {
+        public void toNetwork(FriendlyByteBuf pBuffer, GrinderRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
 
             for (int i = 0; i < pRecipe.inputItems.size(); i++) {
