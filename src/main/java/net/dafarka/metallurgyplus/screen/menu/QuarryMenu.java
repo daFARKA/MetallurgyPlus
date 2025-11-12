@@ -28,7 +28,7 @@ public class QuarryMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public QuarryMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, inv.player.level().getBlockEntity(buf.readBlockPos()), new SimpleContainerData(11));
+        this(id, inv, inv.player.level().getBlockEntity(buf.readBlockPos()), new SimpleContainerData(12));
     }
 
     public QuarryMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {

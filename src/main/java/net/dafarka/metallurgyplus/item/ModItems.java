@@ -63,7 +63,7 @@ public class ModItems {
         () -> new ModTools(
             Tiers.NETHERITE,
             new Item.Properties().stacksTo(1).fireResistant().durability(0),
-            Component.literal("Llamkana").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD),
+            Component.translatable("item.metallurgyplus.llamkana").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD),
             500,
             true
         ));

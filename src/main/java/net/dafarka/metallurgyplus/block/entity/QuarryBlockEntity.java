@@ -66,6 +66,7 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
                     case 8 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getX() : 0;
                     case 9 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getY() : 0;
                     case 10 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getZ() : 0;
+                    case 11 -> QuarryBlockEntity.this.running ? 1 : 0;
                     default -> 0;
                 };
             }
@@ -81,7 +82,7 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
 
             @Override
             public int getCount() {
-                return 11;
+                return 12;
             }
         };
     }
