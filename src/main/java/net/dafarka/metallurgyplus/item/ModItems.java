@@ -49,7 +49,6 @@ public class ModItems {
 
     public static final Map<String, RegistryObject<Item>> CUSTOM_ITEM_MAP = new HashMap<>();
 
-
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
@@ -82,6 +81,7 @@ public class ModItems {
         registerCustomItem("rare_earth3");
         registerCustomItem("small_rare_earth");
         registerCustomItem("stone_dust");
+        registerCustomItem("energy_core");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -143,46 +143,47 @@ public class ModItems {
         registerMaterial("zirconium", 0x705a43);
 
         // Ores
-        registerOre("gibbsite", 0x52695a, OreRarity.UNCOMMON);  //Aluminum
-        registerOre("bauxite", 0x916b4d, OreRarity.COMMON);   //Aluminum
-        registerOre("stibnite", 0x5465c4, OreRarity.UNCOMMON);  //Antimony, Sulphur
-        registerOre("beryl", 0xa8bfaf, OreRarity.RARE);     //Beryllium, Aluminum, Silicon
-        registerOre("bismuthinite", 0xc7c4b1, OreRarity.RARE);  //Bismuth, Sulphur
-        registerOre("chromite", 0x484c59, OreRarity.COMMON);  //Chromium, Iron
-        registerOre("cobaltite", 0x091336, OreRarity.RARE); //Cobalt, Sulphur
-        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); //Copper, Graphite
-        registerOre("hematite", 0x75614f, OreRarity.COMMON);  //Iron
-        registerOre("magnetite", 0x212f36, OreRarity.COMMON); //Iron
-        registerOre("limonite", 0xbd6500, OreRarity.COMMON);  //Iron
-        registerOre("galena", 0xae9bde, OreRarity.COMMON);    //Lead, Silver, Sulphur
-        registerOre("spodumene", 0xeb7cbe, OreRarity.RARE); //Lithium, Aluminum, Silicon
-        registerOre("pyrolusite", 0x34ba53, OreRarity.UNCOMMON); //Manganese
-        registerOre("molybdenite", 0x5a5275, OreRarity.RARE); //Molybdenum, Rhenium, Sulphur
-        registerOre("pentlandite", 0x916f4a, OreRarity.UNCOMMON); //Nickel, Iron, Cobalt, Ruthenium
-        registerOre("garnierite", 0x00ff08, OreRarity.RARE); //Nickel, Magnesium
-        registerOre("niobite", 0xc0cc62, OreRarity.RARE); //Niobium, Iron, Manganese
-        registerOre("sperrylite", 0xe0bad6, OreRarity.VERY_RARE); //Platinum-Like-Metals
-        registerOre("gadolinite", 0x751801, OreRarity.VERY_RARE); //Rare Earth 1
-        registerOre("monazite", 0xff8800, OreRarity.VERY_RARE); //Rare Earth 2
-        registerOre("xenotime", 0x361800, OreRarity.VERY_RARE); //Rare Earth 3
-        registerOre("cassiterite", 0x00173b, OreRarity.UNCOMMON); //Tin
-        registerOre("ilmenite", 0x332e29, OreRarity.COMMON); //Titanium, Iron
-        registerOre("rutile", 0x2e0808, OreRarity.RARE); //Titanium
-        registerOre("wolframite", 0x4c7eb0, OreRarity.RARE); //Tungsten, Iron, Manganese
-        registerOre("scheelite", 0xdb8348, OreRarity.RARE); //Tungsten, Calcium
-        registerOre("patronite", 0x2c2e2a, OreRarity.VERY_RARE); //Vanadium, Sulphur
-        registerOre("sphalerite", 0xcfb470, OreRarity.COMMON); //Zinc, Iron, Sulphur
-        registerOre("zircon", 0x705a43, OreRarity.RARE); //Zirconium, Silicon, Hafnium
-        registerOre("gallite", 0x7e8761, OreRarity.VERY_RARE); //Gallium, Copper, Sulphur
-        registerOre("baryte", 0x8fb5c9, OreRarity.UNCOMMON); //Barium, Sulphur
-        registerOre("greenockite", 0xd9cc1e, OreRarity.VERY_RARE); //Cadmium, Sulphur
-        registerOre("roquesite", 0x619183, OreRarity.VERY_RARE); //Indium, Copper, Sulphur
-        registerOre("cooperite", 0xabb4b8, OreRarity.VERY_RARE); //Palladium, Rhodium
-        registerOre("thortveitite", 0xe09128, OreRarity.VERY_RARE); //Scandium, Yttrium, Silicon
-        registerOre("tantalite", 0x4d2d21, OreRarity.RARE); //Tantalum, Iron, Manganese
-        registerOre("crookesite", 0x2b061b, OreRarity.EXTREMELY_RARE); //Thallium, Copper, Silver
-        registerOre("uraninite", 0x91b572, OreRarity.RARE); //Uranium, Thorium, Technetium
-        registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); //Selenium
+        registerOre("gibbsite", 0x52695a, OreRarity.UNCOMMON);  // Aluminum
+        registerOre("bauxite", 0x916b4d, OreRarity.COMMON);   // Aluminum
+        registerOre("stibnite", 0x5465c4, OreRarity.UNCOMMON);  // Antimony, Sulphur
+        registerOre("beryl", 0xa8bfaf, OreRarity.RARE);     // Beryllium, Aluminum, Silicon
+        registerOre("bismuthinite", 0xc7c4b1, OreRarity.RARE);  // Bismuth, Sulphur
+        registerOre("chromite", 0x484c59, OreRarity.COMMON);  // Chromium, Iron
+        registerOre("cobaltite", 0x091336, OreRarity.RARE); // Cobalt, Sulphur
+        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper, Graphite
+        registerOre("hematite", 0x75614f, OreRarity.COMMON);  // Iron
+        registerOre("magnetite", 0x212f36, OreRarity.COMMON); // Iron
+        registerOre("limonite", 0xbd6500, OreRarity.COMMON);  // Iron
+        registerOre("galena", 0xae9bde, OreRarity.COMMON);    // Lead, Silver, Sulphur
+        registerOre("spodumene", 0xeb7cbe, OreRarity.RARE); // Lithium, Aluminum, Silicon
+        registerOre("pyrolusite", 0x34ba53, OreRarity.UNCOMMON); // Manganese
+        registerOre("molybdenite", 0x5a5275, OreRarity.RARE); // Molybdenum, Rhenium, Sulphur
+        registerOre("pentlandite", 0x916f4a, OreRarity.UNCOMMON); // Nickel, Iron, Cobalt, Ruthenium
+        registerOre("garnierite", 0x00ff08, OreRarity.RARE); // Nickel, Magnesium
+        registerOre("niobite", 0xc0cc62, OreRarity.RARE); // Niobium, Iron, Manganese
+        registerOre("sperrylite", 0xe0bad6, OreRarity.VERY_RARE); // Platinum-Like-Metals
+        registerOre("gadolinite", 0x751801, OreRarity.VERY_RARE); // Rare Earth 1
+        registerOre("monazite", 0xff8800, OreRarity.VERY_RARE); // Rare Earth 2
+        registerOre("xenotime", 0x361800, OreRarity.VERY_RARE); // Rare Earth 3
+        registerOre("cassiterite", 0x00173b, OreRarity.UNCOMMON); // Tin
+        registerOre("ilmenite", 0x332e29, OreRarity.COMMON); // Titanium, Iron
+        registerOre("rutile", 0x2e0808, OreRarity.RARE); // Titanium
+        registerOre("wolframite", 0x4c7eb0, OreRarity.RARE); // Tungsten, Iron, Manganese
+        registerOre("scheelite", 0xdb8348, OreRarity.RARE); // Tungsten, Calcium
+        registerOre("patronite", 0x2c2e2a, OreRarity.VERY_RARE); // Vanadium, Sulphur
+        registerOre("sphalerite", 0xcfb470, OreRarity.COMMON); // Zinc, Iron, Sulphur
+        registerOre("zircon", 0x705a43, OreRarity.RARE); // Zirconium, Silicon, Hafnium
+        registerOre("gallite", 0x7e8761, OreRarity.VERY_RARE); // Gallium, Copper, Sulphur
+        registerOre("baryte", 0x8fb5c9, OreRarity.UNCOMMON); // Barium, Sulphur
+        registerOre("greenockite", 0xd9cc1e, OreRarity.VERY_RARE); // Cadmium, Sulphur
+        registerOre("roquesite", 0x619183, OreRarity.VERY_RARE); // Indium, Copper, Sulphur
+        registerOre("cooperite", 0xabb4b8, OreRarity.VERY_RARE); // Palladium, Rhodium
+        registerOre("thortveitite", 0xe09128, OreRarity.VERY_RARE); // Scandium, Yttrium, Silicon
+        registerOre("tantalite", 0x4d2d21, OreRarity.RARE); // Tantalum, Iron, Manganese
+        registerOre("crookesite", 0x2b061b, OreRarity.EXTREMELY_RARE); // Thallium, Copper, Silver
+        registerOre("uraninite", 0x91b572, OreRarity.RARE); // Uranium, Thorium, Technetium
+        registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); //S elenium
+        registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon
 
         // Alloys
         registerAlloy("steel", 0x707070); // Iron, Coal

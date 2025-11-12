@@ -104,6 +104,7 @@
 * crookesite - 0x2b061b - EXTREMELY_RARE
 * uraninite - 0x91b572 - RARE
 * selenite - 0xebf4fc - UNCOMMON
+* feldspar - 0xc77b63 - COMMON
 
 
 ## Alloys
