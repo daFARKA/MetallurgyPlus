@@ -5,7 +5,6 @@ import net.minecraft.world.inventory.ContainerData;
 public class UtilityMenu {
     private ContainerData data;
 
-
     public UtilityMenu(ContainerData data) {
         this.data = data;
     }
@@ -23,6 +22,12 @@ public class UtilityMenu {
         int maxEnergy = this.data.get(3);
         int energyBarSize = 48;
 
-        return maxEnergy != 0 && energy != 0 ? energy * energyBarSize / maxEnergy : 0;
+        if (maxEnergy <= 0 || energy <= 0) {
+            return 0;
+        }
+
+        double scaled = ((double) energy / maxEnergy) * energyBarSize;
+
+        return (int) Math.round(scaled);
     }
 }

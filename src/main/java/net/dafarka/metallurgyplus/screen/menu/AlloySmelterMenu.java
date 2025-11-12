@@ -149,8 +149,7 @@ public class AlloySmelterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-            pPlayer, ModBlocks.ALLOY_SMELTER.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.ALLOY_SMELTER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

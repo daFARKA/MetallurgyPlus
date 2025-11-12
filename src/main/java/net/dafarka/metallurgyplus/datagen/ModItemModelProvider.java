@@ -36,6 +36,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("alloy_smelter");
         simpleBlockItemModel("ore_processing_unit");
         simpleBlockItemModel("grinder");
+        simpleBlockItemModel("quarry");
         simpleBlockItemModel("power_source");
 
         createCableBlockItems();

@@ -23,6 +23,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<GrinderMenu>> GRINDER_MENU =
         registerMenuType("grinder_menu", GrinderMenu::new);
 
+    public static final RegistryObject<MenuType<QuarryMenu>> QUARRY_MENU =
+        registerMenuType("quarry_menu", QuarryMenu::new);
+
     public static final RegistryObject<MenuType<BatteryMenu>> BATTERY_MENU =
         registerMenuType("battery_menu", BatteryMenu::new);
 

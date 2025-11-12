@@ -14,8 +14,7 @@ public class AlloySmelterScreen extends AbstractContainerScreen<AlloySmelterMenu
     private static final ResourceLocation TEXTURE =
         new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/alloy_smelter_gui.png");
 
-    public AlloySmelterScreen(AlloySmelterMenu pMenu, Inventory pPlayerInventory,
-                              Component pTitle) {
+    public AlloySmelterScreen(AlloySmelterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 

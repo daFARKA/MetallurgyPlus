@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.QuarryBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,6 +34,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<GrinderBlockEntity>> GRINDER_BE =
         BLOCK_ENTITIES.register("grinder_be", () -> BlockEntityType.Builder.of(GrinderBlockEntity::new,
             ModBlocks.GRINDER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY_BE =
+        BLOCK_ENTITIES.register("quarry_be", () -> BlockEntityType.Builder.of(QuarryBlockEntity::new,
+            ModBlocks.QUARRY.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<PowerSourceBlockEntity>> POWER_SOURCE_BE =
         BLOCK_ENTITIES.register("power_source_be", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new,
