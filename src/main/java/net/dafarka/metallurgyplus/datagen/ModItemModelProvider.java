@@ -30,6 +30,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP);
         generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
         generateItemMap(ModItems.CUSTOM_ITEM_MAP);
+        generateItemMapBase(ModItems.VANILLA_MAP);
 
         simpleItem(ModItems.LLAMKANA);
 
@@ -85,6 +86,14 @@ public class ModItemModelProvider extends ItemModelProvider {
     private void generateItemMap(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             simpleItem(item);
+        }
+    }
+
+    private void generateItemMapBase(Map<String, RegistryObject<Item>> itemMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            String currentName = item.getId().getPath();
+            String currentComponentName = currentName.split("_")[1];
+            simpleBaseItem(item, currentComponentName);
         }
     }
 

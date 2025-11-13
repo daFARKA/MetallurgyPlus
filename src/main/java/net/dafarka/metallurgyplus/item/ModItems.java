@@ -52,10 +52,12 @@ public class ModItems {
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> VANILLA_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> VANILLA_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
 
     public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
@@ -217,6 +219,14 @@ public class ModItems {
         registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
 
+        // Vanilla Items
+        registerVanilla("iron", 0xffffff);
+        registerVanilla("copper", 0xe77c56);
+        registerVanilla("gold", 0xfdf55f);
+        registerVanilla("netherite", 0x31292a);
+        registerVanilla("diamond", 0xa1fbe8);
+        registerVanilla("emerald", 0x17dd62);
+
         // Cables
         registerCables();
 
@@ -295,6 +305,18 @@ public class ModItems {
 
         ModBlocks.ALLOY_BLOCKS_MAP.put(name, block);
         ModBlocks.ALLOY_COLOR_MAP.put(name, color);
+    }
+
+    public static final String[] VANILLA_COMPONENT_NAMES = {"dust", "gear", "plate", "rod"};
+    private static void registerVanilla(String materialName, int color) {
+        for (String component : VANILLA_COMPONENT_NAMES) {
+            String name = materialName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            VANILLA_MAP.put(name, item);
+            VANILLA_COLOR_MAP.put(name, color);
+        }
     }
 
     private static void registerCable(int tier, int color) {

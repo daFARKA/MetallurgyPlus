@@ -14,6 +14,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class GrinderRecipeProvider extends RecipeProvider {
-    private static Utility utility = new Utility();
 
     public GrinderRecipeProvider(PackOutput pOutput) {
         super(pOutput);
@@ -112,6 +112,49 @@ public class GrinderRecipeProvider extends RecipeProvider {
                 addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ore_deepslate_to_raw_grinder"));
             }
         }
+
+        for (RegistryObject<Item> item : ModItems.VANILLA_MAP.values()) {
+            String currentName = item.getId().getPath();
+            String currentMaterialName = currentName.split("_")[0];
+            if (!oldMaterials.contains(currentMaterialName)) {
+                oldMaterials.add(currentMaterialName);
+
+                Item ingot = Utility.getItem(currentMaterialName + "_ingot");
+                if (ingot == Items.AIR) {
+                    ingot = Utility.getItem(currentMaterialName);
+                }
+                Item raw = Utility.getItem("raw_" + currentMaterialName);
+
+                MetallurgyPlus.LOGGER.info(currentMaterialName);
+                MetallurgyPlus.LOGGER.info(ingot.getDescriptionId());
+                MetallurgyPlus.LOGGER.info(raw.getDescriptionId());
+
+                Item dust = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[0]).get();
+                Item gear = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[1]).get();
+                Item plate = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[2]).get();
+                Item rod = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[3]).get();
+
+                if (ingot != Items.AIR) {
+                    inputSize = 1;
+                    inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+                    inputAmounts = NonNullList.withSize(inputSize, 1);
+                    inputItems.set(0, ingot);
+                    inputAmounts.set(0, 1);
+                    output = new ItemStack(dust, 1);
+                    addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingot_to_dust_grinder"));
+                }
+
+                if (raw != Items.AIR) {
+                    inputSize = 1;
+                    inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+                    inputAmounts = NonNullList.withSize(inputSize, 1);
+                    inputItems.set(0, raw);
+                    inputAmounts.set(0, 1);
+                    output = new ItemStack(dust, 2);
+                    addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_raw_to_dust_grinder"));
+                }
+            }
+        }
     }
 
     private void addGrinderFinishedRecipe(Consumer<FinishedRecipe> pWriter, NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts,
@@ -142,7 +185,7 @@ public class GrinderRecipeProvider extends RecipeProvider {
             int i = 0;
             for (Item ingredient : inputItems) {
                 JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", utility.formatResourceName(ingredient.getDescriptionId()));
+                ingredientObj.addProperty("item", Utility.formatResourceName(ingredient.getDescriptionId()));
                 ingredientObj.addProperty("count", inputAmounts.get(i));
                 ingredientsArray.add(ingredientObj);
                 i++;
@@ -150,7 +193,7 @@ public class GrinderRecipeProvider extends RecipeProvider {
             pJson.add("ingredients", ingredientsArray);
 
             JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", utility.formatResourceName(output.getDescriptionId()));
+            outputObj.addProperty("item", Utility.formatResourceName(output.getDescriptionId()));
             outputObj.addProperty("count", output.getCount());
             pJson.add("output", outputObj);
 
@@ -158,7 +201,7 @@ public class GrinderRecipeProvider extends RecipeProvider {
             if (extraOutputs != null) {
                 for (ItemStack extraOutput : extraOutputs) {
                     JsonObject ingredientObj = new JsonObject();
-                    ingredientObj.addProperty("item", utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
+                    ingredientObj.addProperty("item", Utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
                     ingredientObj.addProperty("count", extraOutput.getCount());
                     extraOutputArray.add(ingredientObj);
                 }

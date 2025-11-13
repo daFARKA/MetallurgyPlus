@@ -51,6 +51,7 @@ public class ModLangProvider extends LanguageProvider {
         addBatteryTranslations();
         addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
+        addCustomItemMapTranslations(ModItems.VANILLA_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
     }
 

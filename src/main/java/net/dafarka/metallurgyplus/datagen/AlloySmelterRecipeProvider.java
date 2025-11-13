@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class AlloySmelterRecipeProvider extends RecipeProvider {
-    private static Utility utility = new Utility();
 
     public AlloySmelterRecipeProvider(PackOutput pOutput) {
         super(pOutput);
@@ -67,7 +66,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
                 inputAmounts = NonNullList.withSize(inputSize, 1);
                 inputItems.set(0, dust);
                 inputAmounts.set(0, 1);
-                inputItems.set(1, utility.getItem("coal"));
+                inputItems.set(1, Utility.getItem("coal"));
                 inputAmounts.set(1, 1);
                 output = new ItemStack(ingot, 1);
                 addAlloySmelterRecipe(pWriter, inputItems, inputAmounts, output,
@@ -103,7 +102,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
             int i = 0;
             for (Item ingredient : inputItems) {
                 JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", utility.formatResourceName(ingredient.getDescriptionId()));
+                ingredientObj.addProperty("item", Utility.formatResourceName(ingredient.getDescriptionId()));
                 ingredientObj.addProperty("count", inputAmounts.get(i));
                 ingredientsArray.add(ingredientObj);
                 i++;
@@ -112,7 +111,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
 
             // Serialize output
             JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", utility.formatResourceName(output.getDescriptionId()));
+            outputObj.addProperty("item", Utility.formatResourceName(output.getDescriptionId()));
             outputObj.addProperty("count", output.getCount());
             pJson.add("output", outputObj);
         }

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class OreProcessingUnitRecipeProvider extends RecipeProvider {
-    private static Utility utility = new Utility();
 
     public OreProcessingUnitRecipeProvider(PackOutput pOutput) {
         super(pOutput);
@@ -103,7 +102,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
             int i = 0;
             for (Item ingredient : inputItems) {
                 JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", utility.formatResourceName(ingredient.getDescriptionId()));
+                ingredientObj.addProperty("item", Utility.formatResourceName(ingredient.getDescriptionId()));
                 ingredientObj.addProperty("count", inputAmounts.get(i));
                 ingredientsArray.add(ingredientObj);
                 i++;
@@ -112,7 +111,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
 
             // Serialize output
             JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", utility.formatResourceName(output.getDescriptionId()));
+            outputObj.addProperty("item", Utility.formatResourceName(output.getDescriptionId()));
             outputObj.addProperty("count", output.getCount());
             pJson.add("output", outputObj);
 
@@ -121,7 +120,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
             if (extraOutputs != null) {
                 for (ItemStack extraOutput : extraOutputs) {
                     JsonObject ingredientObj = new JsonObject();
-                    ingredientObj.addProperty("item", utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
+                    ingredientObj.addProperty("item", Utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
                     ingredientObj.addProperty("count", extraOutput.getCount());
                     extraOutputArray.add(ingredientObj);
                 }

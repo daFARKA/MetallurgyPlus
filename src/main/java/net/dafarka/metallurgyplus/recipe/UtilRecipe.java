@@ -15,7 +15,7 @@ public class UtilRecipe {
      *
      * @return the index or -1 if not found (should never happen though)
      * */
-    public int findIngredientIndex(NonNullList<Ingredient> ingredients, Ingredient target) {
+    public static int findIngredientIndex(NonNullList<Ingredient> ingredients, Ingredient target) {
         for (int i = 0; i < ingredients.size(); i++) {
             if (ingredients.get(i).test(target.getItems()[0])) {
                 return i;

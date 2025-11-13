@@ -27,9 +27,6 @@ public class GrinderRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<Double> extraOutputChances;
     private final ResourceLocation id;
 
-    private UtilRecipe utilRecipe = new UtilRecipe();
-    private static Utility utility = new Utility();
-
     public GrinderRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs,
                          NonNullList<Double> extraOutputChances, ResourceLocation id) {
         this.inputItems = inputItems;
@@ -92,7 +89,7 @@ public class GrinderRecipe implements Recipe<SimpleContainer> {
     }
 
     public int getInputAmountForIngredient(Ingredient ingredient) {
-        int index = utilRecipe.findIngredientIndex(inputItems, ingredient);
+        int index = UtilRecipe.findIngredientIndex(inputItems, ingredient);
         if (index != -1) {
             return inputAmounts.get(index);
         }
@@ -142,7 +139,7 @@ public class GrinderRecipe implements Recipe<SimpleContainer> {
                 extraOutputs = NonNullList.withSize(extraOutputsJson.size(), ItemStack.EMPTY);
                 extraOutputChances = NonNullList.withSize(extraOutputsJson.size(), 1.0);
                 for (int i = 0; i < extraOutputs.size(); i++) {
-                    extraOutputs.set(i, new ItemStack(utility.getItem(extraOutputsJson.get(i).getAsJsonObject().get("item").getAsString().split(":")[1]),
+                    extraOutputs.set(i, new ItemStack(Utility.getItem(extraOutputsJson.get(i).getAsJsonObject().get("item").getAsString().split(":")[1]),
                         extraOutputsJson.get(i).getAsJsonObject().get("count").getAsInt()));
                     if (extraOutputsJson.get(i).getAsJsonObject().has("chance")) {
                         extraOutputChances.set(i, extraOutputsJson.get(i).getAsJsonObject().get("chance").getAsDouble());

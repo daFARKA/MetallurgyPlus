@@ -25,8 +25,6 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
     private final ItemStack output;
     private final ResourceLocation id;
 
-    private UtilRecipe utilRecipe = new UtilRecipe();
-
     public AlloySmelterRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
         this.inputItems = inputItems;
         this.inputAmounts = inputAmounts;
@@ -78,7 +76,7 @@ public class AlloySmelterRecipe implements Recipe<SimpleContainer> {
     }
 
     public int getInputAmountForIngredient(Ingredient ingredient) {
-        int index = utilRecipe.findIngredientIndex(inputItems, ingredient);
+        int index = UtilRecipe.findIngredientIndex(inputItems, ingredient);
         if (index != -1) {
             return inputAmounts.get(index);
         }

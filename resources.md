@@ -138,3 +138,11 @@
 * titanium 6al 4v - 0x180630
 * titanium 6al 7nb - 0x270f4a
 * titanium 10v 2fe 3 al - 0x0d021c
+
+## Vanilla Materials
+* iron - 0xffffff
+* copper - 0xe77c56
+* gold - 0xfdf55f
+* netherite - 0x31292a
+* diamond - 0xa1fbe8
+* emerald - 0x17dd62

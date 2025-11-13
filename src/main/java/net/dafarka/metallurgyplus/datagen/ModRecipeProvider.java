@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -44,6 +45,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildMaterialRecipes(pWriter);
         buildOreRecipes(pWriter);
         buildAlloyRecipes(pWriter);
+        buildVanillaRecipes(pWriter);
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         grinderRecipeProvider.buildRecipes(pWriter);
@@ -194,6 +196,46 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
+    private void buildVanillaRecipes(Consumer<FinishedRecipe> pWriter) {
+        List<String> oldMaterials = new ArrayList<>();
+        for (RegistryObject<Item> item : ModItems.VANILLA_MAP.values()) {
+            String currentName = item.getId().getPath();
+            String currentMaterialName = currentName.split("_")[0];
+            if (!oldMaterials.contains(currentMaterialName)) {
+                oldMaterials.add(currentMaterialName);
+
+                Item ingot = Utility.getItem(currentMaterialName + "_ingot");
+                if (ingot == Items.AIR) {
+                    ingot = Utility.getItem(currentMaterialName);
+                    if (ingot == Items.AIR) continue;
+                }
+
+                Item dust = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[0]).get();
+                Item gear = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[1]).get();
+                Item plate = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[2]).get();
+                Item rod = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[3]).get();
+
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, gear)
+                    .pattern(" X ")
+                    .pattern("X X")
+                    .pattern(" X ")
+                    .define('X', ingot)
+                    .unlockedBy(getHasName(ingot), has(ingot))
+                    .save(pWriter);
+
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, rod)
+                    .pattern("   ")
+                    .pattern("  X")
+                    .pattern(" X ")
+                    .define('X', ingot)
+                    .unlockedBy(getHasName(ingot), has(ingot))
+                    .save(pWriter);
+
+                oreSmelting(pWriter, List.of(dust), RecipeCategory.MISC, ingot, 0.25f, 100, currentMaterialName);
+            }
+        }
+    }
+
     private void buildCustomRecipes(Consumer<FinishedRecipe> pWriter) {
         oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
 
@@ -252,33 +294,35 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("TIA")
             .define('B', Items.BRICK)
             .define('I', Items.IRON_INGOT)
-            .define('L', ModItems.MATERIAL_MAP.get("lead_ingot").get())
+            .define('L', ModItems.MATERIAL_MAP.get("lead_gear").get())
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('N', ModItems.MATERIAL_MAP.get("nickel_ingot").get())
-            .define('T', ModItems.MATERIAL_MAP.get("tin_ingot").get())
-            .define('A', ModItems.MATERIAL_MAP.get("aluminum_ingot").get())
+            .define('N', ModItems.MATERIAL_MAP.get("nickel_gear").get())
+            .define('T', ModItems.MATERIAL_MAP.get("tin_gear").get())
+            .define('A', ModItems.MATERIAL_MAP.get("aluminum_gear").get())
             .unlockedBy(getHasName(Items.BRICK), has(Items.BRICK))
             .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_ingot").get()), has(ModItems.MATERIAL_MAP.get("lead_ingot").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_gear").get()), has(ModItems.MATERIAL_MAP.get("lead_gear").get()))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_ingot").get()), has(ModItems.MATERIAL_MAP.get("nickel_ingot").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tin_ingot").get()), has(ModItems.MATERIAL_MAP.get("tin_ingot").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("aluminum_ingot").get()), has(ModItems.MATERIAL_MAP.get("aluminum_ingot").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_gear").get()), has(ModItems.MATERIAL_MAP.get("nickel_gear").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tin_gear").get()), has(ModItems.MATERIAL_MAP.get("tin_gear").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("aluminum_gear").get()), has(ModItems.MATERIAL_MAP.get("aluminum_gear").get()))
             .save(pWriter);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.GRINDER.get())
             .pattern("fPf")
             .pattern("ZFZ")
-            .pattern("SSS")
+            .pattern("SsS")
             .define('f', Items.FLINT)
             .define('P', Items.PISTON)
             .define('Z', ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get())
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('S', ModItems.ALLOY_MAP.get("steel_ingot").get())
+            .define('S', ModItems.ALLOY_MAP.get("steel_gear").get())
+            .define('s', ModItems.ALLOY_MAP.get("steel_ingot").get())
             .unlockedBy(getHasName(Items.FLINT), has(Items.FLINT))
             .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
             .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_gear").get()), has(ModItems.ALLOY_MAP.get("steel_gear").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_ingot").get()), has(ModItems.ALLOY_MAP.get("steel_ingot").get()))
             .save(pWriter);
     }

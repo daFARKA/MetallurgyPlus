@@ -13,14 +13,14 @@ public class Utility {
      * <br>
      * The respecting item is given by a priority system. First ModItems are returned,
      * if no ModItem exists with that name return a vanilla minecraft item with that name
-     * if no vanilla item exists with that name return air. As it is very harmless.
+     * if no vanilla item exists with that name return air.
      *
      * @param name the name of the item to return
      *
      * @return an Item with the given name, air otherwise.
      *
      * */
-    public Item getItem(String name) {
+    public static Item getItem(String name) {
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(MetallurgyPlus.MODID, name));
         if (item == ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "air"))) {
             item = ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", name));
@@ -37,7 +37,7 @@ public class Utility {
      *
      * @return The formatted name of the form "id:resource"
      * */
-    public String formatResourceName(String name) {
+    public static String formatResourceName(String name) {
         String[] parts = name.split("\\.");
         return parts[parts.length - 2] + ":" + parts[parts.length - 1];
     }

@@ -23,6 +23,8 @@ public class DynamicItemColor implements ItemColor {
                     return ModItems.ORE_COLOR_MAP.get(name);
                 } else if (ModItems.ALLOY_COLOR_MAP.get(name) != null){
                     return ModItems.ALLOY_COLOR_MAP.get(name);
+                } else if (ModItems.VANILLA_MAP.get(name) != null) {
+                    return ModItems.VANILLA_COLOR_MAP.get(name);
                 }
             } else if (type.equals("block")) {
                 if (ModBlocks.MATERIAL_COLOR_MAP.get(name) != null) {
