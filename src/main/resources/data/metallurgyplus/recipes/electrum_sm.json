@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:silver_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:electrum_ingot",
+    "count": 1
+  }
+}

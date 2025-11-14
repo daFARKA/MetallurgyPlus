@@ -84,6 +84,7 @@ public class ModItems {
         registerCustomItem("small_rare_earth");
         registerCustomItem("stone_dust");
         registerCustomItem("energy_core");
+        registerCustomItem("rubber");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -184,7 +185,7 @@ public class ModItems {
         registerOre("tantalite", 0x4d2d21, OreRarity.RARE); // Tantalum, Iron, Manganese
         registerOre("crookesite", 0x2b061b, OreRarity.EXTREMELY_RARE); // Thallium, Copper, Silver
         registerOre("uraninite", 0x91b572, OreRarity.RARE); // Uranium, Thorium, Technetium
-        registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); //S elenium
+        registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); // Selenium
         registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon
 
         // Alloys
@@ -218,6 +219,8 @@ public class ModItems {
         registerAlloy("titanium-6al-4v", 0x180630); // Titanium, Aluminum, Vanadium
         registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
+        registerAlloy("niobium-titanium", 0x1e1e26); // Niobium, Titanium
+        registerAlloy("electrum", 0xfff5a6); // Gold, Silver
 
         // Vanilla Items
         registerVanilla("iron", 0xffffff);

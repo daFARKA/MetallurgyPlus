@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:niobium_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:titanium_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:niobium-titanium_ingot",
+    "count": 1
+  }
+}

@@ -54,7 +54,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         grinderRecipeProvider.buildRecipes(pWriter);
         pressRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
-
+        buildCableRecipes(pWriter);
+        buildCoilRecipes(pWriter);
         buildBlockEntitiesRecipes(pWriter);
     }
 
@@ -227,13 +228,23 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .unlockedBy(getHasName(ingot), has(ingot))
                     .save(pWriter);
 
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, rod)
-                    .pattern("   ")
-                    .pattern("  X")
-                    .pattern(" X ")
-                    .define('X', ingot)
-                    .unlockedBy(getHasName(ingot), has(ingot))
-                    .save(pWriter);
+                if (ingot == Items.IRON_INGOT) {
+                    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, rod)
+                        .pattern("   ")
+                        .pattern(" X ")
+                        .pattern(" X ")
+                        .define('X', ingot)
+                        .unlockedBy(getHasName(ingot), has(ingot))
+                        .save(pWriter);
+                } else {
+                    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, rod)
+                        .pattern("   ")
+                        .pattern("  X")
+                        .pattern(" X ")
+                        .define('X', ingot)
+                        .unlockedBy(getHasName(ingot), has(ingot))
+                        .save(pWriter);
+                }
 
                 oreSmelting(pWriter, List.of(dust), RecipeCategory.MISC, ingot, 0.25f, 100, currentMaterialName);
             }
@@ -280,7 +291,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     private void buildBlockEntitiesRecipes(Consumer<FinishedRecipe> pWriter) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ORE_PROCESSING_UNIT.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRESS.get())
             .pattern("IPI")
             .pattern("IFI")
             .pattern("III")
@@ -292,19 +303,35 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
             .save(pWriter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ORE_PROCESSING_UNIT.get())
+            .pattern("IDI")
+            .pattern("GFG")
+            .pattern("ICI")
+            .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
+            .define('D', ModItems.VANILLA_MAP.get("diamond_gear").get())
+            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('G', ModItems.VANILLA_MAP.get("iron_gear").get())
+            .define('C', ModItems.VANILLA_MAP.get("copper_gear").get())
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
+            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_gear").get()), has(ModItems.VANILLA_MAP.get("iron_gear").get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_gear").get()), has(ModItems.VANILLA_MAP.get("copper_gear").get()))
+            .save(pWriter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALLOY_SMELTER.get())
             .pattern("BBB")
             .pattern("LFN")
             .pattern("TIA")
             .define('B', Items.BRICK)
-            .define('I', Items.IRON_INGOT)
+            .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
             .define('L', ModItems.MATERIAL_MAP.get("lead_gear").get())
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
             .define('N', ModItems.MATERIAL_MAP.get("nickel_gear").get())
             .define('T', ModItems.MATERIAL_MAP.get("tin_gear").get())
             .define('A', ModItems.MATERIAL_MAP.get("aluminum_gear").get())
             .unlockedBy(getHasName(Items.BRICK), has(Items.BRICK))
-            .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_gear").get()), has(ModItems.MATERIAL_MAP.get("lead_gear").get()))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_gear").get()), has(ModItems.MATERIAL_MAP.get("nickel_gear").get()))
@@ -321,13 +348,211 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('Z', ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get())
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
             .define('S', ModItems.ALLOY_MAP.get("steel_gear").get())
-            .define('s', ModItems.ALLOY_MAP.get("steel_ingot").get())
+            .define('s', ModItems.ALLOY_MAP.get("steel_plate").get())
             .unlockedBy(getHasName(Items.FLINT), has(Items.FLINT))
             .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
             .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_gear").get()), has(ModItems.ALLOY_MAP.get("steel_gear").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_ingot").get()), has(ModItems.ALLOY_MAP.get("steel_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_plate").get()), has(ModItems.ALLOY_MAP.get("steel_plate").get()))
+            .save(pWriter);
+    }
+
+    private void buildCableRecipes(Consumer<FinishedRecipe> pWriter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(1).get())
+            .pattern("RCR")
+            .pattern("CcC")
+            .pattern("RCR")
+            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
+            .define('C', ModItems.VANILLA_MAP.get("copper_plate").get())
+            .define('c', ModItems.COIL_MAP.get(1).get())
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_plate").get()), has(ModItems.VANILLA_MAP.get("copper_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(2).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(1).get())
+            .define('C', ModItems.ALLOY_MAP.get("cupronickel_plate").get())
+            .define('c', ModItems.COIL_MAP.get(2).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(1).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(1).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("cupronickel_plate").get()), has(ModItems.ALLOY_MAP.get("cupronickel_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(3).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(2).get())
+            .define('C', ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get())
+            .define('c', ModItems.COIL_MAP.get(3).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(2).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(2).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(4).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(3).get())
+            .define('C', ModItems.MATERIAL_MAP.get("silver_plate").get())
+            .define('c', ModItems.COIL_MAP.get(4).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(3).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(3).get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("silver_plate").get()), has(ModItems.MATERIAL_MAP.get("silver_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(5).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(4).get())
+            .define('C', ModItems.ALLOY_MAP.get("electrum_plate").get())
+            .define('c', ModItems.COIL_MAP.get(5).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(4).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(4).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("electrum_plate").get()), has(ModItems.ALLOY_MAP.get("electrum_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(5).get()), has(ModItems.COIL_MAP.get(5).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(6).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(5).get())
+            .define('C', ModItems.MATERIAL_MAP.get("palladium_plate").get())
+            .define('c', ModItems.COIL_MAP.get(6).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(5).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(5).get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("palladium_plate").get()), has(ModItems.MATERIAL_MAP.get("palladium_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(6).get()), has(ModItems.COIL_MAP.get(6).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(7).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(6).get())
+            .define('C', ModItems.MATERIAL_MAP.get("platinum_plate").get())
+            .define('c', ModItems.COIL_MAP.get(7).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(6).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(6).get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("platinum_plate").get()), has(ModItems.MATERIAL_MAP.get("platinum_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(7).get()), has(ModItems.COIL_MAP.get(7).get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(8).get())
+            .pattern("XCX")
+            .pattern("CcC")
+            .pattern("XCX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(7).get())
+            .define('C', ModItems.ALLOY_MAP.get("niobium-titanium_plate").get())
+            .define('c', ModItems.COIL_MAP.get(8).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(7).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(7).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("niobium-titanium_plate").get()), has(ModItems.ALLOY_MAP.get("niobium-titanium_plate").get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(8).get()), has(ModItems.COIL_MAP.get(8).get()))
+            .save(pWriter);
+    }
+
+    private void buildCoilRecipes(Consumer<FinishedRecipe> pWriter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(1).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', Items.COPPER_INGOT)
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.VANILLA_MAP.get("iron_rod").get())
+            .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_rod").get()), has(ModItems.VANILLA_MAP.get("iron_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(2).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.MATERIAL_MAP.get("tin_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("steel_rod").get())
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tin_ingot").get()), has(ModItems.MATERIAL_MAP.get("tin_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_rod").get()), has(ModItems.ALLOY_MAP.get("steel_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(3).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.ALLOY_MAP.get("bronze_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("manganese-steel_rod").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("bronze_ingot").get()), has(ModItems.ALLOY_MAP.get("bronze_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("manganese-steel_rod").get()), has(ModItems.ALLOY_MAP.get("manganese-steel_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(4).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.MATERIAL_MAP.get("lead_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("invar_rod").get())
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_ingot").get()), has(ModItems.MATERIAL_MAP.get("lead_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("invar_rod").get()), has(ModItems.ALLOY_MAP.get("invar_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(5).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.ALLOY_MAP.get("solder_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("nitinol_rod").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("solder_ingot").get()), has(ModItems.ALLOY_MAP.get("solder_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("nitinol_rod").get()), has(ModItems.ALLOY_MAP.get("nitinol_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(6).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(7).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get()), has(ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(8).get())
+            .pattern("xRX")
+            .pattern(" I ")
+            .pattern("XRx")
+            .define('X', ModItems.MATERIAL_MAP.get("iridium_ingot").get())
+            .define('x', ModItems.MATERIAL_MAP.get("osmium_ingot").get())
+            .define('R', Items.REDSTONE)
+            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get())
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("iridium_ingot").get()), has(ModItems.MATERIAL_MAP.get("iridium_ingot").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("osmium_ingot").get()), has(ModItems.MATERIAL_MAP.get("osmium_ingot").get()))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get()))
             .save(pWriter);
     }
 }
