@@ -56,7 +56,12 @@ public class ModBlockModelProvider extends BlockModelProvider {
             registerBattery(blockName);
         }
 
-        registerOrientables();
+        registerOrientable("alloy_smelter", false);
+        registerOrientable("ore_processing_unit", false);
+        registerOrientable("grinder", false);
+        registerOrientable("press", false);
+        registerOrientable("quarry", false);
+        registerOrientable("power_source", true);
     }
 
     private void registerMaterialModel(String blockName) {
@@ -111,14 +116,6 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .face(Direction.UP).tintindex(0).texture("#layer1").end()
             .face(Direction.DOWN).tintindex(0).texture("#layer1").end()
             .end();
-    }
-
-    private void registerOrientables() {
-        registerOrientable("alloy_smelter", false);
-        registerOrientable("ore_processing_unit", false);
-        registerOrientable("grinder", false);
-        registerOrientable("quarry", false);
-        registerOrientable("power_source", true);
     }
 
     private void registerOrientable(String name, boolean allSidesSame) {

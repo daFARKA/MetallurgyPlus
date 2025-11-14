@@ -56,6 +56,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> GRINDER = registerBlock("grinder",
         () -> new GrinderBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
+    public static final RegistryObject<Block> PRESS = registerBlock("press",
+        () -> new PressBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",
         () -> new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 

@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
+import net.dafarka.metallurgyplus.recipe.PressRecipe;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -30,6 +31,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private AlloySmelterRecipeProvider alloySmelterRecipeProvider;
     private OreProcessingUnitRecipeProvider oreProcessingUnitRecipeProvider;
     private GrinderRecipeProvider grinderRecipeProvider;
+    private PressRecipeProvider pressRecipeProvider;
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get());
 
@@ -38,6 +40,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         alloySmelterRecipeProvider = new AlloySmelterRecipeProvider(pOutput);
         oreProcessingUnitRecipeProvider = new OreProcessingUnitRecipeProvider(pOutput);
         grinderRecipeProvider = new GrinderRecipeProvider(pOutput);
+        pressRecipeProvider = new PressRecipeProvider(pOutput);
     }
 
     @Override
@@ -49,6 +52,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         grinderRecipeProvider.buildRecipes(pWriter);
+        pressRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
 
         buildBlockEntitiesRecipes(pWriter);

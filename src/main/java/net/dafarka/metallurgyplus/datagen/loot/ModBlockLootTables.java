@@ -41,6 +41,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
         this.dropSelf(ModBlocks.GRINDER.get());
+        this.dropSelf(ModBlocks.PRESS.get());
         this.dropSelf(ModBlocks.QUARRY.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
 

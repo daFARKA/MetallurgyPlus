@@ -35,6 +35,10 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("grinder_be", () -> BlockEntityType.Builder.of(GrinderBlockEntity::new,
             ModBlocks.GRINDER.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<PressBlockEntity>> PRESS_BE =
+        BLOCK_ENTITIES.register("press_be", () -> BlockEntityType.Builder.of(PressBlockEntity::new,
+            ModBlocks.PRESS.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY_BE =
         BLOCK_ENTITIES.register("quarry_be", () -> BlockEntityType.Builder.of(QuarryBlockEntity::new,
             ModBlocks.QUARRY.get()).build(null));
