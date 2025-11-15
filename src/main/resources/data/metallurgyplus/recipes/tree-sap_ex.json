@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:extractor",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:tree_sap",
+      "count": 4
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:rubber",
+    "count": 1
+  }
+}

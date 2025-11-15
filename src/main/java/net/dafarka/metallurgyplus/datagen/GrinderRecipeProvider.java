@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
 import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.NonNullList;
@@ -125,10 +126,6 @@ public class GrinderRecipeProvider extends RecipeProvider {
                 }
                 Item raw = Utility.getItem("raw_" + currentMaterialName);
 
-                MetallurgyPlus.LOGGER.info(currentMaterialName);
-                MetallurgyPlus.LOGGER.info(ingot.getDescriptionId());
-                MetallurgyPlus.LOGGER.info(raw.getDescriptionId());
-
                 Item dust = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[0]).get();
                 Item gear = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[1]).get();
                 Item plate = ModItems.VANILLA_MAP.get(currentMaterialName + "_" + ModItems.VANILLA_COMPONENT_NAMES[2]).get();
@@ -216,7 +213,7 @@ public class GrinderRecipeProvider extends RecipeProvider {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return OreProcessingUnitRecipe.Serializer.INSTANCE;
+            return GrinderRecipe.Serializer.INSTANCE;
         }
 
         @Nullable

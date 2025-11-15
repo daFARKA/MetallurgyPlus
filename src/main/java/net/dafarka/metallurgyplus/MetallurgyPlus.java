@@ -12,6 +12,7 @@ import net.dafarka.metallurgyplus.network.ModMessages;
 import net.dafarka.metallurgyplus.recipe.ModRecipes;
 import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
 import net.dafarka.metallurgyplus.screen.BatteryScreen;
+import net.dafarka.metallurgyplus.screen.ExtractorScreen;
 import net.dafarka.metallurgyplus.screen.GrinderScreen;
 import net.dafarka.metallurgyplus.screen.PressScreen;
 import net.dafarka.metallurgyplus.screen.QuarryScreen;
@@ -103,6 +104,7 @@ public class MetallurgyPlus
             MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
             MenuScreens.register(ModMenuTypes.GRINDER_MENU.get(), GrinderScreen::new);
             MenuScreens.register(ModMenuTypes.PRESS_MENU.get(), PressScreen ::new);
+            MenuScreens.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
 

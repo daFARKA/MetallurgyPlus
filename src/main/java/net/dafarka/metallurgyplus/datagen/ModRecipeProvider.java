@@ -32,6 +32,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private OreProcessingUnitRecipeProvider oreProcessingUnitRecipeProvider;
     private GrinderRecipeProvider grinderRecipeProvider;
     private PressRecipeProvider pressRecipeProvider;
+    private ExtractorRecipeProvider extractorRecipeProvider;
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get());
 
@@ -41,6 +42,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreProcessingUnitRecipeProvider = new OreProcessingUnitRecipeProvider(pOutput);
         grinderRecipeProvider = new GrinderRecipeProvider(pOutput);
         pressRecipeProvider = new PressRecipeProvider(pOutput);
+        extractorRecipeProvider = new ExtractorRecipeProvider(pOutput);
     }
 
     @Override
@@ -53,6 +55,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         grinderRecipeProvider.buildRecipes(pWriter);
         pressRecipeProvider.buildRecipes(pWriter);
+        extractorRecipeProvider.buildRecipes(pWriter);
         buildCustomRecipes(pWriter);
         buildCableRecipes(pWriter);
         buildCoilRecipes(pWriter);
@@ -263,6 +266,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()))
             .save(pWriter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.COBBLESTONE, 1)
+            .pattern("SS ")
+            .pattern("SS ")
+            .pattern("   ")
+            .define('S', ModItems.CUSTOM_ITEM_MAP.get("stone_dust").get())
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("stone_dust").get()), has(ModItems.CUSTOM_ITEM_MAP.get("stone_dust").get()))
+            .save(pWriter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("energy_core").get(), 1)
             .pattern("ICI")
             .pattern("GRG")
@@ -319,6 +330,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_gear").get()), has(ModItems.VANILLA_MAP.get("copper_gear").get()))
             .save(pWriter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.EXTRACTOR.get())
+            .pattern("NCN")
+            .pattern("GFG")
+            .pattern("NSN")
+            .define('N', ModItems.MATERIAL_MAP.get("nickel_plate").get())
+            .define('C', ModItems.MATERIAL_MAP.get("chromium_rod").get())
+            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('G', ModItems.MATERIAL_MAP.get("graphite_gear").get())
+            .define('S', ModItems.MATERIAL_MAP.get("selenium_plate").get())
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_plate").get()), has(ModItems.MATERIAL_MAP.get("nickel_plate").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("chromium_rod").get()), has(ModItems.MATERIAL_MAP.get("chromium_rod").get()))
+            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("graphite_gear").get()), has(ModItems.MATERIAL_MAP.get("graphite_gear").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("selenium_plate").get()), has(ModItems.MATERIAL_MAP.get("selenium_plate").get()))
+            .save(pWriter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALLOY_SMELTER.get())
             .pattern("BBB")
             .pattern("LFN")
@@ -341,8 +368,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.GRINDER.get())
             .pattern("fPf")
-            .pattern("ZFZ")
-            .pattern("SsS")
+            .pattern("SFS")
+            .pattern("ZsZ")
             .define('f', Items.FLINT)
             .define('P', Items.PISTON)
             .define('Z', ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get())

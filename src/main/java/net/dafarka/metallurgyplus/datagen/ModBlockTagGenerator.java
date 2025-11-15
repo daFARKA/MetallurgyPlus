@@ -40,6 +40,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.ALLOY_SMELTER.get(),
                 ModBlocks.GRINDER.get(),
                 ModBlocks.PRESS.get(),
+                ModBlocks.EXTRACTOR.get(),
                 ModBlocks.QUARRY.get(),
                 ModBlocks.POWER_SOURCE.get());
 

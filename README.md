@@ -26,6 +26,9 @@ Grinds ingots and raw pieces into their respective dust variant.
 ### Metal Press ![Metal Press](src/main/resources/assets/metallurgyplus/textures/block/press_front.png)
 Presses ingots into their respective plate variant.
 
+### Extractor ![Metal Press](src/main/resources/assets/metallurgyplus/textures/block/extractor_front.png)
+Processes multiple different materials into other crafting resources. Namely, tree sap and rubber.
+
 ### Quarry ![Quarry](src/main/resources/assets/metallurgyplus/textures/block/quarry_front.png)
 Excavates a user-specified area and produces their block drops.
 

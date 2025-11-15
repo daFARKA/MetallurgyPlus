@@ -60,6 +60,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("ore_processing_unit", false);
         registerOrientable("grinder", false);
         registerOrientable("press", false);
+        registerOrientable("extractor", false);
         registerOrientable("quarry", false);
         registerOrientable("power_source", true);
     }

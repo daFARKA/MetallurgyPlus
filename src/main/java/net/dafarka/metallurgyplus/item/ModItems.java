@@ -85,6 +85,8 @@ public class ModItems {
         registerCustomItem("stone_dust");
         registerCustomItem("energy_core");
         registerCustomItem("rubber");
+        registerCustomItem("tree_sap");
+        registerCustomItem("saw_dust");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);

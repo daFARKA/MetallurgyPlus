@@ -2,8 +2,9 @@ package net.dafarka.metallurgyplus.datagen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.item.ModItems;
-import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
+import net.dafarka.metallurgyplus.recipe.ExtractorRecipe;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.PackOutput;
@@ -12,6 +13,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class OreProcessingUnitRecipeProvider extends RecipeProvider {
+public class ExtractorRecipeProvider extends RecipeProvider {
 
-    public OreProcessingUnitRecipeProvider(PackOutput pOutput) {
+    public ExtractorRecipeProvider(PackOutput pOutput) {
         super(pOutput);
     }
 
@@ -35,19 +37,19 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
         NonNullList<ItemStack> extraOutputs = null;
         NonNullList<Float> extraChances = null;
 
-        // From this point onwards custom recipes can be added. Use the below example to construct recipes. NOTE: inputSize should always be 1 here.
+        // From this point onwards custom recipes can be added. Use the below example to construct recipes.
         /*
         inputSize = 1;
         inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
         inputAmounts = NonNullList.withSize(inputSize, 1);
-        inputItems.set(0, utility.getItem("coal"));
+        inputItems.set(0, Utility.getItem("coal"));
         inputAmounts.set(0, 1);
-        output = new ItemStack(utility.getItem("brick"), 1);
+        output = new ItemStack(Utility.getItem("brick"), 1);
         extraOutputs = NonNullList.withSize(1, ItemStack.EMPTY);
         extraChances = NonNullList.withSize(extraOutputs.size(), 1f);
-        extraOutputs.set(0, new ItemStack(utility.getItem("redstone"), 1));
+        extraOutputs.set(0, new ItemStack(Utility.getItem("redstone"), 1));
         extraChances.set(0, 0.25f));
-        addOreProcessingUnitRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, "test_ore_processing_unit"));*/
+        addExtractorFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, "test_extractor"));*/
 
         List<String> oldMaterials = new ArrayList<>();
         for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
@@ -64,17 +66,38 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
                 Item rod = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[5]).get();
                 Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[6]).get();
 
+            }
+        }
 
+        List<Item> logTypes = List.of(Items.OAK_LOG, Items.ACACIA_LOG, Items.BIRCH_LOG, Items.CHERRY_LOG, Items.JUNGLE_LOG, Items.DARK_OAK_LOG, Items.MANGROVE_LOG, Items.SPRUCE_LOG, Items.WARPED_STEM, Items.CRIMSON_STEM);
+        for (Item logType : logTypes) {
+            String currentName = logType.getDescriptionId();
+            String currentWoodName = currentName.split("\\.")[2];
+
+            if (!oldMaterials.contains(currentWoodName)) {
+                oldMaterials.add(currentWoodName);
+
+                inputSize = 1;
+                inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+                inputAmounts = NonNullList.withSize(inputSize, 1);
+                inputItems.set(0, Utility.getItem(currentWoodName));
+                inputAmounts.set(0, 4);
+                output = new ItemStack(ModItems.CUSTOM_ITEM_MAP.get("tree_sap").get(), 1);
+                extraOutputs = NonNullList.withSize(1, ItemStack.EMPTY);
+                extraChances = NonNullList.withSize(extraOutputs.size(), 1f);
+                extraOutputs.set(0, new ItemStack(ModItems.CUSTOM_ITEM_MAP.get("saw_dust").get(), 2));
+                extraChances.set(0, 1f);
+                addExtractorFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, currentWoodName + "_to_sap_extractor"));
             }
         }
     }
 
-    private void addOreProcessingUnitRecipe(Consumer<FinishedRecipe> pWriter, NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts,
+    private void addExtractorFinishedRecipe(Consumer<FinishedRecipe> pWriter, NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts,
                                        ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
-        pWriter.accept(new OreProcessingUnitFinishedRecipe(inputItems, inputAmounts, output, extraOutputs, extraChances, id));
+        pWriter.accept(new ExtractorFinishedRecipe(inputItems, inputAmounts, output, extraOutputs, extraChances, id));
     }
 
-    private static class OreProcessingUnitFinishedRecipe implements FinishedRecipe {
+    private static class ExtractorFinishedRecipe implements FinishedRecipe {
         private final NonNullList<Item> inputItems;
         private final NonNullList<Integer> inputAmounts;
         private final ItemStack output;
@@ -82,7 +105,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
         private final NonNullList<Float> extraChances;
         private final ResourceLocation id;
 
-        private OreProcessingUnitFinishedRecipe(NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
+        private ExtractorFinishedRecipe(NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
             this.inputItems = inputItems;
             this.inputAmounts = inputAmounts;
             this.output = output;
@@ -93,7 +116,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
 
         @Override
         public void serializeRecipeData(JsonObject pJson) {
-            pJson.addProperty("type","metallurgyplus:ore_processing_unit");
+            pJson.addProperty("type","metallurgyplus:extractor");
 
             JsonArray ingredientsArray = new JsonArray();
             int i = 0;
@@ -133,7 +156,7 @@ public class OreProcessingUnitRecipeProvider extends RecipeProvider {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return OreProcessingUnitRecipe.Serializer.INSTANCE;
+            return ExtractorRecipe.Serializer.INSTANCE;
         }
 
         @Nullable

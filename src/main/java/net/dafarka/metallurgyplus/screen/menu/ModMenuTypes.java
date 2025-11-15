@@ -26,6 +26,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<PressMenu>> PRESS_MENU =
         registerMenuType("press_menu", PressMenu::new);
 
+    public static final RegistryObject<MenuType<ExtractorMenu>> EXTRACTOR_MENU =
+        registerMenuType("extractor_menu", ExtractorMenu::new);
+
     public static final RegistryObject<MenuType<QuarryMenu>> QUARRY_MENU =
         registerMenuType("quarry_menu", QuarryMenu::new);
 

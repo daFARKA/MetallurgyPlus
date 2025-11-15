@@ -39,6 +39,10 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("press_be", () -> BlockEntityType.Builder.of(PressBlockEntity::new,
             ModBlocks.PRESS.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<ExtractorBlockEntity>> ETRACTOR_BE =
+        BLOCK_ENTITIES.register("extractor_be", () -> BlockEntityType.Builder.of(ExtractorBlockEntity::new,
+            ModBlocks.EXTRACTOR.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY_BE =
         BLOCK_ENTITIES.register("quarry_be", () -> BlockEntityType.Builder.of(QuarryBlockEntity::new,
             ModBlocks.QUARRY.get()).build(null));
