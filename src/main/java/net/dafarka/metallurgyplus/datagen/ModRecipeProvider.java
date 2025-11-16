@@ -266,6 +266,23 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()))
             .save(pWriter);
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy").get(), 1)
+            .requires(ModItems.ALLOY_MAP.get("mischmetal_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("terbium-dysprosium_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("neodymium-iron-boron_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("lanthanum-nickel_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("copper-praseodymium_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("samarium-cobalt_ingot").get())
+            .requires(ModItems.ALLOY_MAP.get("gadolinium-silicon-germanium_ingot").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("mischmetal_ingot").get()), has(ModItems.ALLOY_MAP.get("mischmetal_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("terbium-dysprosium_ingot").get()), has(ModItems.ALLOY_MAP.get("terbium-dysprosium_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("neodymium-iron-boron_ingot").get()), has(ModItems.ALLOY_MAP.get("neodymium-iron-boron_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("lanthanum-nickel_ingot").get()), has(ModItems.ALLOY_MAP.get("lanthanum-nickel_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("copper-praseodymium_ingot").get()), has(ModItems.ALLOY_MAP.get("copper-praseodymium_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("samarium-cobalt_ingot").get()), has(ModItems.ALLOY_MAP.get("samarium-cobalt_ingot").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("gadolinium-silicon-germanium_ingot").get()), has(ModItems.ALLOY_MAP.get("gadolinium-silicon-germanium_ingot").get()))
+            .save(pWriter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.COBBLESTONE, 1)
             .pattern("SS ")
             .pattern("SS ")
@@ -382,6 +399,24 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_gear").get()), has(ModItems.ALLOY_MAP.get("steel_gear").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_plate").get()), has(ModItems.ALLOY_MAP.get("steel_plate").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.QUARRY.get())
+            .pattern("PpP")
+            .pattern("EFH")
+            .pattern("PYP")
+            .define('P', ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get())
+            .define('p', ModItems.MATERIAL_MAP.get("promethium_rod").get())
+            .define('E', ModItems.MATERIAL_MAP.get("europium_gear").get())
+            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('H', ModItems.MATERIAL_MAP.get("holmium_gear").get())
+            .define('Y', ModItems.MATERIAL_MAP.get("ytterbium_gear").get())
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get()), has(ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("promethium_rod").get()), has(ModItems.MATERIAL_MAP.get("promethium_rod").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("europium_gear").get()), has(ModItems.MATERIAL_MAP.get("europium_gear").get()))
+            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("holmium_gear").get()), has(ModItems.MATERIAL_MAP.get("holmium_gear").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()), has(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()))
             .save(pWriter);
     }
 

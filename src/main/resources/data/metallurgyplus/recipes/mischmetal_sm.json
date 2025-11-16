@@ -1,0 +1,21 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:cerium_ingot",
+      "count": 10
+    },
+    {
+      "item": "metallurgyplus:lanthanum_ingot",
+      "count": 5
+    },
+    {
+      "item": "metallurgyplus:neodymium_ingot",
+      "count": 2
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:mischmetal_ingot",
+    "count": 16
+  }
+}

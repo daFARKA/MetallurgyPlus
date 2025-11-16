@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:press",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:mixed_rare_earth_alloy",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:mixed_rare_earth_alloy_plate",
+    "count": 1
+  }
+}

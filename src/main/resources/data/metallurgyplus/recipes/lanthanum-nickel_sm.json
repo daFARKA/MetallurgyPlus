@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:lanthanum_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:nickel_ingot",
+      "count": 5
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:lanthanum-nickel_ingot",
+    "count": 5
+  }
+}

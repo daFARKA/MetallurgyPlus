@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:terbium_ingot",
+      "count": 3
+    },
+    {
+      "item": "metallurgyplus:dysprosium_ingot",
+      "count": 7
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:terbium-dysprosium_ingot",
+    "count": 10
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:samarium_ingot",
+      "count": 1
+    },
+    {
+      "item": "metallurgyplus:cobalt_ingot",
+      "count": 5
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:samarium-cobalt_ingot",
+    "count": 5
+  }
+}

@@ -87,6 +87,8 @@ public class ModItems {
         registerCustomItem("rubber");
         registerCustomItem("tree_sap");
         registerCustomItem("saw_dust");
+        registerCustomItem("mixed_rare_earth_alloy");
+        registerCustomItem("mixed_rare_earth_alloy_plate");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -94,6 +96,7 @@ public class ModItems {
         registerMaterial("barium", 0x8c8f85);
         registerMaterial("beryllium", 0xb5b5b5);
         registerMaterial("bismuth", 0xbbc4c3);
+        registerMaterial("boron", 0xd9d9d9);
         registerMaterial("cadmium", 0x56549e);
         registerMaterial("calcium", 0xa3b5b8);
         registerMaterial("cerium", 0x5e7c80);
@@ -104,6 +107,7 @@ public class ModItems {
         registerMaterial("europium", 0x9e8552);
         registerMaterial("gadolinium", 0x0a4d33);
         registerMaterial("gallium", 0x84ada2);
+        registerMaterial("germanium", 0xc9c7ad);
         registerMaterial("graphite", 0x1a1a1a);
         registerMaterial("hafnium", 0x8f8281);
         registerMaterial("holmium", 0x3e635b);
@@ -189,6 +193,8 @@ public class ModItems {
         registerOre("uraninite", 0x91b572, OreRarity.RARE); // Uranium, Thorium, Technetium
         registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); // Selenium
         registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon
+        registerOre("borax", 0xffffff, OreRarity.UNCOMMON); // Boron
+        registerOre("germanite", 0x80725d, OreRarity.RARE); // Copper, Germanium, Iron, Sulphur
 
         // Alloys
         registerAlloy("steel", 0x707070); // Iron, Coal
@@ -223,6 +229,13 @@ public class ModItems {
         registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
         registerAlloy("niobium-titanium", 0x1e1e26); // Niobium, Titanium
         registerAlloy("electrum", 0xfff5a6); // Gold, Silver
+        registerAlloy("mischmetal", 0x496154); // Cerium, Lanthanum, Neodymium
+        registerAlloy("terbium-dysprosium", 0x7f81a3); // Terbium, Dysprosium
+        registerAlloy("neodymium-iron-boron", 0xf7f6eb); // Neodymium, Iron, Boron
+        registerAlloy("lanthanum-nickel", 0x8f8c6e); // Lanthanum, Nickel
+        registerAlloy("copper-praseodymium", 0x756b59); // Copper, Praseodymium
+        registerAlloy("samarium-cobalt", 0x86959e); // Samarium, Cobalt
+        registerAlloy("gadolinium-silicon-germanium", 0x64757d); // Gadolinium, Silicon, Germanium
 
         // Vanilla Items
         registerVanilla("iron", 0xffffff);

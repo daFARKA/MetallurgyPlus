@@ -9,6 +9,7 @@
 * barium - 0x8c8f85
 * beryllium - 0xb5b5b5
 * bismuth - 0xbbc4c3
+* boron - 0xd9d9d9
 * cadmium - 0x56549e
 * calcium - 0xa3b5b8
 * cerium - 0x5e7c80
@@ -19,6 +20,7 @@
 * europium - 0x9e8552
 * gadolinium - 0x0a4d33
 * gallium - 0x84ada2
+* germanium - 0xc9c7ad
 * graphite - 0x1a1a1a
 * hafnium - 0x8f8281
 * holmium - 0x3e635b
@@ -105,6 +107,8 @@
 * uraninite - 0x91b572 - RARE
 * selenite - 0xebf4fc - UNCOMMON
 * feldspar - 0xc77b63 - COMMON
+* borax - 0xffffff - UNCOMMON
+* germanite - 0x80725d - RARE
 
 
 ## Alloys
@@ -140,6 +144,14 @@
 * titanium 10v 2fe 3 al - 0x0d021c
 * niobium titanium - 0x1e1e26
 * electrum - 0xfff5a6
+* mischmetal - 0x496154
+* terbium dysprosium - 0x7f81a3
+* neodymium iron boron - 0xf7f6eb
+* lanthanum nickel - 0x8f8c6e
+* copper praseodymium - 0x756b59
+* samarium cobalt - 0x86959e
+* gadolinium silicon germanium - 0x64757d
+
 
 ## Vanilla Materials
 * iron - 0xffffff

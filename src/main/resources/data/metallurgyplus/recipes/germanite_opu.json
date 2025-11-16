@@ -1,0 +1,30 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:germanite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:raw_copper",
+    "count": 6
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:germanium_raw",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "minecraft:raw_iron",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "metallurgyplus:sulphur",
+      "count": 8,
+      "chance": 1.0
+    }
+  ]
+}

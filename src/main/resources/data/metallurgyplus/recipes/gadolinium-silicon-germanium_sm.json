@@ -1,0 +1,22 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:gadolinium_ingot",
+      "count": 5
+    },
+    {
+    "item": "metallurgyplus:silicon",
+    "count": 2
+    },
+    {
+      "item": "metallurgyplus:germanium_ingot",
+      "count": 2
+    }
+
+  ],
+  "output": {
+    "item": "metallurgyplus:gadolinium-silicon-germanium_ingot",
+    "count": 8
+  }
+}
