@@ -1,0 +1,20 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:calaverite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:raw_gold",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:tellurium_raw",
+      "count": 2,
+      "chance": 1
+    }
+  ]
+}

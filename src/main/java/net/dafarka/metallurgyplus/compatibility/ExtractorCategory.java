@@ -13,6 +13,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.ExtractorRecipe;
 import net.dafarka.metallurgyplus.screen.menu.ExtractorMenu;
 import net.dafarka.metallurgyplus.screen.menu.OreProcessingUnitMenu;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -74,7 +75,8 @@ public class ExtractorCategory implements IRecipeCategory<ExtractorRecipe> {
                 int j = i - 1;
                 builder.addSlot(RecipeIngredientRole.OUTPUT, ExtractorMenu.OUTPUT_POSITIONS[i][0] - OFFSET, ExtractorMenu.OUTPUT_POSITIONS[i][1] - OFFSET)
                     .addItemStack(extraOutput)
-                    .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(Component.literal("Chance: " + (extraOutputChances.get(j) * 100) + "%")));
+                    .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(Component.literal("Chance: " + (extraOutputChances.get(j) * 100) + "%").withStyle(
+                        ChatFormatting.ITALIC)));
                 i++;
             }
         }

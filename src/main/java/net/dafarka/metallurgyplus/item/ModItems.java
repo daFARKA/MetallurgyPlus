@@ -89,6 +89,7 @@ public class ModItems {
         registerCustomItem("saw_dust");
         registerCustomItem("mixed_rare_earth_alloy");
         registerCustomItem("mixed_rare_earth_alloy_plate");
+        registerCustomItem("solar_cell");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -137,6 +138,7 @@ public class ModItems {
         registerMaterial("silver", 0xcccccc);
         registerMaterial("tantalum", 0xc1a3e3);
         registerMaterial("technetium", 0x808691);
+        registerMaterial("tellurium", 0xa0cdfa);
         registerMaterial("terbium", 0xffebfa);
         registerMaterial("thallium", 0x2c2e27);
         registerMaterial("thorium", 0x12151a);
@@ -195,6 +197,8 @@ public class ModItems {
         registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon
         registerOre("borax", 0xffffff, OreRarity.UNCOMMON); // Boron
         registerOre("germanite", 0x80725d, OreRarity.RARE); // Copper, Germanium, Iron, Sulphur
+        registerOre("sylvanite", 0xfff7bd, OreRarity.VERY_RARE); // Silver, Gold, Tellurium
+        registerOre("calaverite", 0xc7bd71, OreRarity.UNCOMMON); // Gold, Tellurium
 
         // Alloys
         registerAlloy("steel", 0x707070); // Iron, Coal

@@ -50,6 +50,7 @@
 * silver - 0xcccccc
 * tantalum - 0xc1a3e3
 * technetium - 0x808691
+* tellurium - 0xa0cdfa
 * terbium - 0xffebfa
 * thallium - 0x2c2e27
 * thorium - 0x12151a
@@ -109,6 +110,8 @@
 * feldspar - 0xc77b63 - COMMON
 * borax - 0xffffff - UNCOMMON
 * germanite - 0x80725d - RARE
+* sylvanite - 0xfff7bd - VERY_RARE
+* calaverite - 0xc7bd71 - RARE
 
 
 ## Alloys
