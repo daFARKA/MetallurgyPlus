@@ -43,9 +43,10 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
     private void addForgeTag(RegistryObject<Item> item) {
         String name = item.getId().getPath();
+        String[] components = name.split("_");
         TagKey<Item> tag = TagKey.create(
             net.minecraft.core.registries.Registries.ITEM,
-            new ResourceLocation("forge", name)
+            new ResourceLocation("forge", components[1] + "s/" + components[0])
         );
 
         this.tag(tag).add(item.get());
