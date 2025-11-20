@@ -25,14 +25,13 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
-    public static final int ENERGY_CONSUMPTION = 400;
+    public static final int ENERGY_CONSUMPTION = 8000000;
 
     protected final ContainerData data;
     private int progress = 0;
@@ -46,7 +45,7 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
     private int tempStartX, tempStartY, tempStartZ;
     private int tempEndX, tempEndY, tempEndZ;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public QuarryBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -242,7 +241,10 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
         pushInternalToExternal(serverLevel);
         if (energyStorage.getEnergyStored() >= ENERGY_CONSUMPTION) {
             if (canMine(serverLevel)) {
+                energyStorage.extractEnergy(ENERGY_CONSUMPTION, false);
                 progress++;
+                setChanged(pLevel, pPos, pState);
+
                 if (progress >= 1) {
                     progress = 0;
                     mineNextBlock(serverLevel);

@@ -240,6 +240,7 @@ public class ModItems {
         registerAlloy("copper-praseodymium", 0x756b59); // Copper, Praseodymium
         registerAlloy("samarium-cobalt", 0x86959e); // Samarium, Cobalt
         registerAlloy("gadolinium-silicon-germanium", 0x64757d); // Gadolinium, Silicon, Germanium
+        registerAlloy("constantan", 0xb59269); // Copper, Nickel
 
         // Vanilla Items
         registerVanilla("iron", 0xffffff);

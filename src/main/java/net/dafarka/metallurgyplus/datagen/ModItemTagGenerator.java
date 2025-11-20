@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static net.minecraft.core.registries.Registries.ITEM;
+
 public class ModItemTagGenerator extends ItemTagsProvider {
 
     public ModItemTagGenerator(PackOutput p_275343_, CompletableFuture<HolderLookup.Provider> p_275729_, CompletableFuture<TagLookup<Block>> p_275322_,
@@ -33,6 +35,12 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         addForgeTags(ModItems.MATERIAL_MAP);
         addForgeTags(ModItems.ORE_MAP);
         addForgeTags(ModItems.ALLOY_MAP);
+
+        TagKey<Item> tag = TagKey.create(
+            ITEM,
+            new ResourceLocation("forge", "silicon")
+        );
+        this.tag(tag).add(ModItems.CUSTOM_ITEM_MAP.get("silicon").get());
     }
 
     private void addForgeTags(Map<String, RegistryObject<Item>> itemMap) {
@@ -45,7 +53,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         String name = item.getId().getPath();
         String[] components = name.split("_");
         TagKey<Item> tag = TagKey.create(
-            net.minecraft.core.registries.Registries.ITEM,
+            ITEM,
             new ResourceLocation("forge", components[1] + "s/" + components[0])
         );
 

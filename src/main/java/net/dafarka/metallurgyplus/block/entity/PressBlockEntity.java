@@ -41,7 +41,7 @@ public class PressBlockEntity extends BlockEntity implements MenuProvider {
     private final int INPUT_SLOT_COUNT = 1;
     private int outputSlot;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, 0);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public PressBlockEntity(BlockPos pPos, BlockState pBlockState) {

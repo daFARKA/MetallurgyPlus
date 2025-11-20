@@ -41,7 +41,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     private final int INPUT_SLOT_COUNT = AlloySmelterMenu.INPUT_POSITIONS.length;
     private int outputSlot;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, 0);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public AlloySmelterBlockEntity(BlockPos pPos, BlockState pBlockState) {

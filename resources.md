@@ -154,6 +154,7 @@
 * copper praseodymium - 0x756b59
 * samarium cobalt - 0x86959e
 * gadolinium silicon germanium - 0x64757d
+* constantan - 0xb59269
 
 
 ## Vanilla Materials
