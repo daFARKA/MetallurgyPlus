@@ -144,7 +144,7 @@
 * titanium 6al 2sn 4zr 2mo - 0x1e152b
 * titanium 6al 4v - 0x180630
 * titanium 6al 7nb - 0x270f4a
-* titanium 10v 2fe 3 al - 0x0d021c
+* titanium 10v 2fe 3al - 0x0d021c
 * niobium titanium - 0x1e1e26
 * electrum - 0xfff5a6
 * mischmetal - 0x496154
