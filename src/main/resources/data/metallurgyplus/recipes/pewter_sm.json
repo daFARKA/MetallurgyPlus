@@ -1,0 +1,17 @@
+{
+  "type": "metallurgyplus:alloy_smelter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:tin_ingot",
+      "count": 9
+    },
+    {
+      "item": "metallurgyplus:antimony_ingot",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:pewter_ingot",
+    "count": 10
+  }
+}
