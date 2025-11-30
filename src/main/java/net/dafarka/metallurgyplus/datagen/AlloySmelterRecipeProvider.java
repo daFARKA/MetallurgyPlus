@@ -61,16 +61,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
                 Item rod = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[5]).get();
                 Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[6]).get();
 
-                inputSize = 2;
-                inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
-                inputAmounts = NonNullList.withSize(inputSize, 1);
-                inputItems.set(0, dust);
-                inputAmounts.set(0, 1);
-                inputItems.set(1, Utility.getItem("coal"));
-                inputAmounts.set(1, 1);
-                output = new ItemStack(ingot, 1);
-                addAlloySmelterRecipe(pWriter, inputItems, inputAmounts, output,
-                    new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_dust_to_ingot_alloy_smelter"));
+                
             }
         }
     }

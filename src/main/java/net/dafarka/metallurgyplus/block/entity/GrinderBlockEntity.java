@@ -215,8 +215,8 @@ public class GrinderBlockEntity extends BlockEntity implements MenuProvider {
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
-            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return false;
-            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0)).getCount() < amounts.get(i)) {
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4) == -1) return false;
+            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4)).getCount() < amounts.get(i)) {
                 return false;
             }
         }
@@ -252,8 +252,8 @@ public class GrinderBlockEntity extends BlockEntity implements MenuProvider {
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
-            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0) == -1) return;
-            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0), amounts.get(i), false);
+            if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4) == -1) return;
+            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4), amounts.get(i), false);
         }
 
         this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),

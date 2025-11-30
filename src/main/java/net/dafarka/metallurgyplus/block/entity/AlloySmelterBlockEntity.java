@@ -30,6 +30,8 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider {
@@ -195,7 +197,7 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        if(hasRecipe() && energyStorage.getEnergyStored() >= ModBlocks.ENERGY_CONSUMPTION_PER_TICK ) {
+        if(hasRecipe() && energyStorage.getEnergyStored() >= ModBlocks.ENERGY_CONSUMPTION_PER_TICK) {
             energyStorage.extractEnergy(ModBlocks.ENERGY_CONSUMPTION_PER_TICK, false);
             progress++;
             setChanged(pLevel, pPos, pState);
@@ -222,16 +224,22 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
 
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
+
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return false;
-            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8)).getCount() < amounts.get(i)) {
-                return false;
+
+            int count = 0;
+            Map<Integer, Integer> counts = utilBlockEntity.getSlotIndexAndCountThatContainAnyOfInputItems(ingredients.get(i), 0, 8);
+            for (int c : counts.values()) {
+                count += c;
             }
+
+            if (count < amounts.get(i)) return false;
         }
 
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
         outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), 8);
-
+        
         return outputSlot != -1;
     }
 
@@ -252,7 +260,18 @@ public class AlloySmelterBlockEntity extends BlockEntity implements MenuProvider
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8) == -1) return;
-            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 8), amounts.get(i), false);
+
+            Map<Integer, Integer> counts = utilBlockEntity.getSlotIndexAndCountThatContainAnyOfInputItems(ingredients.get(i), 0, 8);
+            int remainder = amounts.get(i);
+            for (int slotIndex : counts.keySet()) {
+                if (remainder < counts.get(slotIndex)) {
+                    this.allHandler.extractItem(slotIndex, remainder, false);
+                    break;
+                }
+
+                this.allHandler.extractItem(slotIndex, counts.get(slotIndex), false);
+                remainder -=  counts.get(slotIndex);
+            }
         }
 
         this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
