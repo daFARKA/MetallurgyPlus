@@ -30,6 +30,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -213,9 +214,14 @@ public class ExtractorBlockEntity extends BlockEntity implements MenuProvider {
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4) == -1) return false;
-            if (allHandler.getStackInSlot(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4)).getCount() < amounts.get(i)) {
-                return false;
+
+            int count = 0;
+            Map<Integer, Integer> counts = utilBlockEntity.getSlotIndexAndCountThatContainAnyOfInputItems(ingredients.get(i), 0, 4);
+            for (int c : counts.values()) {
+                count += c;
             }
+
+            if (count < amounts.get(i)) return false;
         }
 
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
@@ -250,8 +256,18 @@ public class ExtractorBlockEntity extends BlockEntity implements MenuProvider {
         NonNullList<Integer> amounts = recipe.get().getInputAmounts();
         for (int i = 0; i < ingredients.size(); i++) {
             if (utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4) == -1) return;
-            this.allHandler.extractItem(utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 4), amounts.get(i), false);
-        }
+
+            Map<Integer, Integer> counts = utilBlockEntity.getSlotIndexAndCountThatContainAnyOfInputItems(ingredients.get(i), 0, 4);
+            int remainder = amounts.get(i);
+            for (int slotIndex : counts.keySet()) {
+                if (remainder < counts.get(slotIndex)) {
+                    this.allHandler.extractItem(slotIndex, remainder, false);
+                    break;
+                }
+
+                this.allHandler.extractItem(slotIndex, counts.get(slotIndex), false);
+                remainder -=  counts.get(slotIndex);
+            }        }
 
         this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
             this.allHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
