@@ -61,7 +61,7 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
                 Item rod = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[5]).get();
                 Item raw = ModItems.MATERIAL_MAP.get(currentMaterialName + "_" + ModItems.MATERIAL_COMPONENT_NAMES[6]).get();
 
-                
+
             }
         }
     }

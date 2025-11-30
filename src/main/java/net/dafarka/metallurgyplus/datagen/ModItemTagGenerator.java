@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.util.ModTags;
+import net.dafarka.metallurgyplus.util.ModTags.Items;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -17,6 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.core.registries.Registries.ITEM;
@@ -41,6 +43,8 @@ public class ModItemTagGenerator extends ItemTagsProvider {
             new ResourceLocation("forge", "silicon")
         );
         this.tag(tag).add(ModItems.CUSTOM_ITEM_MAP.get("silicon").get());
+
+        addResourceTags();
     }
 
     private void addForgeTags(Map<String, RegistryObject<Item>> itemMap) {
@@ -58,5 +62,15 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         );
 
         this.tag(tag).add(item.get());
+    }
+
+    private void addResourceTags() {
+        for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
+            String currentName = item.getId().getPath();
+            String currentMaterialName = currentName.split("_")[0];
+            String currentComponentName = currentName.split("_")[1];
+
+            if (Objects.equals(currentComponentName, "raw")) this.tag(ModTags.Items.MATERIAL_RAW).add(item.get());
+        }
     }
 }

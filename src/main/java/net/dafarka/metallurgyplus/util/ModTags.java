@@ -19,5 +19,7 @@ public class ModTags {
         private static TagKey<Item> tag(String name) {
             return ItemTags.create(new ResourceLocation(MetallurgyPlus.MODID, name));
         }
+
+        public static final TagKey<Item> MATERIAL_RAW = tag("material/raw");
     }
 }
