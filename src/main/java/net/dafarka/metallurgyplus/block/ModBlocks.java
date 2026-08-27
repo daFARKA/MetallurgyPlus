@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final int ENERGY_CONSUMPTION_PER_TICK = 50;
     public static final int ENERGY_CAPACITY = 100000;
-    public static final int ENERGY_MAX_RECIEVE = 10000;
+    public static final int ENERGY_MAX_RECEIVE = 10000;
     public static final int ENERGY_MAX_EXTRACT = 10000;
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MetallurgyPlus.MODID);

@@ -55,6 +55,7 @@ public class ModLangProvider extends LanguageProvider {
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
+        addTieredItemTranslations(ModItems.SACK_MAP);
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {

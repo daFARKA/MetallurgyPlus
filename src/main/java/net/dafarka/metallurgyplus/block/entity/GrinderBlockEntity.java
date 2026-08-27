@@ -2,10 +2,7 @@ package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.GrinderBlock;
-import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
 import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
-import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
 import net.dafarka.metallurgyplus.screen.menu.GrinderMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,7 +44,7 @@ public class GrinderBlockEntity extends BlockEntity implements MenuProvider {
 
     private Random random;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECEIVE, ModBlocks.ENERGY_MAX_EXTRACT);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public GrinderBlockEntity(BlockPos pPos, BlockState pBlockState) {

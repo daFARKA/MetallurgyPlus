@@ -44,7 +44,7 @@ public class OreProcessingUnitBlockEntity extends BlockEntity implements MenuPro
 
     private Random random;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECIEVE, ModBlocks.ENERGY_MAX_EXTRACT);
+    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECEIVE, ModBlocks.ENERGY_MAX_EXTRACT);
     private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
 
     public OreProcessingUnitBlockEntity(BlockPos pPos,

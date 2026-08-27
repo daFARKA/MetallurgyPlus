@@ -148,6 +148,10 @@ public class MetallurgyPlus
             for (RegistryObject<Item> item : ModItems.COIL_MAP.values()) {
                 itemColors.register(new DynamicCoilColor(), item.get());
             }
+
+            for (RegistryObject<Item> item : ModItems.SACK_MAP.values()) {
+                itemColors.register(new DynamicSackColor(), item.get());
+            }
         }
     }
 }

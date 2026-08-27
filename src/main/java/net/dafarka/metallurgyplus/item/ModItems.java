@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.item.custom.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class ModItems {
     private static final List<Integer> TIER_COLORS = List.of(0x000000,
             0x0000ff, 0x0040ff, 0x0070ff, 0x00a0ff, 0x40d0ff, 0x80f0ff,   // Blue family
             0x00ff00, 0x40ff20, 0x80ff30, 0xbfff60, 0x7fff80, 0xc0ffb0,   // Green family
-            0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red → Brown family
+            0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red -> Brown family
             0xffff00, 0xffdf20, 0xffbf40, 0xffa040, 0xffd080, 0xfff0a0,   // Yellow/Gold family
             0x6a00ff, 0x7f40ff, 0x9966ff, 0xb080ff, 0xc0a0ff, 0xd0bfff,   // Purple/Violet family
             0xff00ff, 0xff40df, 0xff80bf, 0xffa0ff, 0xff80cf, 0xffb0e0    // Magenta/Pink family
@@ -54,11 +55,14 @@ public class ModItems {
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> VANILLA_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
+    public static final Map<Integer, RegistryObject<Item>> SACK_MAP = new HashMap<>();
+
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> VANILLA_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> SACK_COLOR_MAP = new HashMap<>();
 
     public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
         () -> new ModTools(
@@ -260,7 +264,10 @@ public class ModItems {
         registerBatteries();
 
         // Coils
-        registerCoils();
+        registerMajorTierItems(8, "coil", COIL_MAP, COIL_COLOR_MAP);
+
+        // Sacks
+        registerSacks();
     }
 
     private static void registerCustomItem(String name) {
@@ -342,6 +349,20 @@ public class ModItems {
         }
     }
 
+    private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {
+        String name = itemName + tier;
+        RegistryObject<Item> item = ITEMS.register(name, () -> new Item(new Item.Properties()));
+
+        itemMap.put(tier, item);
+        colorMap.put(tier, color);
+    }
+
+    private static void registerMajorTierItems(int maxTier, String name, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {
+        for (int i = 1; i <= maxTier; i++) {
+            registerTierItem(i, MAJOR_TIER_COLORS.get(i), name, itemMap, colorMap);
+        }
+    }
+
     private static void registerCable(int tier, int color) {
         String name = "cable" + tier + "_block";
         RegistryObject<CableBlock> block = ModBlocks.registerBlock(name,
@@ -384,17 +405,17 @@ public class ModItems {
         }
     }
 
-    private static void registerCoil(int tier, int color) {
-        String name = "coil" + tier;
-        RegistryObject<Item> item = ITEMS.register(name, () -> new Item(new Item.Properties()));
+    private static void registerSack(int tier, int color) {
+        String name = "sack" + tier;
+        RegistryObject<Item> item = ITEMS.register(name, () -> new SackItem(new Item.Properties().stacksTo(1), tier));
 
-        COIL_MAP.put(tier, item);
-        COIL_COLOR_MAP.put(tier, color);
+        SACK_MAP.put(tier, item);
+        SACK_COLOR_MAP.put(tier, color);
     }
 
-    private static void registerCoils() {
+    private static void registerSacks() {
         for (int i = 1; i <= 8; i++) {
-            registerCoil(i, MAJOR_TIER_COLORS.get(i));
+            registerSack(i, MAJOR_TIER_COLORS.get(i));
         }
     }
 }

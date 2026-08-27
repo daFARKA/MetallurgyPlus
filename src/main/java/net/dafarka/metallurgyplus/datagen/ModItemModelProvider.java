@@ -46,6 +46,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         createSolarPanelBlockItems();
         createBatteryBlockItems();
         createCoilItems();
+        createSackItems();
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -126,6 +127,15 @@ public class ModItemModelProvider extends ItemModelProvider {
                     .parent(new ModelFile.UncheckedModelFile("item/generated"))
                     .texture("layer0", modLoc("item/base_coil"))
                     .texture("layer1", modLoc("item/base_coil_spindle"));
+        }
+    }
+
+    public void createSackItems() {
+        for (RegistryObject<Item> item : ModItems.SACK_MAP.values()) {
+            getBuilder(item.getId().getPath())
+                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                    .texture("layer0", modLoc("item/base_sack"))
+                    .texture("layer1", modLoc("item/base_sack_hole"));
         }
     }
 }

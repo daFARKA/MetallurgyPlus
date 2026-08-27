@@ -2,17 +2,12 @@ package net.dafarka.metallurgyplus.util.color;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
-import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
-public class DynamicCoilColor implements ItemColor {
+public class DynamicSackColor implements ItemColor {
 
-    public DynamicCoilColor() {}
+    public DynamicSackColor() {}
 
     @Override
     public int getColor(ItemStack pStack, int pTintIndex) {
@@ -21,7 +16,7 @@ public class DynamicCoilColor implements ItemColor {
             String name = fullName.split("\\.")[2];
             int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
 
-            return ModItems.COIL_COLOR_MAP.get(tier) != null ? ModItems.COIL_COLOR_MAP.get(tier) : -1;
+            return ModItems.SACK_COLOR_MAP.get(tier) != null ? ModItems.SACK_COLOR_MAP.get(tier) : -1;
         }
 
         return -1;
