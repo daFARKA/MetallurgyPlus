@@ -67,7 +67,7 @@ public class SackStorage {
 
     /**
      * Returns how much additional space is available for a specific item.
-     *
+     * <p>
      * Capacity is PER ITEM, not shared between all items.
      */
     public static int getSpace(ItemStack sack, Item item) {
@@ -131,7 +131,7 @@ public class SackStorage {
     /**
      * Removes up to the requested amount of an item.
      *
-     * @return the amount that was actually removed.
+     * @return the amount that was removed.
      */
     public static int remove(ItemStack sack, Item item, int amount) {
         if (!isSack(sack)) return 0;
@@ -144,11 +144,7 @@ public class SackStorage {
         int amountToRemove = Math.min(current, amount);
 
         if (amountToRemove > 0) {
-            setAmount(
-                    sack,
-                    item,
-                    current - amountToRemove
-            );
+            setAmount(sack, item, current - amountToRemove);
         }
 
         return amountToRemove;
@@ -157,11 +153,12 @@ public class SackStorage {
     /**
      * Sets the amount of a specific item.
      * <p>
-     * The amount is automatically clamped to the sack's
-     * per-item capacity.
+     * The amount is automatically clamped to the sack's per-item capacity.
      */
     public static void setAmount(ItemStack sack, Item item, int amount) {
-        if (!isSack(sack)) return;
+        if (!isSack(sack)) {
+            return;
+        }
 
         if (!canStore(item)) {
             return;

@@ -12,30 +12,33 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
-        DeferredRegister.create(ForgeRegistries.MENU_TYPES, MetallurgyPlus.MODID);
+            DeferredRegister.create(ForgeRegistries.MENU_TYPES, MetallurgyPlus.MODID);
 
     public static final RegistryObject<MenuType<OreProcessingUnitMenu>> ORE_PROCESSING_MENU =
-        registerMenuType("ore_processing_menu", OreProcessingUnitMenu::new);
+            registerMenuType("ore_processing_menu", OreProcessingUnitMenu::new);
 
     public static final RegistryObject<MenuType<AlloySmelterMenu>> ALLOY_SMELTER_MENU =
-        registerMenuType("alloy_smelter_menu", AlloySmelterMenu::new);
+            registerMenuType("alloy_smelter_menu", AlloySmelterMenu::new);
 
     public static final RegistryObject<MenuType<GrinderMenu>> GRINDER_MENU =
-        registerMenuType("grinder_menu", GrinderMenu::new);
+            registerMenuType("grinder_menu", GrinderMenu::new);
 
     public static final RegistryObject<MenuType<PressMenu>> PRESS_MENU =
-        registerMenuType("press_menu", PressMenu::new);
+            registerMenuType("press_menu", PressMenu::new);
 
     public static final RegistryObject<MenuType<ExtractorMenu>> EXTRACTOR_MENU =
-        registerMenuType("extractor_menu", ExtractorMenu::new);
+            registerMenuType("extractor_menu", ExtractorMenu::new);
 
     public static final RegistryObject<MenuType<QuarryMenu>> QUARRY_MENU =
-        registerMenuType("quarry_menu", QuarryMenu::new);
+            registerMenuType("quarry_menu", QuarryMenu::new);
 
     public static final RegistryObject<MenuType<BatteryMenu>> BATTERY_MENU =
-        registerMenuType("battery_menu", BatteryMenu::new);
+            registerMenuType("battery_menu", BatteryMenu::new);
 
-    private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
+    public static final RegistryObject<MenuType<SackMenu>> SACK_MENU =
+            registerMenuType("sack_menu", SackMenu::new);
+
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }
 

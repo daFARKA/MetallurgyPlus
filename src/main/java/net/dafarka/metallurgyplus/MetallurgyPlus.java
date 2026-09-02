@@ -10,14 +10,8 @@ import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.network.ModMessages;
 import net.dafarka.metallurgyplus.recipe.ModRecipes;
-import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
-import net.dafarka.metallurgyplus.screen.BatteryScreen;
-import net.dafarka.metallurgyplus.screen.ExtractorScreen;
-import net.dafarka.metallurgyplus.screen.GrinderScreen;
-import net.dafarka.metallurgyplus.screen.PressScreen;
-import net.dafarka.metallurgyplus.screen.QuarryScreen;
+import net.dafarka.metallurgyplus.screen.*;
 import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
-import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
 import net.dafarka.metallurgyplus.util.color.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
@@ -44,15 +38,13 @@ import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MetallurgyPlus.MODID)
-public class MetallurgyPlus
-{
+public class MetallurgyPlus {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "metallurgyplus";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public MetallurgyPlus()
-    {
+    public MetallurgyPlus() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModCreativeTabs.register(modEventBus);
@@ -92,21 +84,20 @@ public class MetallurgyPlus
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event) {
             LOGGER.info("Hello from MetallurgyPlus!");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             MenuScreens.register(ModMenuTypes.ORE_PROCESSING_MENU.get(), OreProcessingUnitScreen::new);
             MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
             MenuScreens.register(ModMenuTypes.GRINDER_MENU.get(), GrinderScreen::new);
-            MenuScreens.register(ModMenuTypes.PRESS_MENU.get(), PressScreen ::new);
+            MenuScreens.register(ModMenuTypes.PRESS_MENU.get(), PressScreen::new);
             MenuScreens.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
+            MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);
 
             for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
                 ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.translucent());
