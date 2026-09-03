@@ -7,7 +7,6 @@ import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -35,7 +34,7 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.extractor", "Extractor");
         add("block.metallurgyplus.quarry", "Quarry");
         add("block.metallurgyplus.power_source", "Creative Power Source");
-        add("block.metallurgyplus.battery", "Battery");
+        add("block.metallurgyplus.sack_station", "Sack Docking Station");
 
         add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
 
@@ -190,10 +189,10 @@ public class ModLangProvider extends LanguageProvider {
      * x stands for a number here and El1 for the first element (that is not Titanium) and so on.
      *
      * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
-     *
      * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
      *
-     * */
+     *
+     */
     private String getTitaniumAlloyName(String[] parts) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Titanium");

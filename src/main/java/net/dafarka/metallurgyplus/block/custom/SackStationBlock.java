@@ -1,17 +1,12 @@
 package net.dafarka.metallurgyplus.block.custom;
 
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
-import net.dafarka.metallurgyplus.block.entity.SolarPanelBlockEntity;
-import net.dafarka.metallurgyplus.util.Utility;
-import net.minecraft.ChatFormatting;
+import net.dafarka.metallurgyplus.block.entity.SackStationBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -30,20 +25,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class SolarPanelBlock extends BaseEntityBlock {
+public class SackStationBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public static final int GENERATION = (int) Math.pow(2, 6);
-
-    private int tier = 0;
-
-    public SolarPanelBlock(Properties pProperties, int tier) {
+    public SackStationBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
-        this.tier = tier;
     }
 
     @Override
@@ -60,8 +48,8 @@ public class SolarPanelBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SolarPanelBlockEntity) {
-                ((SolarPanelBlockEntity) blockEntity).drops();
+            if (blockEntity instanceof SackStationBlockEntity) {
+                ((SackStationBlockEntity) blockEntity).drops();
             }
         }
 
@@ -80,14 +68,14 @@ public class SolarPanelBlock extends BaseEntityBlock {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.SOLAR_BLOCK_ENTITIES.get(tier).get(),
+        return createTickerHelper(pBlockEntityType, ModBlockEntities.SACK_STATION_BE.get(),
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new SolarPanelBlockEntity(pPos, pState, tier);
+        return new SackStationBlockEntity(pPos, pState);
     }
 
     @Override
@@ -101,13 +89,5 @@ public class SolarPanelBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         return defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
     }
-
-    @Override
-    public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
-
-        int generation = GENERATION * (int) Math.pow(2, tier - 1);
-        if (tier == 26) generation = Integer.MAX_VALUE;
-        tooltip.add(Component.literal("Generates " + Utility.formatWithSeparator(generation, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
-    }
 }
+

@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.datagen.loot;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
@@ -27,7 +26,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     }
 
 
-
     @Override
     protected void generate() {
         mapBlocksDropSelf(ModBlocks.MATERIAL_BLOCKS_MAP);
@@ -45,6 +43,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.EXTRACTOR.get());
         this.dropSelf(ModBlocks.QUARRY.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
+        this.dropSelf(ModBlocks.SACK_STATION.get());
 
         this.add(ModBlocks.CLAY_MINERAL.get(),
             block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));

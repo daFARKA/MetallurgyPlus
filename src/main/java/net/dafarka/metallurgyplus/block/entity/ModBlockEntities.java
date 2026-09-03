@@ -1,11 +1,9 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import com.google.common.collect.Maps;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.dafarka.metallurgyplus.block.custom.QuarryBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -50,6 +48,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<PowerSourceBlockEntity>> POWER_SOURCE_BE =
         BLOCK_ENTITIES.register("power_source_be", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new,
             ModBlocks.POWER_SOURCE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<SackStationBlockEntity>> SACK_STATION_BE =
+        BLOCK_ENTITIES.register("sack_station_be", () -> BlockEntityType.Builder.of(SackStationBlockEntity::new,
+            ModBlocks.SACK_STATION.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {
@@ -100,11 +102,11 @@ public class ModBlockEntities {
             int tier = digits.isEmpty() ? 0 : Integer.parseInt(digits);
 
             RegistryObject<BlockEntityType<BatteryBlockEntity>> batteryBE =
-                    BLOCK_ENTITIES.register("battery" + tier + "_be",
-                            () -> BlockEntityType.Builder
-                                    .of((pos, state) -> new BatteryBlockEntity(pos, state, tier), battery.get())
-                                    .build(null)
-                    );
+                BLOCK_ENTITIES.register("battery" + tier + "_be",
+                    () -> BlockEntityType.Builder
+                        .of((pos, state) -> new BatteryBlockEntity(pos, state, tier), battery.get())
+                        .build(null)
+                );
 
             BATTERY_BLOCK_ENTITIES.put(tier, batteryBE);
         }

@@ -14,7 +14,6 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockStateProvider extends BlockStateProvider {
@@ -37,6 +36,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("extractor", ModBlocks.EXTRACTOR.get());
         horizontalFacingBlock("quarry", ModBlocks.QUARRY.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
+        horizontalFacingBlock("sack_station", ModBlocks.SACK_STATION.get());
 
         cableBlocks();
         solarPanelBlocks();
@@ -72,9 +72,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ResourceLocation model = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
 
         getVariantBuilder(block).forAllStates(state ->
-            ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(model))
-                .build()
+                ConfiguredModel.builder()
+                        .modelFile(models().getExistingFile(model))
+                        .build()
         );
     }
 
@@ -82,14 +82,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile model = models().getExistingFile(modLoc("block/" + name));
 
         getVariantBuilder(block)
-            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-            .modelForState().modelFile(model).addModel()
-            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-            .modelForState().modelFile(model).rotationY(90).addModel()
-            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-            .modelForState().modelFile(model).rotationY(180).addModel()
-            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
-            .modelForState().modelFile(model).rotationY(270).addModel();
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+                .modelForState().modelFile(model).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+                .modelForState().modelFile(model).rotationY(90).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+                .modelForState().modelFile(model).rotationY(180).addModel()
+                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+                .modelForState().modelFile(model).rotationY(270).addModel();
     }
 
     private void cableBlocks() {

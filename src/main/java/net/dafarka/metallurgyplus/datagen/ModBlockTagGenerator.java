@@ -42,7 +42,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PRESS.get(),
                 ModBlocks.EXTRACTOR.get(),
                 ModBlocks.QUARRY.get(),
-                ModBlocks.POWER_SOURCE.get());
+                ModBlocks.POWER_SOURCE.get(),
+                ModBlocks.SACK_STATION.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add(ModBlocks.CLAY_MINERAL.get());

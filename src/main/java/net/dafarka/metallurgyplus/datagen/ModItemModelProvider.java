@@ -41,6 +41,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("extractor");
         simpleBlockItemModel("quarry");
         simpleBlockItemModel("power_source");
+        simpleBlockItemModel("sack_station");
 
         createCableBlockItems();
         createSolarPanelBlockItems();
@@ -52,13 +53,13 @@ public class ModItemModelProvider extends ItemModelProvider {
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
-            new ResourceLocation(MetallurgyPlus.MODID,"item/" + item.getId().getPath()));
+            new ResourceLocation(MetallurgyPlus.MODID, "item/" + item.getId().getPath()));
     }
 
     private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item, String componentName) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
-            new ResourceLocation(MetallurgyPlus.MODID,"item/base_" + componentName));
+            new ResourceLocation(MetallurgyPlus.MODID, "item/base_" + componentName));
     }
 
     public void simpleBlockItemModel(String modelName) {
@@ -124,18 +125,18 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void createCoilItems() {
         for (RegistryObject<Item> item : ModItems.COIL_MAP.values()) {
             getBuilder(item.getId().getPath())
-                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                    .texture("layer0", modLoc("item/base_coil"))
-                    .texture("layer1", modLoc("item/base_coil_spindle"));
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", modLoc("item/base_coil"))
+                .texture("layer1", modLoc("item/base_coil_spindle"));
         }
     }
 
     public void createSackItems() {
         for (RegistryObject<Item> item : ModItems.SACK_MAP.values()) {
             getBuilder(item.getId().getPath())
-                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                    .texture("layer0", modLoc("item/base_sack"))
-                    .texture("layer1", modLoc("item/base_sack_hole"));
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", modLoc("item/base_sack"))
+                .texture("layer1", modLoc("item/base_sack_hole"));
         }
     }
 }
