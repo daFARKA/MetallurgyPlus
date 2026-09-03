@@ -1,7 +1,8 @@
 package net.dafarka.metallurgyplus.item.sack;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.item.custom.SackItem;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +29,6 @@ public class SackPickupHandler {
         }
 
         for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
-
             ItemStack sack = player.getInventory().getItem(slot);
 
             if (!(sack.getItem() instanceof SackItem)) {
@@ -44,6 +44,15 @@ public class SackPickupHandler {
             if (droppedStack.isEmpty()) {
                 itemEntity.discard();
                 event.setCanceled(true);
+                player.level().playSound(
+                    null,
+                    player.blockPosition(),
+                    SoundEvents.ITEM_PICKUP,
+                    SoundSource.PLAYERS,
+                    0.2F,
+                    ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.75F + 1.0F)
+                );
+
                 return;
             }
         }

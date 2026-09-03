@@ -1,6 +1,6 @@
 package net.dafarka.metallurgyplus.screen.menu;
 
-import net.dafarka.metallurgyplus.item.custom.SackItem;
+import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.item.sack.SackStorage;
 import net.dafarka.metallurgyplus.util.ModTags;
 import net.minecraft.core.Holder;
@@ -44,10 +44,10 @@ public class SackMenu extends AbstractContainerMenu {
      */
     public SackMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
         this(
-                containerId,
-                playerInventory,
-                data.readInt(),
-                data.readBoolean()
+            containerId,
+            playerInventory,
+            data.readInt(),
+            data.readBoolean()
         );
     }
 
@@ -208,9 +208,9 @@ public class SackMenu extends AbstractContainerMenu {
         }
 
         return player.getInventory()
-                .getItem(sackSlot)
-                .getItem()
-                instanceof SackItem;
+            .getItem(sackSlot)
+            .getItem()
+            instanceof SackItem;
     }
 
     private boolean handleItemCursor(Player player, Item item, int amount) {

@@ -14,6 +14,8 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nullable;
+
 public class ModBlockModelProvider extends BlockModelProvider {
 
     public ModBlockModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -26,6 +28,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
     }
 
     private void registerDefaultModels() {
+        int[] defaultTintIndices = {0, 0, 0, 0, 0, 0};
+
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             registerMaterialModel(blockName);
@@ -43,45 +47,45 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerCable(blockName);
+            registerOrientable(blockName, "base_cable", "", "", "", "", "", defaultTintIndices);
         }
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerSolarPanel(blockName);
+            registerOrientable(blockName, "solar_panel", "_", "side", "side", "top", "bottom", new int[]{0, 0, 0, 0, 1, 0});
         }
 
         for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerBattery(blockName);
+            registerOrientable(blockName, "base_battery", "", "", "", "", "", defaultTintIndices);
         }
 
-        registerOrientable("alloy_smelter", false);
-        registerOrientable("ore_processing_unit", false);
-        registerOrientable("grinder", false);
-        registerOrientable("press", false);
-        registerOrientable("extractor", false);
-        registerOrientable("quarry", false);
-        registerOrientable("power_source", true);
-        registerOrientable("sack_station", true);
+        registerOrientable("alloy_smelter", "alloy_smelter", "_", "front", "side", "top", "top", null);
+        registerOrientable("ore_processing_unit", "ore_processing_unit", "_", "front", "side", "top", "top", null);
+        registerOrientable("grinder", "grinder", "_", "front", "side", "top", "top", null);
+        registerOrientable("press", "press", "_", "front", "side", "top", "top", null);
+        registerOrientable("extractor", "extractor", "_", "front", "side", "top", "top", null);
+        registerOrientable("quarry", "quarry", "_", "front", "side", "top", "top", null);
+        registerOrientable("power_source", "power_source", "", "", "", "", "", null);
+        registerOrientable("sack_station", "sack_station", "", "", "", "", "_bottom", null);
     }
 
     private void registerMaterialModel(String blockName) {
         ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/base_block");
 
         getBuilder(blockName)
-                .parent(getExistingFile(mcLoc("block/cube_all")))
-                .texture("all", texture)
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).tintindex(0).texture("#all").end()
-                .face(Direction.SOUTH).tintindex(0).texture("#all").end()
-                .face(Direction.EAST).tintindex(0).texture("#all").end()
-                .face(Direction.WEST).tintindex(0).texture("#all").end()
-                .face(Direction.UP).tintindex(0).texture("#all").end()
-                .face(Direction.DOWN).tintindex(0).texture("#all").end()
-                .end();
+            .parent(getExistingFile(mcLoc("block/cube_all")))
+            .texture("all", texture)
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).tintindex(0).texture("#all").end()
+            .face(Direction.SOUTH).tintindex(0).texture("#all").end()
+            .face(Direction.EAST).tintindex(0).texture("#all").end()
+            .face(Direction.WEST).tintindex(0).texture("#all").end()
+            .face(Direction.UP).tintindex(0).texture("#all").end()
+            .face(Direction.DOWN).tintindex(0).texture("#all").end()
+            .end();
     }
 
     private void registerOreModel(String blockName) {
@@ -94,96 +98,57 @@ public class ModBlockModelProvider extends BlockModelProvider {
         ResourceLocation textureOreLayer = new ResourceLocation(MetallurgyPlus.MODID, "block/ore_layer");
 
         getBuilder(blockName)
-                .parent(getExistingFile(mcLoc("block/cube_all")))
-                .texture("particle", textureBase)
-                .texture("layer0", textureBase)
-                .texture("layer1", textureOreLayer)
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).tintindex(1).texture("#layer0").end()
-                .face(Direction.SOUTH).tintindex(1).texture("#layer0").end()
-                .face(Direction.EAST).tintindex(1).texture("#layer0").end()
-                .face(Direction.WEST).tintindex(1).texture("#layer0").end()
-                .face(Direction.UP).tintindex(1).texture("#layer0").end()
-                .face(Direction.DOWN).tintindex(1).texture("#layer0").end()
-                .end()
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).tintindex(0).texture("#layer1").end()
-                .face(Direction.SOUTH).tintindex(0).texture("#layer1").end()
-                .face(Direction.EAST).tintindex(0).texture("#layer1").end()
-                .face(Direction.WEST).tintindex(0).texture("#layer1").end()
-                .face(Direction.UP).tintindex(0).texture("#layer1").end()
-                .face(Direction.DOWN).tintindex(0).texture("#layer1").end()
-                .end();
+            .parent(getExistingFile(mcLoc("block/cube_all")))
+            .texture("particle", textureBase)
+            .texture("layer0", textureBase)
+            .texture("layer1", textureOreLayer)
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).tintindex(1).texture("#layer0").end()
+            .face(Direction.SOUTH).tintindex(1).texture("#layer0").end()
+            .face(Direction.EAST).tintindex(1).texture("#layer0").end()
+            .face(Direction.WEST).tintindex(1).texture("#layer0").end()
+            .face(Direction.UP).tintindex(1).texture("#layer0").end()
+            .face(Direction.DOWN).tintindex(1).texture("#layer0").end()
+            .end()
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).tintindex(0).texture("#layer1").end()
+            .face(Direction.SOUTH).tintindex(0).texture("#layer1").end()
+            .face(Direction.EAST).tintindex(0).texture("#layer1").end()
+            .face(Direction.WEST).tintindex(0).texture("#layer1").end()
+            .face(Direction.UP).tintindex(0).texture("#layer1").end()
+            .face(Direction.DOWN).tintindex(0).texture("#layer1").end()
+            .end();
     }
 
-    private void registerOrientable(String name, boolean allSidesSame) {
-        if (allSidesSame) {
+    private void registerOrientable(String name, String textureName, String connector, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+        if (tintIndices == null || tintIndices.length != 6) {
             getBuilder(name)
-                    .parent(getExistingFile(modLoc("block_entity_orientable")))
-                    .texture("top", modLoc("block/" + name))
-                    .texture("side", modLoc("block/" + name));
+                .parent(getExistingFile(modLoc("block_entity_orientable")))
+                .texture("front", modLoc("block/" + textureName + connector + front))
+                .texture("side", modLoc("block/" + textureName + connector + side))
+                .texture("top", modLoc("block/" + textureName + connector + top))
+                .texture("bottom", modLoc("block/" + textureName + connector + bottom));
         } else {
             getBuilder(name)
-                    .parent(getExistingFile(modLoc("block_entity_orientable")))
-                    .texture("top", modLoc("block/" + name + "_top"))
-                    .texture("front", modLoc("block/" + name + "_front"))
-                    .texture("side", modLoc("block/" + name + "_side"));
+                .parent(getExistingFile(modLoc("block_entity_orientable")))
+                .texture("front", modLoc("block/" + textureName + connector + front))
+                .texture("side", modLoc("block/" + textureName + connector + side))
+                .texture("top", modLoc("block/" + textureName + connector + top))
+                .texture("bottom", modLoc("block/" + textureName + connector + bottom))
+                .element()
+                .from(0, 0, 0)
+                .to(16, 16, 16)
+                .face(Direction.NORTH).texture("#front").tintindex(tintIndices[0]).end()
+                .face(Direction.SOUTH).texture("#side").tintindex(tintIndices[1]).end()
+                .face(Direction.EAST).texture("#side").tintindex(tintIndices[2]).end()
+                .face(Direction.WEST).texture("#side").tintindex(tintIndices[3]).end()
+                .face(Direction.UP).texture("#top").tintindex(tintIndices[4]).end()
+                .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).end()
+                .end();
         }
-    }
-
-    private void registerCable(String name) {
-        getBuilder(name)
-                .parent(getExistingFile(modLoc("block_entity_orientable")))
-                .texture("top", modLoc("block/base_cable"))
-                .texture("side", modLoc("block/base_cable"))
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).texture("#front").tintindex(0).end()
-                .face(Direction.SOUTH).texture("#side").tintindex(0).end()
-                .face(Direction.EAST).texture("#side").tintindex(0).end()
-                .face(Direction.WEST).texture("#side").tintindex(0).end()
-                .face(Direction.UP).texture("#top").tintindex(0).end()
-                .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
-                .end();
-    }
-
-    private void registerSolarPanel(String name) {
-        getBuilder(name)
-                .parent(getExistingFile(modLoc("block_entity_orientable")))
-                .texture("top", modLoc("block/solar_panel_top"))
-                .texture("side", modLoc("block/solar_panel_side"))
-                .texture("bottom", modLoc("block/solar_panel_bottom"))
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).texture("#side").tintindex(0).end()
-                .face(Direction.SOUTH).texture("#side").tintindex(0).end()
-                .face(Direction.EAST).texture("#side").tintindex(0).end()
-                .face(Direction.WEST).texture("#side").tintindex(0).end()
-                .face(Direction.UP).texture("#top").tintindex(1).end()
-                .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
-                .end();
-    }
-
-    private void registerBattery(String name) {
-        getBuilder(name)
-                .parent(getExistingFile(modLoc("block_entity_orientable")))
-                .texture("top", modLoc("block/base_battery"))
-                .texture("side", modLoc("block/base_battery"))
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.NORTH).texture("#front").tintindex(0).end()
-                .face(Direction.SOUTH).texture("#side").tintindex(0).end()
-                .face(Direction.EAST).texture("#side").tintindex(0).end()
-                .face(Direction.WEST).texture("#side").tintindex(0).end()
-                .face(Direction.UP).texture("#top").tintindex(0).end()
-                .face(Direction.DOWN).texture("#bottom").tintindex(0).end()
-                .end();
     }
 }

@@ -1,6 +1,8 @@
-package net.dafarka.metallurgyplus.item.custom;
+package net.dafarka.metallurgyplus.item.sack;
 
 import net.dafarka.metallurgyplus.screen.menu.SackMenu;
+import net.dafarka.metallurgyplus.util.Utility;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -9,8 +11,11 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
+
+import java.util.List;
 
 public class SackItem extends Item {
 
@@ -31,6 +36,10 @@ public class SackItem extends Item {
         return capacity;
     }
 
+    public int getTier() {
+        return tier;
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -49,21 +58,26 @@ public class SackItem extends Item {
             }
 
             NetworkHooks.openScreen(
-                    serverPlayer,
-                    new SimpleMenuProvider(
-                            (containerId, inventory, playerEntity) -> new SackMenu(containerId, inventory, slot, offhand),
-                            Component.literal("Sack")
-                    ),
-                    buffer -> {
-                        buffer.writeInt(slot);
-                        buffer.writeBoolean(offhand);
-                    }
+                serverPlayer,
+                new SimpleMenuProvider(
+                    (containerId, inventory, playerEntity) -> new SackMenu(containerId, inventory, slot, offhand),
+                    Component.literal("Sack")
+                ),
+                buffer -> {
+                    buffer.writeInt(slot);
+                    buffer.writeBoolean(offhand);
+                }
             );
         }
 
-        return InteractionResultHolder.sidedSuccess(
-                stack,
-                level.isClientSide()
-        );
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+
+        tooltip.add(Component.literal("Capacity: " + Utility.formatWithSeparator(capacity, ',') + " per Item")
+            .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

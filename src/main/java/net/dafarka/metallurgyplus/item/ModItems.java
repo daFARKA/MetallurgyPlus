@@ -5,7 +5,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
-import net.dafarka.metallurgyplus.item.custom.SackItem;
+import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -28,13 +28,13 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
 
     private static final List<Integer> TIER_COLORS = List.of(0x000000,
-            0x0000ff, 0x0040ff, 0x0070ff, 0x00a0ff, 0x40d0ff, 0x80f0ff,   // Blue family
-            0x00ff00, 0x40ff20, 0x80ff30, 0xbfff60, 0x7fff80, 0xc0ffb0,   // Green family
-            0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red -> Brown family
-            0xffff00, 0xffdf20, 0xffbf40, 0xffa040, 0xffd080, 0xfff0a0,   // Yellow/Gold family
-            0x6a00ff, 0x7f40ff, 0x9966ff, 0xb080ff, 0xc0a0ff, 0xd0bfff,   // Purple/Violet family
-            0xff00ff, 0xff40df, 0xff80bf, 0xffa0ff, 0xff80cf, 0xffb0e0    // Magenta/Pink family
-            );
+        0x0000ff, 0x0040ff, 0x0070ff, 0x00a0ff, 0x40d0ff, 0x80f0ff,   // Blue family
+        0x00ff00, 0x40ff20, 0x80ff30, 0xbfff60, 0x7fff80, 0xc0ffb0,   // Green family
+        0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red -> Brown family
+        0xffff00, 0xffdf20, 0xffbf40, 0xffa040, 0xffd080, 0xfff0a0,   // Yellow/Gold family
+        0x6a00ff, 0x7f40ff, 0x9966ff, 0xb080ff, 0xc0a0ff, 0xd0bfff,   // Purple/Violet family
+        0xff00ff, 0xff40df, 0xff80bf, 0xffa0ff, 0xff80cf, 0xffb0e0    // Magenta/Pink family
+    );
 
     private static final List<Integer> MAJOR_TIER_COLORS = List.of(
         0x000000,
@@ -276,6 +276,7 @@ public class ModItems {
     }
 
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
+
     private static void registerMaterial(String materialName, int color) {
         for (String component : MATERIAL_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
@@ -296,6 +297,7 @@ public class ModItems {
 
     public static final String[] ORE_COMPONENT_NAMES = {"raw", "dust"};
     public static final String[] ORE_BASE_NAME = {"stone", "deepslate"};
+
     private static void registerOre(String oreName, int color, OreRarity oreRarity) {
         for (String component : ORE_COMPONENT_NAMES) {
             String name = oreName + "_" + component;
@@ -319,6 +321,7 @@ public class ModItems {
     }
 
     public static final String[] ALLOY_COMPONENT_NAMES = {"ingot", "gear", "nugget", "plate", "rod"};
+
     private static void registerAlloy(String materialName, int color) {
         for (String component : ALLOY_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
@@ -338,6 +341,7 @@ public class ModItems {
     }
 
     public static final String[] VANILLA_COMPONENT_NAMES = {"dust", "gear", "plate", "rod"};
+
     private static void registerVanilla(String materialName, int color) {
         for (String component : VANILLA_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
@@ -394,7 +398,7 @@ public class ModItems {
     private static void registerBattery(int tier, int color) {
         String name = "battery" + tier + "_block";
         RegistryObject<BatteryBlock> block = ModBlocks.registerBlock(name,
-                () -> new BatteryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL), tier));
+            () -> new BatteryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL), tier));
         ModBlocks.BATTERY_BLOCK_MAP.put(tier, block);
         ModBlocks.BATTERY_COLOR_MAP.put(tier, color);
     }

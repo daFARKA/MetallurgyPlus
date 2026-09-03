@@ -2,11 +2,13 @@ package net.dafarka.metallurgyplus.block.custom;
 
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.SackStationBlockEntity;
+import net.dafarka.metallurgyplus.item.sack.SackStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -58,7 +60,27 @@ public class SackStationBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        return InteractionResult.PASS;
+        ItemStack heldStack = pPlayer.getItemInHand(pHand);
+        if (!heldStack.isEmpty() && !SackStorage.isSack(heldStack)) return InteractionResult.PASS;
+
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        if (!(blockEntity instanceof SackStationBlockEntity station)) return InteractionResult.PASS;
+
+        if (!pLevel.isClientSide) {
+            ItemStack previousSack = station.getSack();
+            if (heldStack.isEmpty()) {
+                if (!previousSack.isEmpty()) {
+                    pPlayer.setItemInHand(pHand, previousSack);
+                    station.setSack(ItemStack.EMPTY);
+                }
+            } else {
+                station.setSack(heldStack.copyWithCount(1));
+                heldStack.shrink(1);
+                if (!previousSack.isEmpty()) pPlayer.setItemInHand(pHand, previousSack);
+            }
+        }
+
+        return InteractionResult.sidedSuccess(pLevel.isClientSide);
     }
 
     @Nullable

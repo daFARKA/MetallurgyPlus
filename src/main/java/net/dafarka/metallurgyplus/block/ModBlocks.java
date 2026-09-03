@@ -69,7 +69,8 @@ public class ModBlocks {
         () -> new PowerSourceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
     public static final RegistryObject<Block> SACK_STATION = registerBlock("sack_station",
-        () -> new SackStationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+        () -> new SackStationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()
+            .isRedstoneConductor((state, level, pos) -> false)));
 
 
     public static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.item.sack;
 
-import net.dafarka.metallurgyplus.item.custom.SackItem;
 import net.dafarka.metallurgyplus.util.ModTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -78,8 +77,8 @@ public class SackStorage {
         }
 
         return Math.max(
-                0,
-                getCapacity(sack) - getAmount(sack, item)
+            0,
+            getCapacity(sack) - getAmount(sack, item)
         );
     }
 
@@ -100,9 +99,9 @@ public class SackStorage {
 
         if (amountToAdd > 0) {
             setAmount(
-                    sack,
-                    item,
-                    getAmount(sack, item) + amountToAdd
+                sack,
+                item,
+                getAmount(sack, item) + amountToAdd
             );
         }
 
@@ -122,9 +121,9 @@ public class SackStorage {
         }
 
         return add(
-                sack,
-                stack.getItem(),
-                stack.getCount()
+            sack,
+            stack.getItem(),
+            stack.getCount()
         );
     }
 
@@ -165,8 +164,8 @@ public class SackStorage {
         }
 
         amount = Math.max(
-                0,
-                Math.min(amount, getCapacity(sack))
+            0,
+            Math.min(amount, getCapacity(sack))
         );
 
         CompoundTag contents = getContentsTag(sack);
