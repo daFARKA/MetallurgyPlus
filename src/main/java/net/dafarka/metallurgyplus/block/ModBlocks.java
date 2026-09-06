@@ -101,7 +101,7 @@ public class ModBlocks {
     }
 
     private static void registerCustomBlock(String name, BlockBehaviour blockBehaviour, SoundType soundType) {
-        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType)));
+        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType).noOcclusion()));
         CUSTOM_BLOCKS_MAP.put(name, block);
     }
 }

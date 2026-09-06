@@ -126,6 +126,8 @@ public class ModLangProvider extends LanguageProvider {
     }
 
     private void addBatteryTranslations() {
+        add("block." + MetallurgyPlus.MODID + ".battery", "Battery");
+
         for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
             String fullName = battery.getId().getPath();
             String name = battery.get().getDescriptionId().split("\\.")[2];

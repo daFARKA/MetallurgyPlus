@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -30,10 +31,11 @@ import org.jetbrains.annotations.Nullable;
 public class SackStationBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty HAS_SACK = BooleanProperty.create("has_sack");
 
     public SackStationBlock(Properties pProperties) {
         super(pProperties);
-        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(HAS_SACK, false));
     }
 
     @Override
@@ -103,13 +105,13 @@ public class SackStationBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder);
-        pBuilder.add(FACING);
+        pBuilder.add(FACING, HAS_SACK);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+        return defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(HAS_SACK, false);
     }
 }
 

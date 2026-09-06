@@ -1,16 +1,20 @@
 package net.dafarka.metallurgyplus.block.entity;
 
+import net.dafarka.metallurgyplus.block.custom.SackStationBlock;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.item.sack.SackStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,6 +32,7 @@ public class SackStationBlockEntity extends BlockEntity {
 
     private int generation = 0;
     private static final String SACK_TAG = "sack";
+    private static final int SACK_STATE_EVENT = 1;
     private ItemStack sack = ItemStack.EMPTY;
 
 
@@ -104,6 +109,22 @@ public class SackStationBlockEntity extends BlockEntity {
     public void setSack(ItemStack newSack) {
         sack = newSack.isEmpty() ? ItemStack.EMPTY : newSack.copyWithCount(1);
         setChanged();
+        updateBlockState();
+        if (level != null) {
+            level.blockEvent(worldPosition, getBlockState().getBlock(), SACK_STATE_EVENT, sack.isEmpty() ? 0 : 1);
+        }
+    }
+
+    private void updateBlockState() {
+        if (level == null) return;
+
+        BlockState state = getBlockState();
+        boolean hasSack = !sack.isEmpty();
+        if (state.hasProperty(SackStationBlock.HAS_SACK) && state.getValue(SackStationBlock.HAS_SACK) != hasSack) {
+            level.setBlock(worldPosition, state.setValue(SackStationBlock.HAS_SACK, hasSack), Block.UPDATE_ALL);
+        } else {
+            level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+        }
     }
 
     @Override
@@ -128,5 +149,41 @@ public class SackStationBlockEntity extends BlockEntity {
     public void load(CompoundTag pTag) {
         super.load(pTag);
         sack = pTag.contains(SACK_TAG) ? ItemStack.of(pTag.getCompound(SACK_TAG)) : ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int type) {
+        if (id == SACK_STATE_EVENT) {
+            if (type == 0) {
+                sack = ItemStack.EMPTY;
+            }
+            return true;
+        }
+
+        return super.triggerEvent(id, type);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Nullable
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag tag = pkt.getTag();
+        if (tag != null) {
+            load(tag);
+        }
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        load(tag);
     }
 }

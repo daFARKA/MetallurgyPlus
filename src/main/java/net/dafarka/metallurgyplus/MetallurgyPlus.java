@@ -6,6 +6,7 @@ import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
+import net.dafarka.metallurgyplus.block.entity.renderer.SackStationBlockEntityRenderer;
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.network.ModMessages;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -103,6 +105,9 @@ public class MetallurgyPlus {
                 ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.translucent());
             }
 
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SACK_STATION.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get(), RenderType.cutout());
+
             ItemColors itemColors = Minecraft.getInstance().getItemColors();
             for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {
                 itemColors.register(new DynamicItemColor(), item.get());
@@ -143,6 +148,11 @@ public class MetallurgyPlus {
             for (RegistryObject<Item> item : ModItems.SACK_MAP.values()) {
                 itemColors.register(new DynamicSackColor(), item.get());
             }
+        }
+
+        @SubscribeEvent
+        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(ModBlockEntities.SACK_STATION_BE.get(), SackStationBlockEntityRenderer::new);
         }
     }
 }

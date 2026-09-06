@@ -24,11 +24,9 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-        registerDefaultModels();
-    }
-
-    private void registerDefaultModels() {
         int[] defaultTintIndices = {0, 0, 0, 0, 0, 0};
+
+        registerMachineFrame();
 
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
@@ -67,7 +65,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("extractor", "extractor", "_", "front", "side", "top", "top", null);
         registerOrientable("quarry", "quarry", "_", "front", "side", "top", "top", null);
         registerOrientable("power_source", "power_source", "", "", "", "", "", null);
-        registerOrientable("sack_station", "sack_station", "", "", "", "", "_bottom", null);
+        registerSackStation();
     }
 
     private void registerMaterialModel(String blockName) {
@@ -150,5 +148,22 @@ public class ModBlockModelProvider extends BlockModelProvider {
                 .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).end()
                 .end();
         }
+    }
+
+    private void registerSackStation() {
+        getBuilder("sack_station")
+            .parent(getExistingFile(modLoc("block_entity_orientable")))
+            .texture("front", modLoc("block/sack_station"))
+            .texture("side", modLoc("block/sack_station"))
+            .texture("top", modLoc("block/sack_station"))
+            .texture("bottom", modLoc("block/sack_station_bottom"))
+            .renderType(mcLoc("cutout"));
+    }
+
+    private void registerMachineFrame() {
+        getBuilder("machine_frame")
+            .parent(getExistingFile(mcLoc("block/cube_all")))
+            .texture("all", modLoc("block/machine_frame"))
+            .renderType(mcLoc("cutout"));
     }
 }

@@ -4,6 +4,7 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.custom.SackStationBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -36,7 +37,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("extractor", ModBlocks.EXTRACTOR.get());
         horizontalFacingBlock("quarry", ModBlocks.QUARRY.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
-        horizontalFacingBlock("sack_station", ModBlocks.SACK_STATION.get());
+        sackStationBlock();
 
         cableBlocks();
         solarPanelBlocks();
@@ -63,7 +64,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void customBlocksWithItem() {
         for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
-            blockWithItem(block);
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            if (blockName.equals("machine_frame")) {
+                simpleBlockWithItem(block.get(), models().getExistingFile(modLoc("block/machine_frame")));
+            } else {
+                blockWithItem(block);
+            }
         }
     }
 
@@ -72,9 +78,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ResourceLocation model = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
 
         getVariantBuilder(block).forAllStates(state ->
-                ConfiguredModel.builder()
-                        .modelFile(models().getExistingFile(model))
-                        .build()
+            ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(model))
+                .build()
         );
     }
 
@@ -82,14 +88,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModelFile model = models().getExistingFile(modLoc("block/" + name));
 
         getVariantBuilder(block)
-                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-                .modelForState().modelFile(model).addModel()
-                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-                .modelForState().modelFile(model).rotationY(90).addModel()
-                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-                .modelForState().modelFile(model).rotationY(180).addModel()
-                .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
-                .modelForState().modelFile(model).rotationY(270).addModel();
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+            .modelForState().modelFile(model).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+            .modelForState().modelFile(model).rotationY(90).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+            .modelForState().modelFile(model).rotationY(180).addModel()
+            .partialState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+            .modelForState().modelFile(model).rotationY(270).addModel();
+    }
+
+    private void sackStationBlock() {
+        ModelFile model = models().getExistingFile(modLoc("block/sack_station"));
+
+        getVariantBuilder(ModBlocks.SACK_STATION.get()).forAllStates(state -> ConfiguredModel.builder()
+            .modelFile(model)
+            .rotationY(((int) state.getValue(SackStationBlock.FACING).toYRot() + 180) % 360)
+            .build());
     }
 
     private void cableBlocks() {
