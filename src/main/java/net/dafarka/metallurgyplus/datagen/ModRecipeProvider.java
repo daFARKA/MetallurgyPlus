@@ -1,25 +1,16 @@
 package net.dafarka.metallurgyplus.datagen;
 
-import net.dafarka.metallurgyplus.Config;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.item.ModItems;
-import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
-import net.dafarka.metallurgyplus.recipe.PressRecipe;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -61,6 +52,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildCoilRecipes(pWriter);
         buildSolarPanelRecipes(pWriter);
         buildBatteryRecipes(pWriter);
+        buildSackRecipes(pWriter);
         buildBlockEntitiesRecipes(pWriter);
     }
 
@@ -433,6 +425,20 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("holmium_gear").get()), has(ModItems.MATERIAL_MAP.get("holmium_gear").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()), has(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SACK_STATION.get())
+            .pattern("IGI")
+            .pattern("GFG")
+            .pattern("IHI")
+            .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
+            .define('G', Items.GLASS)
+            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('H', Items.HOPPER)
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
+            .unlockedBy(getHasName(Items.GLASS), has(Items.GLASS))
+            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(Items.HOPPER), has(Items.HOPPER))
             .save(pWriter);
     }
 
@@ -1180,6 +1186,128 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
             .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
+            .save(pWriter);
+    }
+
+    private void buildSackRecipes(Consumer<FinishedRecipe> pWriter) {
+        int tier = 1;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SLS")
+            .pattern("LsL")
+            .pattern("LgL")
+            .define('S', Items.STRING)
+            .define('L', Items.LEATHER)
+            .define('s', Items.CHEST)
+            .define('g', ModItems.VANILLA_MAP.get("copper_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+            .unlockedBy(getHasName(Items.CHEST), has(Items.CHEST))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_gear").get()), has(ModItems.VANILLA_MAP.get("copper_gear").get()))
+            .save(pWriter);
+
+        tier = 2;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SLS")
+            .pattern("LsL")
+            .pattern("LgL")
+            .define('S', Items.STRING)
+            .define('L', Items.LEATHER)
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.VANILLA_MAP.get("diamond_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
+            .save(pWriter);
+
+        tier = 3;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SLS")
+            .pattern("LsL")
+            .pattern("LgL")
+            .define('S', Items.STRING)
+            .define('L', Items.LEATHER)
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.ALLOY_MAP.get("wrought-iron_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("wrought-iron_gear").get()), has(ModItems.ALLOY_MAP.get("wrought-iron_gear").get()))
+            .save(pWriter);
+
+        tier = 4;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SLS")
+            .pattern("LsL")
+            .pattern("LgL")
+            .define('S', Items.STRING)
+            .define('L', Items.LEATHER)
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.ALLOY_MAP.get("brass_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("brass_gear").get()), has(ModItems.ALLOY_MAP.get("brass_gear").get()))
+            .save(pWriter);
+
+        tier = 5;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SRS")
+            .pattern("RsR")
+            .pattern("RgR")
+            .define('S', Items.STRING)
+            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.ALLOY_MAP.get("invar_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("invar_gear").get()), has(ModItems.ALLOY_MAP.get("invar_gear").get()))
+            .save(pWriter);
+
+        tier = 6;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SRS")
+            .pattern("RsR")
+            .pattern("RgR")
+            .define('S', Items.STRING)
+            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.MATERIAL_MAP.get("zirconium_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("zirconium_gear").get()), has(ModItems.MATERIAL_MAP.get("zirconium_gear").get()))
+            .save(pWriter);
+
+        tier = 7;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SRS")
+            .pattern("RsR")
+            .pattern("RgR")
+            .define('S', Items.STRING)
+            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.MATERIAL_MAP.get("lead_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_gear").get()), has(ModItems.MATERIAL_MAP.get("lead_gear").get()))
+            .save(pWriter);
+
+        tier = 8;
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
+            .pattern("SRS")
+            .pattern("RsR")
+            .pattern("RgR")
+            .define('S', Items.STRING)
+            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
+            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
+            .define('g', ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get())
+            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
+            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get()))
             .save(pWriter);
     }
 }
