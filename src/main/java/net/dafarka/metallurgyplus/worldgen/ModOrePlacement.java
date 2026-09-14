@@ -1,10 +1,7 @@
 package net.dafarka.metallurgyplus.worldgen;
 
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.dafarka.metallurgyplus.worldgen.placement.ClayMineralPlacement;
+import net.minecraft.world.level.levelgen.placement.*;
 
 import java.util.List;
 
@@ -19,5 +16,9 @@ public class ModOrePlacement {
 
     public static List<PlacementModifier> rareOrePlacement(int pChance, PlacementModifier pHeightRange) {
         return orePlacement(RarityFilter.onAverageOnceEvery(pChance), pHeightRange);
+    }
+
+    public static List<PlacementModifier> clayMineralPlacement(int pCount) {
+        return List.of(new ClayMineralPlacement(pCount, -20, 60), BiomeFilter.biome());
     }
 }

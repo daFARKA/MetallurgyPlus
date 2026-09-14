@@ -14,6 +14,7 @@ import net.dafarka.metallurgyplus.recipe.ModRecipes;
 import net.dafarka.metallurgyplus.screen.*;
 import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
 import net.dafarka.metallurgyplus.util.color.*;
+import net.dafarka.metallurgyplus.worldgen.placement.ModPlacementModifiers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
@@ -68,6 +69,9 @@ public class MetallurgyPlus {
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        // Register our mod's PlacementModifiers
+        ModPlacementModifiers.PLACEMENT_MODIFIERS.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -102,7 +106,7 @@ public class MetallurgyPlus {
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);
 
             for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
-                ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.cutout());
             }
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SACK_STATION.get(), RenderType.cutout());

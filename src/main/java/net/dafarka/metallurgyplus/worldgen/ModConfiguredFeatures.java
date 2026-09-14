@@ -2,17 +2,18 @@ package net.dafarka.metallurgyplus.worldgen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.registries.RegistryObject;
@@ -41,6 +42,7 @@ public class ModConfiguredFeatures {
     private static void registerOresDefault(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest stoneReplaceables = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateReplaceables = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+        RuleTest clayReplaceables = new BlockMatchTest(Blocks.CLAY);
 
         for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
             ResourceKey<ConfiguredFeature<?, ?>> overworldOreKey = registerKey(ore.getId().getPath());
@@ -48,13 +50,19 @@ public class ModConfiguredFeatures {
             String baseType = ore.getId().getPath().split("_")[1];
             List<OreConfiguration.TargetBlockState> overworldOres = null;
             if (baseType.equals("stone")) {
-                 overworldOres = List.of(
+                overworldOres = List.of(
                     OreConfiguration.target(stoneReplaceables, ore.get().defaultBlockState()));
             } else if (baseType.equals("deepslate")) {
                 overworldOres = List.of(
                     OreConfiguration.target(deepslateReplaceables, ore.get().defaultBlockState()));
             }
-            register(context, overworldOreKey, Feature.ORE, new OreConfiguration(overworldOres, 6));
+            if (overworldOres != null) {
+                register(context, overworldOreKey, Feature.ORE, new OreConfiguration(overworldOres, 6));
+            }
         }
+
+        ResourceKey<ConfiguredFeature<?, ?>> clayMineralKey = registerKey("clay_mineral");
+        List<OreConfiguration.TargetBlockState> clayMineralOres = List.of(OreConfiguration.target(clayReplaceables, ModBlocks.CLAY_MINERAL.get().defaultBlockState()));
+        register(context, clayMineralKey, Feature.ORE, new OreConfiguration(clayMineralOres, 16));
     }
 }

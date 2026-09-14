@@ -8,17 +8,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
@@ -27,6 +22,7 @@ import java.util.Map;
 
 public class ModPlacedFeatures {
     public static final Map<String, ResourceKey<PlacedFeature>> ORE_PLACED_MAP = new HashMap<>();
+    public static final ResourceKey<PlacedFeature> CLAY_MINERAL_PLACED = registerKey("clay_mineral_placed");
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         registerOresDefault(context);
@@ -49,18 +45,26 @@ public class ModPlacedFeatures {
             ORE_PLACED_MAP.put(ore.getId().getPath(), orePlacedKey);
 
             switch (ModBlocks.ORE_RARITY_MAP.get(ore)) {
-                case COMMON -> register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
-                    ModOrePlacement.commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
-                case UNCOMMON -> register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
-                    ModOrePlacement.commonOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(50))));
-                case RARE -> register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
-                    ModOrePlacement.commonOrePlacement(1, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(20))));
-                case VERY_RARE -> register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
-                    ModOrePlacement.rareOrePlacement(2, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-10))));
-                case EXTREMELY_RARE -> register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
-                    ModOrePlacement.rareOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-30))));
+                case COMMON ->
+                    register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
+                        ModOrePlacement.commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+                case UNCOMMON ->
+                    register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
+                        ModOrePlacement.commonOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(50))));
+                case RARE ->
+                    register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
+                        ModOrePlacement.commonOrePlacement(1, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(20))));
+                case VERY_RARE ->
+                    register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
+                        ModOrePlacement.rareOrePlacement(2, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-10))));
+                case EXTREMELY_RARE ->
+                    register(context, orePlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.ORE_KEY_MAP.get(ore.getId().getPath())),
+                        ModOrePlacement.rareOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-30))));
             }
-
         }
+
+        ResourceKey<PlacedFeature> clayMineralPlacedKey = registerKey("clay_mineral_placed");
+        register(context, clayMineralPlacedKey, configuredFeatures.getOrThrow(ModConfiguredFeatures.registerKey("clay_mineral")),
+            ModOrePlacement.clayMineralPlacement(500));
     }
 }
