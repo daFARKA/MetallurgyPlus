@@ -2,7 +2,7 @@
   "type": "metallurgyplus:ore_processing_unit",
   "ingredients": [
     {
-      "item": "metallurgyplus:rare_earth1",
+      "item": "metallurgyplus:rare_earth_3",
       "count": 1
     }
   ],
@@ -17,27 +17,17 @@
       "chance": 1.0
     },
     {
-      "item": "metallurgyplus:lanthanum_raw",
+      "item": "metallurgyplus:erbium_raw",
       "count": 1,
       "chance": 1.0
     },
     {
-      "item": "metallurgyplus:europium_raw",
-      "count": 1,
-      "chance": 1.0
-    },
-    {
-      "item": "metallurgyplus:gadolinium_raw",
-      "count": 1,
-      "chance": 1.0
-    },
-    {
-      "item": "metallurgyplus:terbium_raw",
+      "item": "metallurgyplus:dysprosium_raw",
       "count": 1,
       "chance": 0.5
     },
     {
-      "item": "metallurgyplus:thulium_raw",
+      "item": "metallurgyplus:holmium_raw",
       "count": 1,
       "chance": 0.5
     }

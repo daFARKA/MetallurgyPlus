@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 public class DynamicItemColor implements ItemColor {
 
 
-    public DynamicItemColor() {}
+    public DynamicItemColor() { }
 
     @Override
     public int getColor(ItemStack pStack, int pTintIndex) {
@@ -19,12 +19,14 @@ public class DynamicItemColor implements ItemColor {
             if (type.equals("item")) {
                 if (ModItems.MATERIAL_COLOR_MAP.get(name) != null) {
                     return ModItems.MATERIAL_COLOR_MAP.get(name);
-                } else if (ModItems.ORE_COLOR_MAP.get(name) != null){
+                } else if (ModItems.ORE_COLOR_MAP.get(name) != null) {
                     return ModItems.ORE_COLOR_MAP.get(name);
-                } else if (ModItems.ALLOY_COLOR_MAP.get(name) != null){
+                } else if (ModItems.ALLOY_COLOR_MAP.get(name) != null) {
                     return ModItems.ALLOY_COLOR_MAP.get(name);
                 } else if (ModItems.VANILLA_MAP.get(name) != null) {
                     return ModItems.VANILLA_COLOR_MAP.get(name);
+                } else if (ModItems.GEM_MAP.get(name) != null) {
+                    return ModItems.GEM_COLOR_MAP.get(name);
                 }
             } else if (type.equals("block")) {
                 if (ModBlocks.MATERIAL_COLOR_MAP.get(name) != null) {

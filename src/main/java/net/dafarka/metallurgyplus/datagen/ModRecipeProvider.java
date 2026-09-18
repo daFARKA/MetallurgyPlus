@@ -252,12 +252,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreSmelting(pWriter, CLAY_SMELTABLES, RecipeCategory.MISC, Items.CLAY_BALL, 0.25f, 100, "clay");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("small_rare_earth").get(), 1)
-            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get())
-            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get())
-            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get())
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth1").get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth2").get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth3").get()))
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_1").get())
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_2").get())
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_3").get())
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_1").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_1").get()))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_2").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_2").get()))
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_3").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rare_earth_3").get()))
             .save(pWriter);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy").get(), 1)

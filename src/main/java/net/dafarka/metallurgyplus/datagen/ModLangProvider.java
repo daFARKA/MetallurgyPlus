@@ -36,7 +36,7 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.sack_station", "Sack Docking Station");
 
-        add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
+        addCreativeTabsTranslations();
 
         add("tooltip.metallurgyplus.common", "Y-Level: 80 to -64");
         add("tooltip.metallurgyplus.uncommon", "Y-Level: 50 to -64");
@@ -53,8 +53,20 @@ public class ModLangProvider extends LanguageProvider {
         addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
+        addBaseItemMapTranslations(ModItems.GEM_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
+    }
+
+    private void addCreativeTabsTranslations() {
+        add("creativetab.metallurgyplus_tab", "MetallurgyPlus");
+        add("creativetab.metallurgyplus_items", "MetallurgyPlus Items");
+        add("creativetab.metallurgyplus_materials", "MetallurgyPlus Materials");
+        add("creativetab.metallurgyplus_ores", "MetallurgyPlus Ores");
+        add("creativetab.metallurgyplus_alloys", "MetallurgyPlus Alloys");
+        add("creativetab.metallurgyplus_vanilla_items", "MetallurgyPlus Vanilla Items");
+        add("creativetab.metallurgyplus_gems", "MetallurgyPlus Gemstones");
+        add("creativetab.metallurgyplus_machines", "MetallurgyPlus Machines");
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
@@ -62,6 +74,9 @@ public class ModLangProvider extends LanguageProvider {
         addBlockMapTranslations(blockMap);
     }
 
+    /**
+     * name_component -> Name Component
+     */
     private void addBlockMapTranslations(Map<String, RegistryObject<Block>> blockMap) {
         for (RegistryObject<Block> block : blockMap.values()) {
             String fullName = block.getId().getPath();
@@ -70,6 +85,9 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
+    /**
+     * name_component -> Name Component
+     */
     private void addItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
@@ -78,10 +96,24 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
+    /**
+     * name_component -> Name Component
+     */
     private void addCustomItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = fullName.replace('_', ' ');
+            add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
+        }
+    }
+
+    /**
+     * first-last_component -> First Last
+     */
+    private void addBaseItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
+        for (RegistryObject<Item> item : itemMap.values()) {
+            String fullName = item.getId().getPath();
+            String name = fullName.split("_")[0].replace("-", " ");
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
@@ -137,6 +169,9 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
+    /**
+     * name_component -> Name Component Tier x
+     */
     private void addTieredItemTranslations(Map<Integer, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
@@ -147,6 +182,12 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
+    /**
+     * Capitalizes the first letter of every word in the provided string.
+     *
+     * @param input string whose words should be capitalized
+     * @return the input string with the first letter of each word capitalized
+     */
     public String capitalizeFirstLetterEach(String input) {
         String[] parts = input.split(" ");
         StringBuilder capitalized = new StringBuilder();
@@ -164,6 +205,14 @@ public class ModLangProvider extends LanguageProvider {
         return capitalized.toString();
     }
 
+    /**
+     * Formats the name of an entity.
+     *
+     * @param fullName The full name of the entity, of the following form:
+     *                 name<-tag>_component, where -tag is optional.
+     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3>_component
+     * @return a nicely formatted name, such as: Name Tag Component
+     */
     private String getName(String fullName) {
         String[] parts = fullName.split("_");
 
@@ -188,12 +237,10 @@ public class ModLangProvider extends LanguageProvider {
     /**
      * Titanium Alloys have very industrialized names and always look like this: Titanium-xEl1-xEl1-...
      * <br>
-     * x stands for a number here and El1 for the first element (that is not Titanium) and so on.
+     * x is a number and El1 the first element (that is not Titanium) and so on.
      *
      * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
      * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
-     *
-     *
      */
     private String getTitaniumAlloyName(String[] parts) {
         StringBuilder stringBuilder = new StringBuilder();

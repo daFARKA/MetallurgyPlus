@@ -1,9 +1,11 @@
 # Resources
+
 *this should contain all resources, that are automatically being generated*
 <br>
 *resourceName - hexColor - \<RARITY\>*
 
 ## Materials
+
 * aluminum - 0xb9f0f0
 * antimony - 0x5465c4
 * barium - 0x8c8f85
@@ -65,8 +67,8 @@
 * zinc - 0xc7fff8
 * zirconium - 0x705a43
 
-
 ## Ores
+
 * gibbsite - 0x52695a - UNCOMMON
 * bauxite - 0x916b4d - COMMON
 * stibnite - 0x5465c4 - UNCOMMON
@@ -113,8 +115,8 @@
 * sylvanite - 0xfff7bd - VERY_RARE
 * calaverite - 0xc7bd71 - RARE
 
-
 ## Alloys
+
 * steel - 0x707070
 * wrought iron - 0x242020
 * pig iron - 0xe3ccb1
@@ -157,9 +159,33 @@
 * pewter - 0xbecfce
 
 ## Vanilla Materials
+
 * iron - 0xffffff
 * copper - 0xe77c56
 * gold - 0xfdf55f
 * netherite - 0x31292a
 * diamond - 0xa1fbe8
 * emerald - 0x17dd62
+
+## Gemstones
+
+* ruby - 0xd21f3c
+* sapphire - 0x2855c5
+* peridot - 0x8fbf3f
+* alexandrite - 0x4f9e72
+* aquamarine - 0x69d9d0
+* morganite - 0xe8a9a5
+* red-beryl - 0xc7354a
+* garnet - 0x8f2038
+* tsavorite - 0x27a85b
+* demantoid - 0x35a85a
+* spinel - 0xc62b4a
+* topaz - 0xf1b84b
+* tourmaline - 0x238b58
+* opal - 0xdde7e2
+* ametrine - 0xb88a55
+* kunzite - 0xd78ac7
+* hiddenite - 0x73b86b
+* tanzanite - 0x6256b8
+* iolite - 0x4d4fa8
+* turquoise - 0x35b9b0

@@ -54,6 +54,7 @@ public class ModItems {
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> VANILLA_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> GEM_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> SACK_MAP = new HashMap<>();
 
@@ -61,6 +62,7 @@ public class ModItems {
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> VANILLA_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> GEM_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> SACK_COLOR_MAP = new HashMap<>();
 
@@ -82,9 +84,9 @@ public class ModItems {
         registerCustomItem("kaolinite");
         registerCustomItem("platinum_like_metals");
         registerCustomItem("sulphur");
-        registerCustomItem("rare_earth1");
-        registerCustomItem("rare_earth2");
-        registerCustomItem("rare_earth3");
+        registerCustomItem("rare_earth_1");
+        registerCustomItem("rare_earth_2");
+        registerCustomItem("rare_earth_3");
         registerCustomItem("small_rare_earth");
         registerCustomItem("stone_dust");
         registerCustomItem("energy_core");
@@ -254,6 +256,28 @@ public class ModItems {
         registerVanilla("diamond", 0xa1fbe8);
         registerVanilla("emerald", 0x17dd62);
 
+        // Gemstones
+        registerGem("ruby", 0xD21F3C);
+        registerGem("sapphire", 0x2855C5);
+        registerGem("peridot", 0x8FBF3F);
+        registerGem("alexandrite", 0x4F9E72);
+        registerGem("aquamarine", 0x69D9D0);
+        registerGem("morganite", 0xE8A9A5);
+        registerGem("red-beryl", 0xC7354A);
+        registerGem("garnet", 0x8F2038);
+        registerGem("tsavorite", 0x27A85B);
+        registerGem("demantoid", 0x35A85A);
+        registerGem("spinel", 0xC62B4A);
+        registerGem("topaz", 0xF1B84B);
+        registerGem("tourmaline", 0x238B58);
+        registerGem("opal", 0xDDE7E2);
+        registerGem("ametrine", 0xB88A55);
+        registerGem("kunzite", 0xD78AC7);
+        registerGem("hiddenite", 0x73B86B);
+        registerGem("tanzanite", 0x6256B8);
+        registerGem("iolite", 0x4D4FA8);
+        registerGem("turquoise", 0x35B9B0);
+
         // Cables
         registerCables();
 
@@ -350,6 +374,19 @@ public class ModItems {
             );
             VANILLA_MAP.put(name, item);
             VANILLA_COLOR_MAP.put(name, color);
+        }
+    }
+
+    public static final String[] GEM_COMPONENT_NAMES = {"gem"};
+
+    private static void registerGem(String gemName, int color) {
+        for (String component : GEM_COMPONENT_NAMES) {
+            String name = gemName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            GEM_MAP.put(name, item);
+            GEM_COLOR_MAP.put(name, color);
         }
     }
 

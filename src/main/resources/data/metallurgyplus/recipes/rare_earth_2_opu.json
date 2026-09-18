@@ -2,7 +2,7 @@
   "type": "metallurgyplus:ore_processing_unit",
   "ingredients": [
     {
-      "item": "metallurgyplus:rare_earth2",
+      "item": "metallurgyplus:rare_earth_2",
       "count": 1
     }
   ],
@@ -40,8 +40,7 @@
       "item": "metallurgyplus:terbium_raw",
       "count": 1,
       "chance": 0.5
-    }
-  ,
+    },
     {
       "item": "metallurgyplus:gadolinium_raw",
       "count": 1,
