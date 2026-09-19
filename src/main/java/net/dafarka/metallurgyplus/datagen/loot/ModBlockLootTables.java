@@ -31,6 +31,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         mapBlocksDropSelf(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksRaw();
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
+        mapBlocksDropSelf(ModBlocks.GEM_BLOCKS_MAP);
         cableBlocksDropSelf();
         solarPanelBlocksDropSelf();
         batteryBlocksDropSelf();

@@ -54,6 +54,7 @@ public class ModLangProvider extends LanguageProvider {
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
         addBaseItemMapTranslations(ModItems.GEM_MAP);
+        addBlockMapTranslations(ModBlocks.GEM_BLOCKS_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
     }

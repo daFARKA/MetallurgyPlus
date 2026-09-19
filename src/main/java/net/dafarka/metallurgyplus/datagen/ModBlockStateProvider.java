@@ -60,6 +60,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             simpleBlockState(block.get());
         }
+
+        for (RegistryObject<Block> block : ModBlocks.GEM_BLOCKS_MAP.values()) {
+            simpleBlockState(block.get());
+        }
     }
 
     private void customBlocksWithItem() {

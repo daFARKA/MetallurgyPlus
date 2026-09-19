@@ -30,7 +30,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerMaterialModel(blockName);
+            registerSimpleBlockModel(blockName, "base_metal_block");
         }
 
         for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
@@ -40,7 +40,12 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerMaterialModel(blockName);
+            registerSimpleBlockModel(blockName, "base_metal_block");
+        }
+
+        for (RegistryObject<Block> block : ModBlocks.GEM_BLOCKS_MAP.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            registerSimpleBlockModel(blockName, "base_gem_block");
         }
 
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
@@ -68,8 +73,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerSackStation();
     }
 
-    private void registerMaterialModel(String blockName) {
-        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/base_block");
+    private void registerSimpleBlockModel(String blockName, String baseName) {
+        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + baseName);
 
         getBuilder(blockName)
             .parent(getExistingFile(mcLoc("block/cube_all")))

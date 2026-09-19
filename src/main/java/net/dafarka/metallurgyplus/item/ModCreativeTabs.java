@@ -81,7 +81,7 @@ public class ModCreativeTabs {
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.GEM_MAP.get("ruby_gem").get()))
             .title(Component.translatable("creativetab.metallurgyplus_gems"))
             .displayItems((pParameters, pOutput) -> {
-                addSortedItems(ModItems.GEM_MAP, pOutput);
+                addSortedItems(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, pOutput);
             })
             .build());
 
@@ -125,7 +125,10 @@ public class ModCreativeTabs {
 
                 String itemName = item.getId().getPath();
 
-                String baseName = itemName.replace("_ingot", "").replace("_raw", "");
+                String baseName = itemName
+                    .replace("_ingot", "")
+                    .replace("_raw", "")
+                    .replace("_gem", "");
 
                 blockMap.entrySet().stream()
                     .filter(entry -> {

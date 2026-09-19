@@ -31,7 +31,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
         generateItemMap(ModItems.CUSTOM_ITEM_MAP);
         generateItemMapBase(ModItems.VANILLA_MAP);
-        generateItemMapBase(ModItems.GEM_MAP);
+        generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP);
 
         simpleItem(ModItems.LLAMKANA);
 

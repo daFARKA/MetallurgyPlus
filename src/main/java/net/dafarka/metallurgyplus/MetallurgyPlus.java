@@ -130,6 +130,10 @@ public class MetallurgyPlus {
                 blockColors.register(new DynamicAlloyBlockColor(), block.get());
             }
 
+            for (RegistryObject<Block> block : ModBlocks.GEM_BLOCKS_MAP.values()) {
+                blockColors.register(new DynamicGemBlockColor(), block.get());
+            }
+
             for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
                 blockColors.register(new DynamicCableColor(), block.get());
                 itemColors.register(new DynamicCableColor(), block.get().asItem());

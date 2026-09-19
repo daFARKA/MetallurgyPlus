@@ -388,6 +388,13 @@ public class ModItems {
             GEM_MAP.put(name, item);
             GEM_COLOR_MAP.put(name, color);
         }
+
+        String name = gemName + "_block";
+        RegistryObject<Block> block = ModBlocks.registerBlock(name,
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.EMERALD_BLOCK).sound(SoundType.METAL)));
+
+        ModBlocks.GEM_BLOCKS_MAP.put(name, block);
+        ModBlocks.GEM_COLOR_MAP.put(name, color);
     }
 
     private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {

@@ -29,7 +29,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider pProvider) {
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksAddTags();
-        mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
+        mapBlocksAddTags(ModBlocks.ALLOY_BLOCKS_MAP);
+        mapBlocksAddTags(ModBlocks.GEM_BLOCKS_MAP);
         cableBlockAddTags();
         solarPanelBlockAddTags();
         batteryBlockAddTags();
