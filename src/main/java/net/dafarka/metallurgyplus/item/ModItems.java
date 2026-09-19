@@ -167,7 +167,7 @@ public class ModItems {
         registerOre("bismuthinite", 0xc7c4b1, OreRarity.RARE);  // Bismuth, Sulphur
         registerOre("chromite", 0x484c59, OreRarity.COMMON);  // Chromium, Iron
         registerOre("cobaltite", 0x091336, OreRarity.RARE); // Cobalt, Sulphur
-        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper, Graphite
+        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper
         registerOre("hematite", 0x75614f, OreRarity.COMMON);  // Iron
         registerOre("magnetite", 0x212f36, OreRarity.COMMON); // Iron
         registerOre("limonite", 0xbd6500, OreRarity.COMMON);  // Iron
@@ -260,23 +260,48 @@ public class ModItems {
         registerGem("ruby", 0xD21F3C);
         registerGem("sapphire", 0x2855C5);
         registerGem("peridot", 0x8FBF3F);
-        registerGem("alexandrite", 0x4F9E72);
         registerGem("aquamarine", 0x69D9D0);
-        registerGem("morganite", 0xE8A9A5);
-        registerGem("red-beryl", 0xC7354A);
-        registerGem("garnet", 0x8F2038);
-        registerGem("tsavorite", 0x27A85B);
-        registerGem("demantoid", 0x35A85A);
-        registerGem("spinel", 0xC62B4A);
-        registerGem("topaz", 0xF1B84B);
-        registerGem("tourmaline", 0x238B58);
-        registerGem("opal", 0xDDE7E2);
-        registerGem("ametrine", 0xB88A55);
-        registerGem("kunzite", 0xD78AC7);
-        registerGem("hiddenite", 0x73B86B);
-        registerGem("tanzanite", 0x6256B8);
-        registerGem("iolite", 0x4D4FA8);
-        registerGem("turquoise", 0x35B9B0);
+        registerGem("apatite", 0x82fff9);
+        registerGem("azurite", 0x00095c);
+        registerGem("red-beryl", 0xc7354a);
+        registerGem("morganite", 0xe8a9a5);
+        registerGem("chrysoberyl", 0xe2ff52);
+        registerGem("cinnabar", 0xbf3232);
+        registerGem("clinohumite", 0x9c3111);
+        registerGem("diaspore", 0xc9b26b);
+        registerGem("dioptase", 0x2c9980);
+        registerGem("ekanite", 0x53784e);
+        registerGem("amazonite", 0x00ffea);
+        registerGem("moonstone", 0xe0f6ff);
+        registerGem("sunstone", 0xffab5c);
+        registerGem("fluorite", 0xe4c9ff);
+        registerGem("garnet", 0xa32017);
+        registerGem("helenite", 0x59ff78);
+        registerGem("jade", 0x009c4b);
+        registerGem("jasper", 0xff7000);
+        registerGem("lazulite", 0x001b91);
+        registerGem("lazurite", 0x001363);
+        registerGem("malachite", 0x56cc9b);
+        registerGem("moissanite", 0x6e767d);
+        registerGem("musgravite", 0x6b6bc2);
+        registerGem("opal", 0xffffff);
+        registerGem("black-opal", 0x141414);
+        registerGem("fire-opal", 0xb53300);
+        registerGem("purpurite", 0x6600ba);
+        registerGem("citrine", 0xfffa9e);
+        registerGem("rhodochrosite", 0xc4668f);
+        registerGem("scorodite", 0x1e396b);
+        registerGem("serandite", 0xc97e55);
+        registerGem("hiddenite", 0x84d193);
+        registerGem("sugilite", 0xb252de);
+        registerGem("titanite", 0xc7db51);
+        registerGem("topaz", 0xff892e);
+        registerGem("triplite", 0xff7e47);
+        registerGem("turquoise", 0x40e0d0);
+        registerGem("wulfenite", 0xff8469);
+        registerGem("zircon", 0xd9c3bf);
+        registerGem("tanzanite", 0x000738);
+        registerGem("zultanite", 0x697a50);
 
         // Cables
         registerCables();

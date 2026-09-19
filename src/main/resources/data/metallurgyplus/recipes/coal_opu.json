@@ -2,12 +2,12 @@
   "type": "metallurgyplus:ore_processing_unit",
   "ingredients": [
     {
-      "item": "metallurgyplus:malachite_raw",
+      "item": "minecraft:coal",
       "count": 1
     }
   ],
   "output": {
-    "item": "minecraft:raw_copper",
+    "item": "metallurgyplus:graphite_raw",
     "count": 1
   }
 }
