@@ -8,16 +8,8 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
-import net.dafarka.metallurgyplus.recipe.ExtractorRecipe;
-import net.dafarka.metallurgyplus.recipe.GrinderRecipe;
-import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
-import net.dafarka.metallurgyplus.recipe.PressRecipe;
-import net.dafarka.metallurgyplus.screen.AlloySmelterScreen;
-import net.dafarka.metallurgyplus.screen.ExtractorScreen;
-import net.dafarka.metallurgyplus.screen.GrinderScreen;
-import net.dafarka.metallurgyplus.screen.OreProcessingUnitScreen;
-import net.dafarka.metallurgyplus.screen.PressScreen;
+import net.dafarka.metallurgyplus.recipe.*;
+import net.dafarka.metallurgyplus.screen.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -39,6 +31,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipeCategories(new GrinderCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new PressCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new ExtractorCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new GemstoneCutterCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -50,11 +43,14 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         List<GrinderRecipe> grinderRecipes = recipeManager.getAllRecipesFor(GrinderRecipe.Type.INSTANCE);
         List<PressRecipe> pressRecipes = recipeManager.getAllRecipesFor(PressRecipe.Type.INSTANCE);
         List<ExtractorRecipe> extractorRecipes = recipeManager.getAllRecipesFor(ExtractorRecipe.Type.INSTANCE);
+        List<GemstoneCutterRecipe> gemstoneCutterRecipes = recipeManager.getAllRecipesFor(GemstoneCutterRecipe.Type.INSTANCE);
+        
         registration.addRecipes(AlloySmelterCategory.ALLOY_SMELTER_TYPE, alloySmelterRecipes);
         registration.addRecipes(OreProcessingUnitCategory.ORE_PROCESSING_UNIT_TYPE, oreProcessingUnitRecipes);
         registration.addRecipes(GrinderCategory.GRINDER_TYPE, grinderRecipes);
         registration.addRecipes(PressCategory.PRESS_TYPE, pressRecipes);
         registration.addRecipes(ExtractorCategory.EXTRACTOR_TYPE, extractorRecipes);
+        registration.addRecipes(GemstoneCutterCategory.GEMSTONE_CUTTER_TYPE, gemstoneCutterRecipes);
     }
 
     @Override
@@ -67,6 +63,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipeClickArea(GrinderScreen.class, 48, 34, width, height, GrinderCategory.GRINDER_TYPE);
         registration.addRecipeClickArea(PressScreen.class, 64, 38, width, height, PressCategory.PRESS_TYPE);
         registration.addRecipeClickArea(ExtractorScreen.class, 64, 34, width, height, ExtractorCategory.EXTRACTOR_TYPE);
+        registration.addRecipeClickArea(GemstoneCutterScreen.class, 64, 38, width, height, GemstoneCutterCategory.GEMSTONE_CUTTER_TYPE);
     }
 
     @Override
@@ -94,6 +91,11 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipeCatalyst(
             new net.minecraft.world.item.ItemStack(ModBlocks.EXTRACTOR.get()),
             ExtractorCategory.EXTRACTOR_TYPE
+        );
+
+        registration.addRecipeCatalyst(
+            new net.minecraft.world.item.ItemStack(ModBlocks.GEMSTONE_CUTTER.get()),
+            GemstoneCutterCategory.GEMSTONE_CUTTER_TYPE
         );
     }
 }

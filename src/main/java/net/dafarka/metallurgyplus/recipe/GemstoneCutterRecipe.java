@@ -13,9 +13,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
-public class AlloySmelterRecipe extends MachineRecipe {
+public class GemstoneCutterRecipe extends MachineRecipe {
 
-    public AlloySmelterRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
+    public GemstoneCutterRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
         super(inputItems, inputAmounts, output, id);
     }
 
@@ -29,33 +29,41 @@ public class AlloySmelterRecipe extends MachineRecipe {
         return Type.INSTANCE;
     }
 
-    public static class Type implements RecipeType<AlloySmelterRecipe> {
+    public static class Type implements RecipeType<GemstoneCutterRecipe> {
         public static final Type INSTANCE = new Type();
     }
 
-    public static class Serializer implements RecipeSerializer<AlloySmelterRecipe> {
+    public static class Serializer implements RecipeSerializer<GemstoneCutterRecipe> {
         public static final Serializer INSTANCE = new Serializer();
 
         @Override
-        public AlloySmelterRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        public GemstoneCutterRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
             NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
             NonNullList<Integer> inputAmounts = NonNullList.withSize(ingredients.size(), 1);
 
+            if (inputs.size() > 1) {
+                throw new IllegalStateException("GemstoneCutterRecipe must not have more than 1 input item.");
+            }
+
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
                 inputAmounts.set(i, GsonHelper.getAsInt((JsonObject) ingredients.get(i), "count"));
             }
 
-            return new AlloySmelterRecipe(inputs, inputAmounts, output, pRecipeId);
+            return new GemstoneCutterRecipe(inputs, inputAmounts, output, pRecipeId);
         }
 
         @Override
-        public @Nullable AlloySmelterRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public @Nullable GemstoneCutterRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
             NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
             NonNullList<Integer> inputAmounts = NonNullList.withSize(pBuffer.readInt(), 1);
+
+            if (inputs.size() > 1) {
+                throw new IllegalStateException("GemstoneCutterRecipe must not have more than 1 input item.");
+            }
 
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromNetwork(pBuffer));
@@ -63,11 +71,11 @@ public class AlloySmelterRecipe extends MachineRecipe {
             }
 
             ItemStack output = pBuffer.readItem();
-            return new AlloySmelterRecipe(inputs, inputAmounts, output, pRecipeId);
+            return new GemstoneCutterRecipe(inputs, inputAmounts, output, pRecipeId);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, AlloySmelterRecipe pRecipe) {
+        public void toNetwork(FriendlyByteBuf pBuffer, GemstoneCutterRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
             pBuffer.writeInt(pRecipe.inputAmounts.size());
 

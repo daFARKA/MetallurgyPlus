@@ -25,6 +25,9 @@ public class ModRecipes {
     public static final RegistryObject<RecipeSerializer<ExtractorRecipe>> EXTRACTOR_SERIALIZER =
         SERIALIZERS.register("extractor", () -> ExtractorRecipe.Serializer.INSTANCE);
 
+    public static final RegistryObject<RecipeSerializer<GemstoneCutterRecipe>> GEMSTONE_CUTTER_SERIALIZER =
+        SERIALIZERS.register("gemstone_cutter", () -> GemstoneCutterRecipe.Serializer.INSTANCE);
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

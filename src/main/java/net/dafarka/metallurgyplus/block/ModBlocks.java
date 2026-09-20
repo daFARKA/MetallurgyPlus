@@ -64,6 +64,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> EXTRACTOR = registerBlock("extractor",
         () -> new ExtractorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
+    public static final RegistryObject<Block> GEMSTONE_CUTTER = registerBlock("gemstone_cutter",
+        () -> new GemstoneCutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
+
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",
         () -> new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 

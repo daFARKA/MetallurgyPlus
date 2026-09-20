@@ -35,6 +35,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("grinder", ModBlocks.GRINDER.get());
         horizontalFacingBlock("press", ModBlocks.PRESS.get());
         horizontalFacingBlock("extractor", ModBlocks.EXTRACTOR.get());
+        horizontalFacingBlock("gemstone_cutter", ModBlocks.GEMSTONE_CUTTER.get());
         horizontalFacingBlock("quarry", ModBlocks.QUARRY.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         sackStationBlock();

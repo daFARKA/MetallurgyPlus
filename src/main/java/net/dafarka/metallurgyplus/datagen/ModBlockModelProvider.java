@@ -68,6 +68,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("grinder", "grinder", "_", "front", "side", "top", "top", null);
         registerOrientable("press", "press", "_", "front", "side", "top", "top", null);
         registerOrientable("extractor", "extractor", "_", "front", "side", "top", "top", null);
+        registerOrientable("gemstone_cutter", "gemstone_cutter", "_", "front", "side", "top", "top", null);
         registerOrientable("quarry", "quarry", "_", "front", "side", "top", "top", null);
         registerOrientable("power_source", "power_source", "", "", "", "", "", null);
         registerSackStation();

@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:malachite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:malachite_gem",
+    "count": 1
+  }
+}

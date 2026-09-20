@@ -19,8 +19,7 @@ public class PowerSourceBlockEntity extends BlockEntity {
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
 
-    public PowerSourceBlockEntity(BlockPos pPos,
-                                  BlockState pBlockState) {
+    public PowerSourceBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.POWER_SOURCE_BE.get(), pPos, pBlockState);
     }
 

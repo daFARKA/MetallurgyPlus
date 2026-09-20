@@ -101,6 +101,7 @@ public class MetallurgyPlus {
             MenuScreens.register(ModMenuTypes.GRINDER_MENU.get(), GrinderScreen::new);
             MenuScreens.register(ModMenuTypes.PRESS_MENU.get(), PressScreen::new);
             MenuScreens.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
+            MenuScreens.register(ModMenuTypes.GEMSTONE_CUTTER_MENU.get(), GemstoneCutterScreen::new);
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);

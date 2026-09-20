@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.screen.menu;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.entity.PressBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.GemstoneCutterBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,25 +12,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class PressMenu extends AbstractContainerMenu {
+public class GemstoneCutterMenu extends AbstractContainerMenu {
     public static final int[] INPUT_POSITION = {40, 35};
-    public static final int[][] OUTPUT_POSITIONS = {{98, 25}, {116, 25}, {98, 43}, {116, 43}};
-    public static final int PRESS_SLOT_COUNT = 1 + OUTPUT_POSITIONS.length;
+    public static final int[][] OUTPUT_POSITIONS = {{98, 17}, {116, 17}, {134, 17}, {98, 35}, {116, 35}, {134, 35}, {98, 53}, {116, 53}, {134, 53}};
+    public static final int GEMSTONE_CUTTER_SLOT_COUNT = 1 + OUTPUT_POSITIONS.length;
 
     public UtilityMenu utilityMenu;
 
-    public final PressBlockEntity blockEntity;
+    public final GemstoneCutterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public PressMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
+    public GemstoneCutterMenu(int pContainerId, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(friendlyByteBuf.readBlockPos()), new SimpleContainerData(19));
     }
 
-    public PressMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.PRESS_MENU.get(), pContainerId);
-        checkContainerSize(inv, PRESS_SLOT_COUNT);
-        blockEntity = ((PressBlockEntity) entity);
+    public GemstoneCutterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.GEMSTONE_CUTTER_MENU.get(), pContainerId);
+        checkContainerSize(inv, GEMSTONE_CUTTER_SLOT_COUNT);
+        blockEntity = ((GemstoneCutterBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
         this.utilityMenu = new UtilityMenu(this.data);
@@ -69,7 +69,7 @@ public class PressMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = PRESS_SLOT_COUNT;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = GEMSTONE_CUTTER_SLOT_COUNT;  // must be the number of slots you have!
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
@@ -106,7 +106,7 @@ public class PressMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.PRESS.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.GEMSTONE_CUTTER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

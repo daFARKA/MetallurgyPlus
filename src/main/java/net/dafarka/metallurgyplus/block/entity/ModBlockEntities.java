@@ -41,6 +41,10 @@ public class ModBlockEntities {
         BLOCK_ENTITIES.register("extractor_be", () -> BlockEntityType.Builder.of(ExtractorBlockEntity::new,
             ModBlocks.EXTRACTOR.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<GemstoneCutterBlockEntity>> GEMSTONE_CUTTER_BE =
+        BLOCK_ENTITIES.register("gemstone_cutter_be", () -> BlockEntityType.Builder.of(GemstoneCutterBlockEntity::new,
+            ModBlocks.GEMSTONE_CUTTER.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY_BE =
         BLOCK_ENTITIES.register("quarry_be", () -> BlockEntityType.Builder.of(QuarryBlockEntity::new,
             ModBlocks.QUARRY.get()).build(null));

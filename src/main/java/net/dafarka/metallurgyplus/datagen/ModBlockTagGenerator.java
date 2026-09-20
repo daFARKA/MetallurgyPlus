@@ -42,6 +42,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GRINDER.get(),
                 ModBlocks.PRESS.get(),
                 ModBlocks.EXTRACTOR.get(),
+                ModBlocks.GEMSTONE_CUTTER.get(),
                 ModBlocks.QUARRY.get(),
                 ModBlocks.POWER_SOURCE.get(),
                 ModBlocks.SACK_STATION.get());

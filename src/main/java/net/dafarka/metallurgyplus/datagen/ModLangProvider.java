@@ -32,6 +32,7 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.grinder", "Grinder");
         add("block.metallurgyplus.press", "Metal Press");
         add("block.metallurgyplus.extractor", "Extractor");
+        add("block.metallurgyplus.gemstone_cutter", "Gemstone Cutter");
         add("block.metallurgyplus.quarry", "Quarry");
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.sack_station", "Sack Docking Station");

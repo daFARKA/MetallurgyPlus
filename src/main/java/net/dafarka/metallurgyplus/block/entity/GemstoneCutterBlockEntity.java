@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.recipe.OreProcessingUnitRecipe;
-import net.dafarka.metallurgyplus.screen.menu.OreProcessingUnitMenu;
+import net.dafarka.metallurgyplus.recipe.GemstoneCutterRecipe;
+import net.dafarka.metallurgyplus.screen.menu.GemstoneCutterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -16,35 +16,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.Random;
 
-public class OreProcessingUnitBlockEntity extends MachineBlockEntity {
+public class GemstoneCutterBlockEntity extends MachineBlockEntity {
     private final int INPUT_SLOT_COUNT = 1;
     private int outputSlot;
 
-    private final Random random;
 
-
-    public OreProcessingUnitBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ORE_PROCESSING_BE.get(), pPos, pBlockState, 1, OreProcessingUnitMenu.OUTPUT_POSITIONS.length);
-
-        random = new Random();
+    public GemstoneCutterBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(ModBlockEntities.GEMSTONE_CUTTER_BE.get(), pPos, pBlockState, 1, 9);
     }
+
 
     @NotNull
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.metallurgyplus.ore_processing_unit");
+        return Component.translatable("block.metallurgyplus.gemstone_cutter");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new OreProcessingUnitMenu(pContainerId, pPlayerInventory, this, this.data);
+        return new GemstoneCutterMenu(pContainerId, pPlayerInventory, this, this.data);
     }
 
     protected boolean hasRecipe() {
-        Optional<OreProcessingUnitRecipe> recipe = getCurrentRecipe();
+        Optional<GemstoneCutterRecipe> recipe = getCurrentRecipe();
 
         if (recipe.isEmpty()) {
             return false;
@@ -60,31 +56,22 @@ public class OreProcessingUnitBlockEntity extends MachineBlockEntity {
         }
 
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
-        NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
-        if (extraOutputs != null) {
-            for (ItemStack currentItemStack : extraOutputs) {
-                outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);
-                if (outputSlot == -1) {
-                    return false;
-                }
-            }
-        }
         outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), 1);
 
         return outputSlot != -1;
     }
 
-    private Optional<OreProcessingUnitRecipe> getCurrentRecipe() {
+    private Optional<GemstoneCutterRecipe> getCurrentRecipe() {
         SimpleContainer inventory = new SimpleContainer(INPUT_SLOT_COUNT);
         for (int i = 0; i < INPUT_SLOT_COUNT; i++) {
             inventory.setItem(i, this.allHandler.getStackInSlot(i));
         }
 
-        return this.level.getRecipeManager().getRecipeFor(OreProcessingUnitRecipe.Type.INSTANCE, inventory, level);
+        return this.level.getRecipeManager().getRecipeFor(GemstoneCutterRecipe.Type.INSTANCE, inventory, level);
     }
 
     protected void craftItem() {
-        Optional<OreProcessingUnitRecipe> recipe = getCurrentRecipe();
+        Optional<GemstoneCutterRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
 
         NonNullList<Ingredient> ingredients = recipe.get().getIngredients();
@@ -96,24 +83,5 @@ public class OreProcessingUnitBlockEntity extends MachineBlockEntity {
 
         this.allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(),
             this.allHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
-
-        NonNullList<ItemStack> extraOutputs = recipe.get().getExtraOutputs();
-        NonNullList<Double> extraOutputChances = recipe.get().getExtraOutputChances();
-        if (extraOutputs != null) {
-            int i = 0;
-            for (ItemStack currentItemStack : extraOutputs) {
-                boolean success = true;
-                double chance = extraOutputChances.get(i);
-                if (chance < 1.0) {
-                    success = random.nextDouble() < chance;
-                }
-                if (success) {
-                    outputSlot = utilBlockEntity.getFirstAvailableSlot(currentItemStack.getItem(), currentItemStack.getCount(), 1);
-                    this.allHandler.setStackInSlot(outputSlot, new ItemStack(currentItemStack.getItem(),
-                        this.allHandler.getStackInSlot(outputSlot).getCount() + currentItemStack.getCount()));
-                }
-                i++;
-            }
-        }
     }
 }
