@@ -58,7 +58,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.ORE_PROCESSING_UNIT_TYPE,
             ORE_PROCESSING_UNIT_INPUT_POSITION,
-            ORE_PROCESSING_UNIT_OUTPUT_POSITIONS
+            ORE_PROCESSING_UNIT_OUTPUT_POSITIONS,
+            new int[]{31, 43},
+            new int[]{8, 60}
         ));
 
     public static final int[][] ALLOY_SMELTER_INPUT_POSITIONS = {{8, 26}, {26, 26}, {8, 44}, {26, 44}, {50, 26}, {68, 26}, {50, 44}, {68, 44}};
@@ -68,7 +70,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.ALLOY_SMELTER_TYPE,
             ALLOY_SMELTER_INPUT_POSITIONS,
-            ALLOY_SMELTER_OUTPUT_POSITIONS
+            ALLOY_SMELTER_OUTPUT_POSITIONS,
+            new int[]{87, 39},
+            new int[]{8, 65}
         ));
 
     public static final int[][] GRINDER_INPUT_POSITIONS = {{8, 21}, {26, 21}, {8, 39}, {26, 39}};
@@ -79,7 +83,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.GRINDER_TYPE,
             GRINDER_INPUT_POSITIONS,
-            GRINDER_OUTPUT_POSITIONS
+            GRINDER_OUTPUT_POSITIONS,
+            new int[]{48, 34},
+            new int[]{8, 60}
         ));
 
     public static final int[][] PRESS_INPUT_POSITION = {{40, 35}};
@@ -89,7 +95,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.PRESS_TYPE,
             PRESS_INPUT_POSITION,
-            PRESS_OUTPUT_POSITIONS
+            PRESS_OUTPUT_POSITIONS,
+            new int[]{64, 38},
+            new int[]{8, 60}
         ));
 
     public static final int[][] EXTRACTOR_INPUT_POSITIONS = {{22, 21}, {40, 21}, {22, 39}, {40, 39}};
@@ -99,7 +107,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.EXTRACTOR_TYPE,
             EXTRACTOR_INPUT_POSITIONS,
-            EXTRACTOR_OUTPUT_POSITIONS
+            EXTRACTOR_OUTPUT_POSITIONS,
+            new int[]{64, 34},
+            new int[]{8, 60}
         ));
 
     public static final int[][] GEMSTONE_CUTTER_INPUT_POSITION = {{40, 35}};
@@ -109,7 +119,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.GEMSTONE_CUTTER_TYPE,
             GEMSTONE_CUTTER_INPUT_POSITION,
-            GEMSTONE_CUTTER_OUTPUT_POSITIONS
+            GEMSTONE_CUTTER_OUTPUT_POSITIONS,
+            new int[]{64, 38},
+            new int[]{8, 60}
         ));
 
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",

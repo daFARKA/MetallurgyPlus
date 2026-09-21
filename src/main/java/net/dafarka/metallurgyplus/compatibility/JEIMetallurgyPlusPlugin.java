@@ -11,7 +11,6 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
 import net.dafarka.metallurgyplus.recipe.ModRecipeTypes;
-import net.dafarka.metallurgyplus.screen.MachineScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -105,15 +104,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        int width = 30;
-        int height = 20;
 
-        registration.addRecipeClickArea(MachineScreen.class, 87, 39, width, height, alloySmelterCategory.getRecipeType());
-        registration.addRecipeClickArea(MachineScreen.class, 32, 43, width, height, oreProcessingUnitCategory.getRecipeType());
-        registration.addRecipeClickArea(MachineScreen.class, 48, 34, width, height, grinderCategory.getRecipeType());
-        registration.addRecipeClickArea(MachineScreen.class, 64, 38, width, height, pressCategory.getRecipeType());
-        registration.addRecipeClickArea(MachineScreen.class, 64, 34, width, height, extractorCategory.getRecipeType());
-        registration.addRecipeClickArea(MachineScreen.class, 64, 38, width, height, gemstoneCutterCategory.getRecipeType());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.dafarka.metallurgyplus.block.custom.MachineBlock;
 import net.dafarka.metallurgyplus.screen.menu.MachineMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,10 +14,22 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
     private final ResourceLocation texture;
 
-    public MachineScreen(MachineMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    private final int[] progressPosition;
+    private final int[] energyPosition;
+
+    public MachineScreen(
+        MachineMenu pMenu,
+        Inventory pPlayerInventory,
+        Component pTitle
+    ) {
         super(pMenu, pPlayerInventory, pTitle);
 
         this.texture = pMenu.getTexture();
+
+        MachineBlock machineBlock = menu.getMachineBlock();
+
+        this.progressPosition = machineBlock.getProgressPosition();
+        this.energyPosition = machineBlock.getEnergyPosition();
     }
 
     @Override
@@ -42,12 +55,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting()) {
-            guiGraphics.blit(texture, x + 87, y + 39, 176, 0, menu.utilityMenu.getScaledProgress(), 8);
+            guiGraphics.blit(texture, x + progressPosition[0], y + progressPosition[1], 176, 0, menu.utilityMenu.getScaledProgress(), 8);
         }
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(texture, x + 8, y + 65, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
+        guiGraphics.blit(texture, x + energyPosition[0], y + energyPosition[1], 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
     }
 
     @Override

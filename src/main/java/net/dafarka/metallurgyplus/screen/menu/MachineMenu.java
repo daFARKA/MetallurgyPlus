@@ -78,7 +78,7 @@ public class MachineMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    private MachineBlock getMachineBlock() {
+    public MachineBlock getMachineBlock() {
         return (MachineBlock) blockEntity.getBlockState().getBlock();
     }
 
