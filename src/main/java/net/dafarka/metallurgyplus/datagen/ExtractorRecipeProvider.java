@@ -1,10 +1,9 @@
 package net.dafarka.metallurgyplus.datagen;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.datagen.recipe.MachineFinishedRecipeWithExtraOutputs;
 import net.dafarka.metallurgyplus.item.ModItems;
-import net.dafarka.metallurgyplus.recipe.ExtractorRecipe;
+import net.dafarka.metallurgyplus.recipe.ModRecipeSerializers;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.PackOutput;
@@ -14,9 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,7 @@ public class ExtractorRecipeProvider extends RecipeProvider {
         extraOutputs = NonNullList.withSize(1, ItemStack.EMPTY);
         extraChances = NonNullList.withSize(extraOutputs.size(), 1f);
         extraOutputs.set(0, new ItemStack(Utility.getItem("redstone"), 1));
-        extraChances.set(0, 0.25f));
+        extraChances.set(0, 0.25f);
         addExtractorFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, "test_extractor"));*/
 
         List<String> oldMaterials = new ArrayList<>();
@@ -93,82 +90,9 @@ public class ExtractorRecipeProvider extends RecipeProvider {
     }
 
     private void addExtractorFinishedRecipe(Consumer<FinishedRecipe> pWriter, NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts,
-                                       ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
-        pWriter.accept(new ExtractorFinishedRecipe(inputItems, inputAmounts, output, extraOutputs, extraChances, id));
-    }
-
-    private static class ExtractorFinishedRecipe implements FinishedRecipe {
-        private final NonNullList<Item> inputItems;
-        private final NonNullList<Integer> inputAmounts;
-        private final ItemStack output;
-        private final NonNullList<ItemStack> extraOutputs;
-        private final NonNullList<Float> extraChances;
-        private final ResourceLocation id;
-
-        private ExtractorFinishedRecipe(NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
-            this.inputItems = inputItems;
-            this.inputAmounts = inputAmounts;
-            this.output = output;
-            this.extraOutputs = extraOutputs;
-            this.extraChances = extraChances;
-            this.id = id;
-        }
-
-        @Override
-        public void serializeRecipeData(JsonObject pJson) {
-            pJson.addProperty("type","metallurgyplus:extractor");
-
-            JsonArray ingredientsArray = new JsonArray();
-            int i = 0;
-            for (Item ingredient : inputItems) {
-                JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", Utility.formatResourceName(ingredient.getDescriptionId()));
-                ingredientObj.addProperty("count", inputAmounts.get(i));
-                ingredientsArray.add(ingredientObj);
-                i++;
-            }
-            pJson.add("ingredients", ingredientsArray);
-
-            JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", Utility.formatResourceName(output.getDescriptionId()));
-            outputObj.addProperty("count", output.getCount());
-            pJson.add("output", outputObj);
-
-            JsonArray extraOutputArray = new JsonArray();
-            i = 0;
-            if (extraOutputs != null) {
-                for (ItemStack extraOutput : extraOutputs) {
-                    JsonObject ingredientObj = new JsonObject();
-                    ingredientObj.addProperty("item", Utility.formatResourceName(extraOutput.getItem().getDescriptionId()));
-                    ingredientObj.addProperty("count", extraOutput.getCount());
-                    ingredientObj.addProperty("chance", extraChances.get(i));
-                    extraOutputArray.add(ingredientObj);
-                    i++;
-                }
-                pJson.add("extra_outputs", extraOutputArray);
-            }
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return id;
-        }
-
-        @Override
-        public RecipeSerializer<?> getType() {
-            return ExtractorRecipe.Serializer.INSTANCE;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
+                                            ItemStack output, NonNullList<ItemStack> extraOutputs, NonNullList<Float> extraChances, ResourceLocation id) {
+        pWriter.accept(new MachineFinishedRecipeWithExtraOutputs(
+            inputItems, inputAmounts, output, extraOutputs, extraChances, id, "metallurgyplus:extractor", ModRecipeSerializers.EXTRACTOR_SERIALIZER.get()
+        ));
     }
 }

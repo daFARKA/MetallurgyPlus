@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.custom;
 
 import net.dafarka.metallurgyplus.block.entity.MachineBlockEntity;
+import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -24,26 +26,60 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MachineBlock<T extends MachineBlockEntity> extends BaseEntityBlock {
+public class MachineBlock extends BaseEntityBlock {
 
-    protected final RegistryObject<BlockEntityType<T>> blockEntityType;
+    private final RecipeType<? extends MachineRecipe> recipeType;
+    protected final int inputSlots;
+    protected final int outputSlots;
+    protected final int[][] inputPositions;
+    protected final int[][] outputPositions;
 
-    public static final VoxelShape SHAPE =
-        Block.box(0, 0, 0, 16, 16, 16);
-
-    public static final DirectionProperty FACING =
-        BlockStateProperties.HORIZONTAL_FACING;
+    public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 
-    protected MachineBlock(Properties properties, RegistryObject<BlockEntityType<T>> blockEntityType) {
+    public MachineBlock(
+        Properties properties,
+        RecipeType<? extends MachineRecipe> recipeType,
+        int[][] inputPositions,
+        int[][] outputPositions
+    ) {
         super(properties);
 
-        this.blockEntityType = blockEntityType;
+        this.recipeType = recipeType;
+        this.inputSlots = inputPositions.length;
+        this.outputSlots = outputPositions.length;
+        this.inputPositions = inputPositions;
+        this.outputPositions = outputPositions;
 
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+    }
+
+    public RecipeType<? extends MachineRecipe> getRecipeType() {
+        return recipeType;
+    }
+
+    public int getInputSlots() {
+        return inputSlots;
+    }
+
+    public int getOutputSlots() {
+        return outputSlots;
+    }
+
+    public int[][] getInputPositions() {
+        return inputPositions;
+    }
+
+    public int[][] getOutputPositions() {
+        return outputPositions;
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new MachineBlockEntity(pos, state);
     }
 
     @Override
@@ -86,16 +122,8 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BaseEnt
 
     @Nullable
     @Override
-    public <BE extends BlockEntity> BlockEntityTicker<BE> getTicker(
-        Level level,
-        BlockState state,
-        BlockEntityType<BE> type
-    ) {
+    public <BE extends BlockEntity> BlockEntityTicker<BE> getTicker(Level level, BlockState state, BlockEntityType<BE> type) {
         if (level.isClientSide()) {
-            return null;
-        }
-
-        if (type != blockEntityType.get()) {
             return null;
         }
 
@@ -104,9 +132,7 @@ public abstract class MachineBlock<T extends MachineBlockEntity> extends BaseEnt
     }
 
     @Override
-    protected void createBlockStateDefinition(
-        StateDefinition.Builder<Block, BlockState> builder
-    ) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }

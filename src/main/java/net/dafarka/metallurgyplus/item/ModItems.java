@@ -167,7 +167,7 @@ public class ModItems {
         registerOre("bismuthinite", 0xc7c4b1, OreRarity.RARE);  // Bismuth, Sulphur
         registerOre("chromite", 0x484c59, OreRarity.COMMON);  // Chromium, Iron
         registerOre("cobaltite", 0x091336, OreRarity.RARE); // Cobalt, Sulphur
-        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper
+        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper, [Malachite]
         registerOre("hematite", 0x75614f, OreRarity.COMMON);  // Iron
         registerOre("magnetite", 0x212f36, OreRarity.COMMON); // Iron
         registerOre("limonite", 0xbd6500, OreRarity.COMMON);  // Iron
@@ -189,7 +189,7 @@ public class ModItems {
         registerOre("scheelite", 0xdb8348, OreRarity.RARE); // Tungsten, Calcium
         registerOre("patronite", 0x2c2e2a, OreRarity.VERY_RARE); // Vanadium, Sulphur
         registerOre("sphalerite", 0xcfb470, OreRarity.COMMON); // Zinc, Iron, Sulphur
-        registerOre("zircon", 0x705a43, OreRarity.RARE); // Zirconium, Silicon, Hafnium
+        registerOre("zircon", 0x705a43, OreRarity.RARE); // Zirconium, Silicon, Hafnium, [Zircon]
         registerOre("gallite", 0x7e8761, OreRarity.VERY_RARE); // Gallium, Copper, Sulphur
         registerOre("baryte", 0x8fb5c9, OreRarity.UNCOMMON); // Barium, Sulphur
         registerOre("greenockite", 0xd9cc1e, OreRarity.VERY_RARE); // Cadmium, Sulphur

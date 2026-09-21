@@ -10,8 +10,11 @@ import net.dafarka.metallurgyplus.block.entity.renderer.SackStationBlockEntityRe
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.network.ModMessages;
-import net.dafarka.metallurgyplus.recipe.ModRecipes;
-import net.dafarka.metallurgyplus.screen.*;
+import net.dafarka.metallurgyplus.recipe.ModRecipeSerializers;
+import net.dafarka.metallurgyplus.screen.BatteryScreen;
+import net.dafarka.metallurgyplus.screen.MachineScreen;
+import net.dafarka.metallurgyplus.screen.QuarryScreen;
+import net.dafarka.metallurgyplus.screen.SackScreen;
 import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
 import net.dafarka.metallurgyplus.util.color.*;
 import net.dafarka.metallurgyplus.worldgen.placement.ModPlacementModifiers;
@@ -56,7 +59,7 @@ public class MetallurgyPlus {
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
-        ModRecipes.register(modEventBus);
+        ModRecipeSerializers.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -96,12 +99,7 @@ public class MetallurgyPlus {
             LOGGER.info("Hello from MetallurgyPlus!");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            MenuScreens.register(ModMenuTypes.ORE_PROCESSING_MENU.get(), OreProcessingUnitScreen::new);
-            MenuScreens.register(ModMenuTypes.ALLOY_SMELTER_MENU.get(), AlloySmelterScreen::new);
-            MenuScreens.register(ModMenuTypes.GRINDER_MENU.get(), GrinderScreen::new);
-            MenuScreens.register(ModMenuTypes.PRESS_MENU.get(), PressScreen::new);
-            MenuScreens.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
-            MenuScreens.register(ModMenuTypes.GEMSTONE_CUTTER_MENU.get(), GemstoneCutterScreen::new);
+            MenuScreens.register(ModMenuTypes.MACHINE_MENU.get(), MachineScreen::new);
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);

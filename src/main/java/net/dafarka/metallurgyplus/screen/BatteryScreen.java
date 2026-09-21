@@ -2,7 +2,6 @@ package net.dafarka.metallurgyplus.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.screen.menu.AlloySmelterMenu;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,7 +16,7 @@ public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
         new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/battery_gui.png");
 
     public BatteryScreen(BatteryMenu pMenu, Inventory pPlayerInventory,
-                              Component pTitle) {
+                         Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
@@ -39,7 +38,7 @@ public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
         pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
         renderEnergyBar(pGuiGraphics, x, y);
-        renderEnergyText(pGuiGraphics, x ,y);
+        renderEnergyText(pGuiGraphics, x, y);
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {

@@ -21,29 +21,19 @@ public class ModBlockEntities {
     public static final Map<Integer, RegistryObject<BlockEntityType<SolarPanelBlockEntity>>> SOLAR_BLOCK_ENTITIES = new HashMap<>();
     public static final Map<Integer, RegistryObject<BlockEntityType<BatteryBlockEntity>>> BATTERY_BLOCK_ENTITIES = new HashMap<>();
 
-    public static final RegistryObject<BlockEntityType<OreProcessingUnitBlockEntity>> ORE_PROCESSING_BE =
-        BLOCK_ENTITIES.register("ore_processing_be", () -> BlockEntityType.Builder.of(OreProcessingUnitBlockEntity::new,
-            ModBlocks.ORE_PROCESSING_UNIT.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<AlloySmelterBlockEntity>> ALLOY_SMELTER_BE =
-        BLOCK_ENTITIES.register("alloy_smelter_be", () -> BlockEntityType.Builder.of(AlloySmelterBlockEntity::new,
-            ModBlocks.ALLOY_SMELTER.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<GrinderBlockEntity>> GRINDER_BE =
-        BLOCK_ENTITIES.register("grinder_be", () -> BlockEntityType.Builder.of(GrinderBlockEntity::new,
-            ModBlocks.GRINDER.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<PressBlockEntity>> PRESS_BE =
-        BLOCK_ENTITIES.register("press_be", () -> BlockEntityType.Builder.of(PressBlockEntity::new,
-            ModBlocks.PRESS.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<ExtractorBlockEntity>> ETRACTOR_BE =
-        BLOCK_ENTITIES.register("extractor_be", () -> BlockEntityType.Builder.of(ExtractorBlockEntity::new,
-            ModBlocks.EXTRACTOR.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<GemstoneCutterBlockEntity>> GEMSTONE_CUTTER_BE =
-        BLOCK_ENTITIES.register("gemstone_cutter_be", () -> BlockEntityType.Builder.of(GemstoneCutterBlockEntity::new,
-            ModBlocks.GEMSTONE_CUTTER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MachineBlockEntity>> MACHINE_BE =
+        BLOCK_ENTITIES.register(
+            "machine_be",
+            () -> BlockEntityType.Builder.of(
+                MachineBlockEntity::new,
+                ModBlocks.ORE_PROCESSING_UNIT.get(),
+                ModBlocks.ALLOY_SMELTER.get(),
+                ModBlocks.GRINDER.get(),
+                ModBlocks.PRESS.get(),
+                ModBlocks.EXTRACTOR.get(),
+                ModBlocks.GEMSTONE_CUTTER.get()
+            ).build(null)
+        );
 
     public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY_BE =
         BLOCK_ENTITIES.register("quarry_be", () -> BlockEntityType.Builder.of(QuarryBlockEntity::new,

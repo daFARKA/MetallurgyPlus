@@ -1,11 +1,8 @@
 package net.dafarka.metallurgyplus.datagen;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.datagen.recipe.MachineFinishedRecipe;
 import net.dafarka.metallurgyplus.item.ModItems;
-import net.dafarka.metallurgyplus.recipe.AlloySmelterRecipe;
-import net.dafarka.metallurgyplus.util.Utility;
+import net.dafarka.metallurgyplus.recipe.ModRecipeSerializers;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -13,9 +10,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,65 +63,8 @@ public class AlloySmelterRecipeProvider extends RecipeProvider {
 
     private void addAlloySmelterRecipe(Consumer<FinishedRecipe> pWriter, NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts,
                                        ItemStack output, ResourceLocation id) {
-        pWriter.accept(new AlloySmelterFinishedRecipe(inputItems, inputAmounts, output, id));
-    }
-
-    private static class AlloySmelterFinishedRecipe implements FinishedRecipe {
-        private final NonNullList<Item> inputItems;
-        private final NonNullList<Integer> inputAmounts;
-        private final ItemStack output;
-        private final ResourceLocation id;
-
-        private AlloySmelterFinishedRecipe(NonNullList<Item> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
-            this.inputItems = inputItems;
-            this.inputAmounts = inputAmounts;
-            this.output = output;
-            this.id = id;
-        }
-
-        @Override
-        public void serializeRecipeData(JsonObject pJson) {
-            pJson.addProperty("type","metallurgyplus:alloy_smelter");
-
-            // Serialize ingredients array
-            JsonArray ingredientsArray = new JsonArray();
-            int i = 0;
-            for (Item ingredient : inputItems) {
-                JsonObject ingredientObj = new JsonObject();
-                ingredientObj.addProperty("item", Utility.formatResourceName(ingredient.getDescriptionId()));
-                ingredientObj.addProperty("count", inputAmounts.get(i));
-                ingredientsArray.add(ingredientObj);
-                i++;
-            }
-            pJson.add("ingredients", ingredientsArray);
-
-            // Serialize output
-            JsonObject outputObj = new JsonObject();
-            outputObj.addProperty("item", Utility.formatResourceName(output.getDescriptionId()));
-            outputObj.addProperty("count", output.getCount());
-            pJson.add("output", outputObj);
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return id;
-        }
-
-        @Override
-        public RecipeSerializer<?> getType() {
-            return AlloySmelterRecipe.Serializer.INSTANCE;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
+        pWriter.accept(new MachineFinishedRecipe(
+            inputItems, inputAmounts, output, id, "metallurgyplus:alloy_smelter", ModRecipeSerializers.ALLOY_SMELTER_SERIALIZER.get()
+        ));
     }
 }

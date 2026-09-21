@@ -14,23 +14,8 @@ public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
         DeferredRegister.create(ForgeRegistries.MENU_TYPES, MetallurgyPlus.MODID);
 
-    public static final RegistryObject<MenuType<OreProcessingUnitMenu>> ORE_PROCESSING_MENU =
-        registerMenuType("ore_processing_menu", OreProcessingUnitMenu::new);
-
-    public static final RegistryObject<MenuType<AlloySmelterMenu>> ALLOY_SMELTER_MENU =
-        registerMenuType("alloy_smelter_menu", AlloySmelterMenu::new);
-
-    public static final RegistryObject<MenuType<GrinderMenu>> GRINDER_MENU =
-        registerMenuType("grinder_menu", GrinderMenu::new);
-
-    public static final RegistryObject<MenuType<PressMenu>> PRESS_MENU =
-        registerMenuType("press_menu", PressMenu::new);
-
-    public static final RegistryObject<MenuType<ExtractorMenu>> EXTRACTOR_MENU =
-        registerMenuType("extractor_menu", ExtractorMenu::new);
-
-    public static final RegistryObject<MenuType<GemstoneCutterMenu>> GEMSTONE_CUTTER_MENU =
-        registerMenuType("gemstone_cutter_menu", GemstoneCutterMenu::new);
+    public static final RegistryObject<MenuType<MachineMenu>> MACHINE_MENU =
+        registerMenuType("machine_menu", MachineMenu::new);
 
     public static final RegistryObject<MenuType<QuarryMenu>> QUARRY_MENU =
         registerMenuType("quarry_menu", QuarryMenu::new);

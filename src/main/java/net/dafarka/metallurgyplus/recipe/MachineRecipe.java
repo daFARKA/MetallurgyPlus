@@ -7,16 +7,23 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-public abstract class MachineRecipe implements Recipe<SimpleContainer> {
+public class MachineRecipe implements Recipe<SimpleContainer> {
 
-    protected final NonNullList<Ingredient> inputItems;
-    protected final NonNullList<Integer> inputAmounts;
-    protected final ItemStack output;
-    protected final ResourceLocation id;
+    public final RecipeType<? extends MachineRecipe> type;
+    public final RecipeSerializer<?> serializer;
 
-    protected MachineRecipe(NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
+    public final NonNullList<Ingredient> inputItems;
+    public final NonNullList<Integer> inputAmounts;
+    public final ItemStack output;
+    public final ResourceLocation id;
+
+    public MachineRecipe(RecipeType<? extends MachineRecipe> type, RecipeSerializer<?> serializer, NonNullList<Ingredient> inputItems, NonNullList<Integer> inputAmounts, ItemStack output, ResourceLocation id) {
+        this.type = type;
+        this.serializer = serializer;
         this.inputItems = inputItems;
         this.inputAmounts = inputAmounts;
         this.output = output;
@@ -68,7 +75,7 @@ public abstract class MachineRecipe implements Recipe<SimpleContainer> {
     }
 
     public int getInputAmountForIngredient(Ingredient ingredient) {
-        int index = UtilRecipe.findIngredientIndex(
+        int index = findIngredientIndex(
             inputItems,
             ingredient
         );
@@ -83,5 +90,24 @@ public abstract class MachineRecipe implements Recipe<SimpleContainer> {
     @Override
     public ResourceLocation getId() {
         return id;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return serializer;
+    }
+
+    @Override
+    public RecipeType<?> getType() {
+        return type;
+    }
+
+    private static int findIngredientIndex(NonNullList<Ingredient> ingredients, Ingredient target) {
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (ingredients.get(i).test(target.getItems()[0])) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

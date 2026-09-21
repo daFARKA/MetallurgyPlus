@@ -1,8 +1,7 @@
 package net.dafarka.metallurgyplus.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.screen.menu.GemstoneCutterMenu;
+import net.dafarka.metallurgyplus.screen.menu.MachineMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -10,12 +9,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GemstoneCutterScreen extends AbstractContainerScreen<GemstoneCutterMenu> {
-    private static final ResourceLocation TEXTURE =
-        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/gemstone_cutter_gui.png");
+public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
-    public GemstoneCutterScreen(GemstoneCutterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    private final ResourceLocation texture;
+
+    public MachineScreen(MachineMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
+
+        this.texture = pMenu.getTexture();
     }
 
     @Override
@@ -29,11 +30,11 @@ public class GemstoneCutterScreen extends AbstractContainerScreen<GemstoneCutter
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderTexture(0, texture);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        pGuiGraphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(pGuiGraphics, x, y);
         renderEnergyBar(pGuiGraphics, x, y);
@@ -41,12 +42,12 @@ public class GemstoneCutterScreen extends AbstractContainerScreen<GemstoneCutter
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 64, y + 38, 176, 0, menu.utilityMenu.getScaledProgress(), 8);
+            guiGraphics.blit(texture, x + 87, y + 39, 176, 0, menu.utilityMenu.getScaledProgress(), 8);
         }
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(TEXTURE, x + 8, y + 60, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
+        guiGraphics.blit(texture, x + 8, y + 65, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
     }
 
     @Override
