@@ -15,7 +15,6 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     private final ResourceLocation texture;
 
     private final int[] progressPosition;
-    private final int[] energyPosition;
 
     public MachineScreen(
         MachineMenu pMenu,
@@ -29,7 +28,6 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         MachineBlock machineBlock = menu.getMachineBlock();
 
         this.progressPosition = machineBlock.getProgressPosition();
-        this.energyPosition = machineBlock.getEnergyPosition();
     }
 
     @Override
@@ -60,7 +58,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(texture, x + energyPosition[0], y + energyPosition[1], 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
+        guiGraphics.blit(texture, x + 8, y + 60, 176, 16, menu.utilityMenu.getScaledEnergy(), 13);
     }
 
     @Override

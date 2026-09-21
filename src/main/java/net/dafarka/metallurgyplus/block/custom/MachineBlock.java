@@ -37,7 +37,6 @@ public class MachineBlock extends BaseEntityBlock {
     protected final int[][] outputPositions;
 
     protected final int[] progressPosition;
-    protected final int[] energyPosition;
 
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -48,8 +47,7 @@ public class MachineBlock extends BaseEntityBlock {
         RecipeType<? extends MachineRecipe> recipeType,
         int[][] inputPositions,
         int[][] outputPositions,
-        int[] progressPosition,
-        int[] energyPosition
+        int[] progressPosition
     ) {
         super(properties);
 
@@ -59,7 +57,6 @@ public class MachineBlock extends BaseEntityBlock {
         this.inputPositions = inputPositions;
         this.outputPositions = outputPositions;
         this.progressPosition = progressPosition;
-        this.energyPosition = energyPosition;
 
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
@@ -82,10 +79,6 @@ public class MachineBlock extends BaseEntityBlock {
 
     public int[][] getOutputPositions() {
         return outputPositions;
-    }
-
-    public int[] getEnergyPosition() {
-        return energyPosition;
     }
 
     public int[] getProgressPosition() {

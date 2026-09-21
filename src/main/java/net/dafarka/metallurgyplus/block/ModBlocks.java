@@ -59,11 +59,10 @@ public class ModBlocks {
             ModRecipeTypes.ORE_PROCESSING_UNIT_TYPE,
             ORE_PROCESSING_UNIT_INPUT_POSITION,
             ORE_PROCESSING_UNIT_OUTPUT_POSITIONS,
-            new int[]{31, 43},
-            new int[]{8, 60}
+            new int[]{31, 43}
         ));
 
-    public static final int[][] ALLOY_SMELTER_INPUT_POSITIONS = {{8, 26}, {26, 26}, {8, 44}, {26, 44}, {50, 26}, {68, 26}, {50, 44}, {68, 44}};
+    public static final int[][] ALLOY_SMELTER_INPUT_POSITIONS = {{8, 18}, {26, 18}, {8, 36}, {26, 36}, {50, 18}, {68, 18}, {50, 36}, {68, 36}};
     public static final int[][] ALLOY_SMELTER_OUTPUT_POSITIONS = {{116, 18}, {134, 18}, {152, 18}, {116, 36}, {134, 36}, {152, 36}, {116, 54}, {134, 54}, {152, 54}};
     public static final RegistryObject<MachineBlock> ALLOY_SMELTER = registerBlock("alloy_smelter",
         () -> new MachineBlock(
@@ -71,8 +70,7 @@ public class ModBlocks {
             ModRecipeTypes.ALLOY_SMELTER_TYPE,
             ALLOY_SMELTER_INPUT_POSITIONS,
             ALLOY_SMELTER_OUTPUT_POSITIONS,
-            new int[]{87, 39},
-            new int[]{8, 65}
+            new int[]{87, 31}
         ));
 
     public static final int[][] GRINDER_INPUT_POSITIONS = {{8, 21}, {26, 21}, {8, 39}, {26, 39}};
@@ -84,8 +82,7 @@ public class ModBlocks {
             ModRecipeTypes.GRINDER_TYPE,
             GRINDER_INPUT_POSITIONS,
             GRINDER_OUTPUT_POSITIONS,
-            new int[]{48, 34},
-            new int[]{8, 60}
+            new int[]{48, 34}
         ));
 
     public static final int[][] PRESS_INPUT_POSITION = {{40, 35}};
@@ -96,8 +93,7 @@ public class ModBlocks {
             ModRecipeTypes.PRESS_TYPE,
             PRESS_INPUT_POSITION,
             PRESS_OUTPUT_POSITIONS,
-            new int[]{64, 38},
-            new int[]{8, 60}
+            new int[]{64, 38}
         ));
 
     public static final int[][] EXTRACTOR_INPUT_POSITIONS = {{22, 21}, {40, 21}, {22, 39}, {40, 39}};
@@ -108,8 +104,7 @@ public class ModBlocks {
             ModRecipeTypes.EXTRACTOR_TYPE,
             EXTRACTOR_INPUT_POSITIONS,
             EXTRACTOR_OUTPUT_POSITIONS,
-            new int[]{64, 34},
-            new int[]{8, 60}
+            new int[]{64, 34}
         ));
 
     public static final int[][] GEMSTONE_CUTTER_INPUT_POSITION = {{40, 35}};
@@ -120,8 +115,7 @@ public class ModBlocks {
             ModRecipeTypes.GEMSTONE_CUTTER_TYPE,
             GEMSTONE_CUTTER_INPUT_POSITION,
             GEMSTONE_CUTTER_OUTPUT_POSITIONS,
-            new int[]{64, 38},
-            new int[]{8, 60}
+            new int[]{64, 38}
         ));
 
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",
