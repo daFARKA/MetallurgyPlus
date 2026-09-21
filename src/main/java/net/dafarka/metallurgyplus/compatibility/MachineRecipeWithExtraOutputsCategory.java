@@ -6,10 +6,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.dafarka.metallurgyplus.block.custom.MachineBlock;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class MachineRecipeWithExtraOutputsCategory extends MachineRecipeCategoryBase<MachineRecipeWithExtraOutputs> {
-    
+
     public MachineRecipeWithExtraOutputsCategory(IGuiHelper guiHelper, ResourceLocation uid, MachineBlock machineBlock) {
         super(guiHelper, uid, machineBlock, MachineRecipeWithExtraOutputs.class);
     }
@@ -31,11 +32,21 @@ public class MachineRecipeWithExtraOutputsCategory extends MachineRecipeCategory
                 break;
             }
 
+            final int extraOutputIndex = i;
+
             builder.addSlot(
-                RecipeIngredientRole.OUTPUT,
-                outputPositions[outputIndex][0] - OFFSET,
-                outputPositions[outputIndex][1] - OFFSET
-            ).addItemStack(recipe.getExtraOutputs().get(i));
+                    RecipeIngredientRole.OUTPUT,
+                    outputPositions[outputIndex][0] - OFFSET,
+                    outputPositions[outputIndex][1] - OFFSET
+                ).addItemStack(recipe.getExtraOutputs().get(i))
+                .addTooltipCallback((slotView, tooltip) -> {
+                    double chance = recipe.getExtraOutputChances().get(extraOutputIndex);
+
+                    tooltip.add(Component.literal(
+                        "Chance: " + (int) (chance * 100) + "%"
+                    ));
+                });
+            ;
         }
     }
 }
