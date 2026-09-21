@@ -75,10 +75,7 @@ public class MachineRecipe implements Recipe<SimpleContainer> {
     }
 
     public int getInputAmountForIngredient(Ingredient ingredient) {
-        int index = findIngredientIndex(
-            inputItems,
-            ingredient
-        );
+        int index = findIngredientIndex(inputItems, ingredient);
 
         if (index != -1) {
             return inputAmounts.get(index);

@@ -38,6 +38,8 @@ import java.util.Random;
 
 public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
+    private MachineBlock machineBlock;
+
     protected int progress = 0;
     protected int maxProgress = 100;
 
@@ -88,16 +90,16 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     public MachineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MACHINE_BE.get(), pos, state);
 
-        MachineBlock machine = getMachineBlock();
+        this.machineBlock = (MachineBlock) state.getBlock();
 
-        inputHandler = new ItemStackHandler(machine.getInputSlots()) {
+        inputHandler = new ItemStackHandler(machineBlock.getInputSlots()) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
 
-        outputHandler = new ItemStackHandler(machine.getOutputSlots()) {
+        outputHandler = new ItemStackHandler(machineBlock.getOutputSlots()) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
@@ -114,7 +116,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private MachineBlock getMachineBlock() {
-        return (MachineBlock) getBlockState().getBlock();
+        return machineBlock;
     }
 
     protected RecipeType<? extends MachineRecipe> getRecipeType() {
@@ -232,32 +234,49 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         MachineRecipe currentRecipe = recipe.get();
 
         NonNullList<Ingredient> ingredients = currentRecipe.getIngredients();
-
         NonNullList<Integer> amounts = currentRecipe.getInputAmounts();
 
-        for (int i = 0; i < ingredients.size(); i++) {
-            int inputSlot = utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0);
+        SimpleContainer inventory = new SimpleContainer(inputHandler.getSlots());
 
-            if (inputSlot == -1) {
-                return false;
+        for (int i = 0; i < inputHandler.getSlots(); i++) {
+            inventory.setItem(i, inputHandler.getStackInSlot(i).copy());
+        }
+
+        for (int i = 0; i < ingredients.size(); i++) {
+            Ingredient ingredient = ingredients.get(i);
+            int requiredAmount = amounts.get(i);
+
+            int remainingAmount = requiredAmount;
+
+            for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+                ItemStack stack = inventory.getItem(slot);
+
+                if (!ingredient.test(stack)) {
+                    continue;
+                }
+
+                int amount = Math.min(
+                    remainingAmount,
+                    stack.getCount()
+                );
+
+                remainingAmount -= amount;
+
+                stack.shrink(amount);
+
+                if (remainingAmount <= 0) {
+                    break;
+                }
             }
 
-            if (allHandler.getStackInSlot(inputSlot).getCount() < amounts.get(i)) {
+            if (remainingAmount > 0) {
                 return false;
             }
         }
 
-        ItemStack result =
-            currentRecipe.getResultItem(
-                getLevel().registryAccess()
-            );
+        ItemStack result = currentRecipe.getResultItem(getLevel().registryAccess());
 
-        outputSlot =
-            utilBlockEntity.getFirstAvailableSlot(
-                result.getItem(),
-                result.getCount(),
-                1
-            );
+        outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), machineBlock.getInputSlots());
 
         if (outputSlot == -1) {
             return false;
@@ -269,7 +288,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
             if (extraOutputs != null) {
                 for (ItemStack extraOutput : extraOutputs) {
-                    if (utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), 1) == -1) {
+                    if (utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), machineBlock.getInputSlots()) == -1) {
                         return false;
                     }
                 }
@@ -299,22 +318,45 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         MachineRecipe currentRecipe = recipe.get();
 
         NonNullList<Ingredient> ingredients = currentRecipe.getIngredients();
-
         NonNullList<Integer> amounts = currentRecipe.getInputAmounts();
 
         for (int i = 0; i < ingredients.size(); i++) {
-            int inputSlot = utilBlockEntity.getFirstSlotThatContainsAnyOfInputItems(ingredients.get(i), 0, 0);
+            Ingredient ingredient = ingredients.get(i);
+            int remainingAmount = amounts.get(i);
 
-            if (inputSlot == -1) {
-                return;
+            for (int slot = 0; slot < inputHandler.getSlots(); slot++) {
+                ItemStack stack = inputHandler.getStackInSlot(slot);
+
+                if (!ingredient.test(stack)) {
+                    continue;
+                }
+
+                int amount = Math.min(remainingAmount, stack.getCount());
+
+                inputHandler.extractItem(slot, amount, false);
+
+                remainingAmount -= amount;
+
+                if (remainingAmount <= 0) {
+                    break;
+                }
             }
 
-            allHandler.extractItem(inputSlot, amounts.get(i), false);
+            if (remainingAmount > 0) {
+                return;
+            }
         }
 
         ItemStack result = currentRecipe.getResultItem(getLevel().registryAccess());
 
-        allHandler.setStackInSlot(outputSlot, new ItemStack(result.getItem(), allHandler.getStackInSlot(outputSlot).getCount() + result.getCount()));
+        allHandler.setStackInSlot(
+            outputSlot,
+            new ItemStack(
+                result.getItem(),
+                allHandler.getStackInSlot(outputSlot).getCount()
+                    + result.getCount()
+            )
+        );
 
         if (currentRecipe instanceof MachineRecipeWithExtraOutputs extraRecipe) {
             NonNullList<ItemStack> extraOutputs = extraRecipe.getExtraOutputs();
@@ -331,18 +373,21 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                         continue;
                     }
 
-                    int extraOutputSlot = utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), 1);
+                    int extraOutputSlot = utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), machineBlock.getInputSlots());
 
                     if (extraOutputSlot == -1) {
                         continue;
                     }
 
-                    allHandler.setStackInSlot(extraOutputSlot, new ItemStack(
-                        extraOutput.getItem(),
-                        allHandler
-                            .getStackInSlot(extraOutputSlot)
-                            .getCount()
-                            + extraOutput.getCount())
+                    allHandler.setStackInSlot(
+                        extraOutputSlot,
+                        new ItemStack(
+                            extraOutput.getItem(),
+                            allHandler
+                                .getStackInSlot(extraOutputSlot)
+                                .getCount()
+                                + extraOutput.getCount()
+                        )
                     );
                 }
             }
