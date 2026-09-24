@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:garnet_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:garnet_gem",
+    "count": 1
+  }
+}

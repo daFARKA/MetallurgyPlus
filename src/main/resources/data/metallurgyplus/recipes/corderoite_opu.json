@@ -1,0 +1,20 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:corderoite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:mercury",
+    "count": 3
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:sulphur",
+      "count": 2,
+      "chance": 1
+    }
+  ]
+}

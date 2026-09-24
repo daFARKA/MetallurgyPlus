@@ -1,7 +1,9 @@
 # MetallurgyPlus
 
 MetallurgyPlus is a Minecraft tech mod which focuses on more ores, materials, alloys, [machines](#machines) as well as
-other [miscellaneous things](#miscellaneous). Here is a list of all added [resources](resources.md).
+other [miscellaneous things](#miscellaneous).
+Here is a list of all added [resources](documentation/resources.md).
+Here is a list of all added machine [recipes](documentation/recipes.md).
 This mod is by far not realistic, but it is rooted in reality.
 Because of this recipes and (especially) ore generation have been stylized to preserve the fun.
 

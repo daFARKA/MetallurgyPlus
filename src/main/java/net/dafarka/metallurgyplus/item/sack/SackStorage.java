@@ -37,7 +37,7 @@ public class SackStorage {
      * Checks whether an item is allowed to be stored in a sack.
      */
     public static boolean canStore(Item item) {
-        return item.builtInRegistryHolder().is(ModTags.Items.MATERIAL_RAW);
+        return item.builtInRegistryHolder().is(ModTags.Items.ORE_RAW);
     }
 
     /**

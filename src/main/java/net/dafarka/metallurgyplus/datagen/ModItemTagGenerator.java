@@ -3,7 +3,6 @@ package net.dafarka.metallurgyplus.datagen;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.util.ModTags;
-import net.dafarka.metallurgyplus.util.ModTags.Items;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -13,7 +12,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +42,8 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         );
         this.tag(tag).add(ModItems.CUSTOM_ITEM_MAP.get("silicon").get());
 
-        addResourceTags();
+        addCustomTag(ModItems.MATERIAL_MAP, "raw", ModTags.Items.MATERIAL_RAW);
+        addCustomTag(ModItems.ORE_MAP, "raw", ModTags.Items.ORE_RAW);
     }
 
     private void addForgeTags(Map<String, RegistryObject<Item>> itemMap) {
@@ -64,13 +63,13 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(tag).add(item.get());
     }
 
-    private void addResourceTags() {
-        for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {
+    private void addCustomTag(Map<String, RegistryObject<Item>> itemMap, String identifier, TagKey<Item> tag) {
+        for (RegistryObject<Item> item : itemMap.values()) {
             String currentName = item.getId().getPath();
             String currentMaterialName = currentName.split("_")[0];
             String currentComponentName = currentName.split("_")[1];
 
-            if (Objects.equals(currentComponentName, "raw")) this.tag(ModTags.Items.MATERIAL_RAW).add(item.get());
+            if (Objects.equals(currentComponentName, identifier)) this.tag(tag).add(item.get());
         }
     }
 }

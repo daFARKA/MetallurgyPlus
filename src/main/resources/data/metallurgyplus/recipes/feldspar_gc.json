@@ -1,0 +1,30 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:feldspar_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:stone_dust",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:amazonite_gem",
+      "count": 1,
+      "chance": 0.15
+    },
+    {
+      "item": "metallurgyplus:moonstone_gem",
+      "count": 1,
+      "chance": 0.1
+    },
+    {
+      "item": "metallurgyplus:sunstone_gem",
+      "count": 1,
+      "chance": 0.05
+    }
+  ]
+}

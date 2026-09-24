@@ -38,16 +38,19 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
+        buildCustomRecipes(pWriter);
+
         buildMaterialRecipes(pWriter);
         buildOreRecipes(pWriter);
         buildAlloyRecipes(pWriter);
         buildVanillaRecipes(pWriter);
+
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         grinderRecipeProvider.buildRecipes(pWriter);
         pressRecipeProvider.buildRecipes(pWriter);
         extractorRecipeProvider.buildRecipes(pWriter);
-        buildCustomRecipes(pWriter);
+
         buildCableRecipes(pWriter);
         buildCoilRecipes(pWriter);
         buildSolarPanelRecipes(pWriter);
@@ -285,6 +288,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("stone_dust").get()), has(ModItems.CUSTOM_ITEM_MAP.get("stone_dust").get()))
             .save(pWriter);
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.PAPER, 2)
+            .requires(ModItems.CUSTOM_ITEM_MAP.get("saw_dust").get(), 3)
+            .requires(Items.WATER_BUCKET)
+            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("saw_dust").get()), has(ModItems.CUSTOM_ITEM_MAP.get("saw_dust").get()))
+            .unlockedBy(getHasName(Items.WATER_BUCKET), has(Items.WATER_BUCKET))
+            .save(pWriter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("energy_core").get(), 1)
             .pattern("ICI")
             .pattern("GRG")
@@ -439,6 +449,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(Items.GLASS), has(Items.GLASS))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
             .unlockedBy(getHasName(Items.HOPPER), has(Items.HOPPER))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.GEMSTONE_CUTTER.get())
+            .pattern("PGP")
+            .pattern("RFR")
+            .pattern("PBP")
+            .define('P', ModItems.ALLOY_MAP.get("stainless-steel_plate").get())
+            .define('G', ModItems.VANILLA_MAP.get("diamond_gear").get())
+            .define('R', ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get())
+            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('B', ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()), has(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()))
+            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()))
+            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()))
             .save(pWriter);
     }
 

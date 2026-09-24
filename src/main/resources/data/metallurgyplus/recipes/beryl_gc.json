@@ -1,0 +1,35 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:beryl_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:stone_dust",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:aquamarine_gem",
+      "count": 1,
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:emerald",
+      "count": 1,
+      "chance": 0.15
+    },
+    {
+      "item": "metallurgyplus:morganite_gem",
+      "count": 1,
+      "chance": 0.10
+    },
+    {
+      "item": "metallurgyplus:red-beryl_gem",
+      "count": 1,
+      "chance": 0.01
+    }
+  ]
+}

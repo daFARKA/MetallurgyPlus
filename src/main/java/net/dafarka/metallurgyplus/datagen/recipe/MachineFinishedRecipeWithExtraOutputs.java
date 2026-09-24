@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
+import javax.annotation.Nullable;
+
 public class MachineFinishedRecipeWithExtraOutputs extends MachineFinishedRecipe {
 
     private final NonNullList<ItemStack> extraOutputs;
@@ -18,8 +20,8 @@ public class MachineFinishedRecipeWithExtraOutputs extends MachineFinishedRecipe
         NonNullList<Item> inputItems,
         NonNullList<Integer> inputAmounts,
         ItemStack output,
-        NonNullList<ItemStack> extraOutputs,
-        NonNullList<Float> extraChances,
+        @Nullable NonNullList<ItemStack> extraOutputs,
+        @Nullable NonNullList<Float> extraChances,
         ResourceLocation id,
         String recipeType,
         RecipeSerializer<?> serializer

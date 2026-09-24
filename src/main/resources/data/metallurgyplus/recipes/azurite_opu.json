@@ -1,0 +1,13 @@
+{
+  "type": "metallurgyplus:ore_processing_unit",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:azurite_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:raw_copper",
+    "count": 1
+  }
+}

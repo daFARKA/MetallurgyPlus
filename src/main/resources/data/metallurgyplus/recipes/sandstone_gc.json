@@ -1,0 +1,25 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "minecraft:sandstone",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "minecraft:sand",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:fluorite_gem",
+      "count": 1,
+      "chance": 0.02
+    },
+    {
+      "item": "metallurgyplus:turquoise_gem",
+      "count": 1,
+      "chance": 0.01
+    }
+  ]
+}

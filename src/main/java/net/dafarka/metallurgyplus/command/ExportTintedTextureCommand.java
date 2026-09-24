@@ -4,22 +4,28 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ExportedTintedTextureCommands {
+public class ExportTintedTextureCommand {
 
     public static void execute() {
         Minecraft mc = Minecraft.getInstance();
+
+        if (mc.player == null) {
+            return;
+        }
+
+        Player player = mc.player;
+
         ItemStack stack = mc.player.getMainHandItem();
 
         if (stack.isEmpty()) {
-            mc.player.displayClientMessage(
-                Component.literal("Hold an item first!"), true
-            );
+            player.displayClientMessage(Component.literal("Hold an item first!"), true);
             return;
         }
 
@@ -27,14 +33,10 @@ public class ExportedTintedTextureCommands {
             String fileName = stack.getItem().builtInRegistryHolder().key().location().getPath();
             exportTintedTexture(stack, fileName);
 
-            mc.player.displayClientMessage(
-                Component.literal("Exported texture as " + fileName + ".png"), true
-            );
+            player.displayClientMessage(Component.literal("Exported texture as " + fileName + ".png"), true);
 
         } catch (Exception ex) {
-            mc.player.displayClientMessage(
-                Component.literal("Failed: " + ex.getMessage()), true
-            );
+            player.displayClientMessage(Component.literal("Failed: " + ex.getMessage()), true);
         }
     }
 
@@ -75,7 +77,7 @@ public class ExportedTintedTextureCommands {
         }
 
         Path out = mc.gameDirectory.toPath()
-            .resolve("metallurgyplus/exported_textures/" + name + ".png");
+            .resolve(ModClientCommands.EXPORT_PATH + "/textures" + name + ".png");
 
         Files.createDirectories(out.getParent());
         tinted.writeToFile(out);

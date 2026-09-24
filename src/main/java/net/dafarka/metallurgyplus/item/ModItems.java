@@ -89,13 +89,16 @@ public class ModItems {
         registerCustomItem("rare_earth_3");
         registerCustomItem("small_rare_earth");
         registerCustomItem("stone_dust");
+        registerCustomItem("magma_dust");
+        registerCustomItem("saw_dust");
+        registerCustomItem("quartz_dust");
         registerCustomItem("energy_core");
         registerCustomItem("rubber");
         registerCustomItem("tree_sap");
-        registerCustomItem("saw_dust");
         registerCustomItem("mixed_rare_earth_alloy");
         registerCustomItem("mixed_rare_earth_alloy_plate");
         registerCustomItem("solar_cell");
+        registerCustomItem("mercury");
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -158,21 +161,22 @@ public class ModItems {
         registerMaterial("yttrium", 0xdbdec1);
         registerMaterial("zinc", 0xc7fff8);
         registerMaterial("zirconium", 0x705a43);
+        registerMaterial("arsenic", 0x6b7075);
 
         // Ores
         registerOre("gibbsite", 0x52695a, OreRarity.UNCOMMON);  // Aluminum
         registerOre("bauxite", 0x916b4d, OreRarity.COMMON);   // Aluminum
         registerOre("stibnite", 0x5465c4, OreRarity.UNCOMMON);  // Antimony, Sulphur
-        registerOre("beryl", 0xa8bfaf, OreRarity.RARE);     // Beryllium, Aluminum, Silicon
+        registerOre("beryl", 0xa8bfaf, OreRarity.RARE);     // Beryllium, Aluminum, Silicon - [Aquamarine, Emerald, Morganite, Red-Beryl]
         registerOre("bismuthinite", 0xc7c4b1, OreRarity.RARE);  // Bismuth, Sulphur
         registerOre("chromite", 0x484c59, OreRarity.COMMON);  // Chromium, Iron
         registerOre("cobaltite", 0x091336, OreRarity.RARE); // Cobalt, Sulphur
-        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper, [Malachite]
+        registerOre("malachite", 0x064d00, OreRarity.UNCOMMON); // Copper - [Malachite]
         registerOre("hematite", 0x75614f, OreRarity.COMMON);  // Iron
         registerOre("magnetite", 0x212f36, OreRarity.COMMON); // Iron
         registerOre("limonite", 0xbd6500, OreRarity.COMMON);  // Iron
         registerOre("galena", 0xae9bde, OreRarity.COMMON);    // Lead, Silver, Sulphur
-        registerOre("spodumene", 0xeb7cbe, OreRarity.RARE); // Lithium, Aluminum, Silicon
+        registerOre("spodumene", 0xeb7cbe, OreRarity.RARE); // Lithium, Aluminum, Silicon - [Hiddenite]
         registerOre("pyrolusite", 0x34ba53, OreRarity.UNCOMMON); // Manganese
         registerOre("molybdenite", 0x5a5275, OreRarity.RARE); // Molybdenum, Rhenium, Sulphur
         registerOre("pentlandite", 0x916f4a, OreRarity.UNCOMMON); // Nickel, Iron, Cobalt, Ruthenium
@@ -189,7 +193,7 @@ public class ModItems {
         registerOre("scheelite", 0xdb8348, OreRarity.RARE); // Tungsten, Calcium
         registerOre("patronite", 0x2c2e2a, OreRarity.VERY_RARE); // Vanadium, Sulphur
         registerOre("sphalerite", 0xcfb470, OreRarity.COMMON); // Zinc, Iron, Sulphur
-        registerOre("zircon", 0x705a43, OreRarity.RARE); // Zirconium, Silicon, Hafnium, [Zircon]
+        registerOre("zircon", 0x705a43, OreRarity.RARE); // Zirconium, Silicon, Hafnium - [Zircon]
         registerOre("gallite", 0x7e8761, OreRarity.VERY_RARE); // Gallium, Copper, Sulphur
         registerOre("baryte", 0x8fb5c9, OreRarity.UNCOMMON); // Barium, Sulphur
         registerOre("greenockite", 0xd9cc1e, OreRarity.VERY_RARE); // Cadmium, Sulphur
@@ -200,11 +204,22 @@ public class ModItems {
         registerOre("crookesite", 0x2b061b, OreRarity.EXTREMELY_RARE); // Thallium, Copper, Silver
         registerOre("uraninite", 0x91b572, OreRarity.RARE); // Uranium, Thorium, Technetium
         registerOre("selenite", 0xebf4fc, OreRarity.UNCOMMON); // Selenium
-        registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon
+        registerOre("feldspar", 0xc77b63, OreRarity.COMMON); // Aluminum, Silicon - [Amazonite, Moonstone, Sunstone]
         registerOre("borax", 0xffffff, OreRarity.UNCOMMON); // Boron
         registerOre("germanite", 0x80725d, OreRarity.RARE); // Copper, Germanium, Iron, Sulphur
         registerOre("sylvanite", 0xfff7bd, OreRarity.VERY_RARE); // Silver, Gold, Tellurium
         registerOre("calaverite", 0xc7bd71, OreRarity.UNCOMMON); // Gold, Tellurium
+        registerOre("corundum", 0xcf95db, OreRarity.RARE); // [Ruby, Sapphire, Lazulite]
+        registerOre("apatite", 0x82fff9, OreRarity.UNCOMMON); // [Apatite]
+        registerOre("azurite", 0x00095c, OreRarity.UNCOMMON); // Copper - [Azurite]
+        registerOre("corderoite", 0xc28cab, OreRarity.EXTREMELY_RARE); // Mercury, Sulphur - [Cinnabar]
+        registerOre("garnet", 0xa32017, OreRarity.COMMON); // [Garnet]
+        registerOre("jadeite", 0x009c4b, OreRarity.RARE); // [Jade]
+        registerOre("lazurite", 0x001363, OreRarity.VERY_RARE); // [Lazurite, Lapis Lazuli]
+        registerOre("moissanite", 0x6e767d, OreRarity.EXTREMELY_RARE); // [Moissanite]
+        registerOre("lithiophilite", 0xc9a36d, OreRarity.VERY_RARE); // Lithium, Manganese - [Purpurite]
+        registerOre("arsenopyrite", 0x807970, OreRarity.COMMON); // Iron, Arsen, Sulphur - [Scorodite]
+        registerOre("vanadinite", 0x8a2000, OreRarity.VERY_RARE); // Vanadium, Lead - [Wulfenite]
 
         // Alloys
         registerAlloy("steel", 0x707070); // Iron, Coal
@@ -247,6 +262,8 @@ public class ModItems {
         registerAlloy("samarium-cobalt", 0x86959e); // Samarium, Cobalt
         registerAlloy("gadolinium-silicon-germanium", 0x64757d); // Gadolinium, Silicon, Germanium
         registerAlloy("pewter", 0xbecfce); // Tin, Antimony
+        registerAlloy("arsenic-lead", 0x77747d); // Arsenic, Lead
+        registerAlloy("gallium-arsenide", 0x434d49); // Gallium, Arsenic
 
         // Vanilla Items
         registerVanilla("iron", 0xffffff);
@@ -268,7 +285,6 @@ public class ModItems {
         registerGem("chrysoberyl", 0xe2ff52);
         registerGem("cinnabar", 0xbf3232);
         registerGem("clinohumite", 0x9c3111);
-        registerGem("diaspore", 0xc9b26b);
         registerGem("dioptase", 0x2c9980);
         registerGem("ekanite", 0x53784e);
         registerGem("amazonite", 0x00ffea);
@@ -283,25 +299,19 @@ public class ModItems {
         registerGem("lazurite", 0x001363);
         registerGem("malachite", 0x56cc9b);
         registerGem("moissanite", 0x6e767d);
-        registerGem("musgravite", 0x6b6bc2);
         registerGem("opal", 0xffffff);
         registerGem("black-opal", 0x141414);
         registerGem("fire-opal", 0xb53300);
         registerGem("purpurite", 0x6600ba);
         registerGem("citrine", 0xfffa9e);
-        registerGem("rhodochrosite", 0xc4668f);
         registerGem("scorodite", 0x1e396b);
-        registerGem("serandite", 0xc97e55);
         registerGem("hiddenite", 0x84d193);
-        registerGem("sugilite", 0xb252de);
         registerGem("titanite", 0xc7db51);
         registerGem("topaz", 0xff892e);
         registerGem("triplite", 0xff7e47);
         registerGem("turquoise", 0x40e0d0);
         registerGem("wulfenite", 0xff8469);
         registerGem("zircon", 0xd9c3bf);
-        registerGem("tanzanite", 0x000738);
-        registerGem("zultanite", 0x697a50);
 
         // Cables
         registerCables();

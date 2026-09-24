@@ -1,0 +1,30 @@
+{
+  "type": "metallurgyplus:gemstone_cutter",
+  "ingredients": [
+    {
+      "item": "metallurgyplus:corundum_raw",
+      "count": 1
+    }
+  ],
+  "output": {
+    "item": "metallurgyplus:stone_dust",
+    "count": 1
+  },
+  "extra_outputs": [
+    {
+      "item": "metallurgyplus:ruby_gem",
+      "count": 1,
+      "chance": 0.25
+    },
+    {
+      "item": "metallurgyplus:sapphire_gem",
+      "count": 1,
+      "chance": 0.25
+    },
+    {
+      "item": "metallurgyplus:lazulite_gem",
+      "count": 1,
+      "chance": 0.025
+    }
+  ]
+}

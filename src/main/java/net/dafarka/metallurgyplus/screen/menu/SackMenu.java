@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SackMenu extends AbstractContainerMenu {
@@ -91,7 +92,7 @@ public class SackMenu extends AbstractContainerMenu {
     public List<Item> getSackItems() {
         List<Item> items = new ArrayList<>();
 
-        var tag = BuiltInRegistries.ITEM.getTag(ModTags.Items.MATERIAL_RAW);
+        var tag = BuiltInRegistries.ITEM.getTag(ModTags.Items.ORE_RAW);
 
         if (tag.isEmpty()) {
             return items;
@@ -100,6 +101,10 @@ public class SackMenu extends AbstractContainerMenu {
         for (Holder<Item> holder : tag.get()) {
             items.add(holder.value());
         }
+
+        items.sort(Comparator.comparing(
+            item -> BuiltInRegistries.ITEM.getKey(item).getPath()
+        ));
 
         return items;
     }

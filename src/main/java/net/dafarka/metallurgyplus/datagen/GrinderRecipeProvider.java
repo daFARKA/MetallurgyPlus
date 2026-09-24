@@ -40,13 +40,21 @@ public class GrinderRecipeProvider extends RecipeProvider {
         inputSize = 1;
         inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
         inputAmounts = NonNullList.withSize(inputSize, 1);
-        inputItems.set(0, utility.getItem("coal"));
+        inputItems.set(0, Utility.getItem("coal"));
         inputAmounts.set(0, 1);
-        output = new ItemStack(utility.getItem("brick"), 1);
+        output = new ItemStack(Utility.getItem("brick"), 1);
         extraOutputs = NonNullList.withSize(1, ItemStack.EMPTY);
-        extraOutputs.set(0, new ItemStack(utility.getItem("redstone"), 1));
+        extraOutputs.set(0, new ItemStack(Utility.getItem("redstone"), 1));
         extraChances.set(0, 0.25f);
-        addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, new ResourceLocation(MetallurgyPlus.MODID, "test_grinder"));*/
+        addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, "test_grinder"));*/
+
+        inputSize = 1;
+        inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+        inputAmounts = NonNullList.withSize(inputSize, 1);
+        inputItems.set(0, Utility.getItem("quartz"));
+        inputAmounts.set(0, 1);
+        output = new ItemStack(ModItems.CUSTOM_ITEM_MAP.get("quartz_dust").get(), 2);
+        addGrinderFinishedRecipe(pWriter, inputItems, inputAmounts, output, null, null, new ResourceLocation(MetallurgyPlus.MODID, "quartz_to_quartz_dust_grinder"));
 
         List<String> oldMaterials = new ArrayList<>();
         for (RegistryObject<Item> item : ModItems.MATERIAL_MAP.values()) {

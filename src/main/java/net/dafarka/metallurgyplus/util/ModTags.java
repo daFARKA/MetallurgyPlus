@@ -21,5 +21,6 @@ public class ModTags {
         }
 
         public static final TagKey<Item> MATERIAL_RAW = tag("material/raw");
+        public static final TagKey<Item> ORE_RAW = tag("ore/raw");
     }
 }
