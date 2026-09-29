@@ -18,6 +18,7 @@ import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -68,7 +69,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             new ResourceLocation(MetallurgyPlus.MODID, "item/base/" + componentName));
     }
 
-    private ItemModelBuilder dynamicItem(RegistryObject<Item> item, String group) {
+    private ItemModelBuilder dynamicItem(RegistryObject<Item> item, @Nullable String group) {
         if (group == null) return baseItem(item);
 
         String texturePath = "item/" + (group.isEmpty() ? "" : group + "/") + item.getId().getPath();
