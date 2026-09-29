@@ -34,7 +34,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateItemMapBase(ModItems.VANILLA_MAP);
         generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, "gem");
 
-        simpleItem(ModItems.LLAMKANA, "custom");
+        groupItem(ModItems.LLAMKANA, "custom");
 
         simpleBlockItemModel("alloy_smelter");
         simpleBlockItemModel("ore_processing_unit");
@@ -53,13 +53,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         createSackItems();
     }
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item, String group) {
+    private ItemModelBuilder groupItem(RegistryObject<Item> item, String group) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
             new ResourceLocation(MetallurgyPlus.MODID, "item/" + group + "/" + item.getId().getPath()));
     }
 
-    private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item) {
+    private ItemModelBuilder baseItem(RegistryObject<Item> item) {
         String currentName = item.getId().getPath();
         String componentName = currentName.split("_")[1];
 
@@ -69,15 +69,15 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder dynamicItem(RegistryObject<Item> item, String group) {
-        if (group == null) return simpleBaseItem(item);
+        if (group == null) return baseItem(item);
 
         String texturePath = "item/" + (group.isEmpty() ? "" : group + "/") + item.getId().getPath();
         ResourceLocation customTexture = new ResourceLocation(MetallurgyPlus.MODID, texturePath);
 
         if (existingFileHelper.exists(customTexture, ModelProvider.TEXTURE)) {
-            return simpleItem(item, group);
+            return groupItem(item, group);
         } else {
-            return simpleBaseItem(item);
+            return baseItem(item);
         }
     }
 
@@ -95,7 +95,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            simpleBaseItem(item);
+            baseItem(item);
         }
 
         for (RegistryObject<Block> block : blockMap.values()) {
@@ -123,7 +123,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private void generateItemMapBase(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            simpleBaseItem(item);
+            baseItem(item);
         }
     }
 
