@@ -27,9 +27,9 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        generateMaps(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
-        generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP);
-        generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
+        generateMaps(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP, "material");
+        generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP, "ore");
+        generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP, "alloy");
         generateItemMap(ModItems.CUSTOM_ITEM_MAP, "custom");
         generateItemMapBase(ModItems.VANILLA_MAP);
         generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, "gem");
@@ -69,6 +69,8 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder dynamicItem(RegistryObject<Item> item, String group) {
+        if (group == null) return simpleBaseItem(item);
+
         String texturePath = "item/" + (group.isEmpty() ? "" : group + "/") + item.getId().getPath();
         ResourceLocation customTexture = new ResourceLocation(MetallurgyPlus.MODID, texturePath);
 
