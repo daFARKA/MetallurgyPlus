@@ -16,10 +16,10 @@ public class Utility {
      * if no vanilla item exists with that name return air.
      *
      * @param name the name of the item to return
-     *
      * @return an Item with the given name, air otherwise.
      *
-     * */
+     *
+     */
     public static Item getItem(String name) {
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(MetallurgyPlus.MODID, name));
         if (item == ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", "air"))) {
@@ -34,9 +34,9 @@ public class Utility {
      * name is not checked for proper formatting!
      *
      * @param name The input name which should always be of the form "type.id.resource"
-     *
      * @return The formatted name of the form "id:resource"
-     * */
+     *
+     */
     public static String formatResourceName(String name) {
         String[] parts = name.split("\\.");
         return parts[parts.length - 2] + ":" + parts[parts.length - 1];
@@ -45,9 +45,8 @@ public class Utility {
     /**
      * Formats a given Integer to have digit grouping {@code separator}.
      *
-     * @param number the Integer number to format
+     * @param number    the Integer number to format
      * @param separator the separator symbol between the digit groups.
-     *
      * @return The formatted string with the corresponding digit grouping
      */
     public static String formatWithSeparator(@NotNull Integer number, char separator) {

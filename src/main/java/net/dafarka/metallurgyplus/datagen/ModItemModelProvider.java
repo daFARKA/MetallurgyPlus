@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -31,7 +32,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
         generateItemMap(ModItems.CUSTOM_ITEM_MAP, "custom");
         generateItemMapBase(ModItems.VANILLA_MAP);
-        generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP);
+        generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, "gem");
 
         simpleItem(ModItems.LLAMKANA, "custom");
 
@@ -52,22 +53,30 @@ public class ModItemModelProvider extends ItemModelProvider {
         createSackItems();
     }
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
-        return withExistingParent(item.getId().getPath(),
-            new ResourceLocation("item/generated")).texture("layer0",
-            new ResourceLocation(MetallurgyPlus.MODID, "item/" + item.getId().getPath()));
-    }
-
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String group) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
             new ResourceLocation(MetallurgyPlus.MODID, "item/" + group + "/" + item.getId().getPath()));
     }
 
-    private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item, String componentName) {
+    private ItemModelBuilder simpleBaseItem(RegistryObject<Item> item) {
+        String currentName = item.getId().getPath();
+        String componentName = currentName.split("_")[1];
+
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
             new ResourceLocation(MetallurgyPlus.MODID, "item/base/" + componentName));
+    }
+
+    private ItemModelBuilder dynamicItem(RegistryObject<Item> item, String group) {
+        String texturePath = "item/" + (group.isEmpty() ? "" : group + "/") + item.getId().getPath();
+        ResourceLocation customTexture = new ResourceLocation(MetallurgyPlus.MODID, texturePath);
+
+        if (existingFileHelper.exists(customTexture, ModelProvider.TEXTURE)) {
+            return simpleItem(item, group);
+        } else {
+            return simpleBaseItem(item);
+        }
     }
 
     public void simpleBlockItemModel(String modelName) {
@@ -84,9 +93,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            String currentName = item.getId().getPath();
-            String currentComponentName = currentName.split("_")[1];
-            simpleBaseItem(item, currentComponentName);
+            simpleBaseItem(item);
         }
 
         for (RegistryObject<Block> block : blockMap.values()) {
@@ -95,23 +102,26 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void generateItemMap(Map<String, RegistryObject<Item>> itemMap) {
+    private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap, String group) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            simpleItem(item);
+            dynamicItem(item, group);
+        }
+
+        for (RegistryObject<Block> block : blockMap.values()) {
+            String blockName = block.get().getDescriptionId().split("\\.")[2];
+            simpleBlockItemModel(blockName);
         }
     }
 
     private void generateItemMap(Map<String, RegistryObject<Item>> itemMap, String group) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            simpleItem(item, group);
+            dynamicItem(item, group);
         }
     }
 
     private void generateItemMapBase(Map<String, RegistryObject<Item>> itemMap) {
         for (RegistryObject<Item> item : itemMap.values()) {
-            String currentName = item.getId().getPath();
-            String currentComponentName = currentName.split("_")[1];
-            simpleBaseItem(item, currentComponentName);
+            simpleBaseItem(item);
         }
     }
 
