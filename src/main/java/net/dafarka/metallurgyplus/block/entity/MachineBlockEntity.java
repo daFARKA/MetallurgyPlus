@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.MachineBlock;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
@@ -22,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -36,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
-public class MachineBlockEntity extends BlockEntity implements MenuProvider {
+public class MachineBlockEntity extends EnergyBlockEntity implements MenuProvider {
 
     private MachineBlock machineBlock;
 
@@ -47,15 +45,11 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final Random random = new Random();
 
-    protected final GenericEnergyStorage energyStorage =
-        new GenericEnergyStorage(ModBlocks.ENERGY_CAPACITY, ModBlocks.ENERGY_MAX_RECEIVE, ModBlocks.ENERGY_MAX_EXTRACT);
-
     protected final ItemStackHandler inputHandler;
     protected final ItemStackHandler outputHandler;
     protected final CombinedInvWrapper allHandler;
     protected final UtilBlockEntity utilBlockEntity;
 
-    protected LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
     protected LazyOptional<IItemHandler> inputLazy = LazyOptional.empty();
     protected LazyOptional<IItemHandler> outputLazy = LazyOptional.empty();
     protected LazyOptional<IItemHandler> allLazy = LazyOptional.empty();
@@ -88,7 +82,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     };
 
     public MachineBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.MACHINE_BE.get(), pos, state);
+        super(
+            ModBlockEntities.MACHINE_BE.get(),
+            pos,
+            state,
+            ModBlocks.ENERGY_CAPACITY,
+            ModBlocks.ENERGY_MAX_RECEIVE,
+            ModBlocks.ENERGY_MAX_EXTRACT
+        );
 
         this.machineBlock = (MachineBlock) state.getBlock();
 
@@ -137,10 +138,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
 
-        if (cap == ForgeCapabilities.ENERGY) {
-            return energyLazy.cast();
-        }
-
         return super.getCapability(cap, side);
     }
 
@@ -151,7 +148,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         inputLazy = LazyOptional.of(() -> inputHandler);
         outputLazy = LazyOptional.of(() -> outputHandler);
         allLazy = LazyOptional.of(() -> allHandler);
-        energyLazy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
@@ -161,7 +157,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         inputLazy.invalidate();
         outputLazy.invalidate();
         allLazy.invalidate();
-        energyLazy.invalidate();
     }
 
     public void drops() {
@@ -179,7 +174,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         tag.put("input", inputHandler.serializeNBT());
         tag.put("output", outputHandler.serializeNBT());
         tag.putInt("progress", progress);
-        tag.put("energy", energyStorage.serializeNBT());
     }
 
     @Override
@@ -189,7 +183,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         inputHandler.deserializeNBT(tag.getCompound("input"));
         outputHandler.deserializeNBT(tag.getCompound("output"));
         progress = tag.getInt("progress");
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
     }
 
     @Override

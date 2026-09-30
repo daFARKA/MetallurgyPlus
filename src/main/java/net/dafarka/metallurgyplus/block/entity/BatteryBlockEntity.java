@@ -1,9 +1,6 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,44 +14,31 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
+public class BatteryBlockEntity extends EnergyBlockEntity implements MenuProvider {
 
     protected final ContainerData data;
 
-    private final GenericEnergyStorage energyStorage;
-    private final LazyOptional<IEnergyStorage> energy;
-
-    private int tier = 0;
-
     public BatteryBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
-        super(ModBlockEntities.BATTERY_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
-        if (tier <= 0) {
-            throw new IllegalArgumentException("Tier must be greater than 0! Found: " + tier);
-        }
-
-        this.tier = tier;
-        int capacity = BatteryBlock.CAPACITY * (int) Math.pow(10, tier - 1);
-        double transfer_d = BatteryBlock.CAPACITY * Math.pow(10, tier - 2);
-        int transfer = (int) transfer_d;
-        if (tier == 7) capacity = Integer.MAX_VALUE;
-        this.energyStorage = new GenericEnergyStorage(capacity, transfer, transfer);
-        this.energy = LazyOptional.of(() -> energyStorage);
+        super(
+            ModBlockEntities.BATTERY_BLOCK_ENTITIES.get(tier).get(),
+            pPos,
+            pBlockState,
+            getCapacity(tier),
+            getTransfer(tier),
+            getTransfer(tier)
+        );
 
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> BatteryBlockEntity.this.energyStorage.getEnergyStored();
-                    case 1 -> BatteryBlockEntity.this.energyStorage.getMaxEnergyStored();
-                    case 2 -> BatteryBlockEntity.this.tier;
+                    case 0 -> energyStorage.getEnergyStored();
+                    case 1 -> energyStorage.getMaxEnergyStored();
+                    case 2 -> tier;
                     default -> 0;
                 };
             }
@@ -62,7 +46,7 @@ public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> BatteryBlockEntity.this.energyStorage.receiveEnergy(pValue, false);
+                    case 0 -> energyStorage.receiveEnergy(pValue, false);
                 }
             }
 
@@ -71,6 +55,20 @@ public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
                 return 2;
             }
         };
+    }
+
+    private static int getTransfer(int tier) {
+        if (tier == 8) return Integer.MAX_VALUE;
+
+        double transfer_d = BatteryBlock.CAPACITY * Math.pow(10, tier - 2);
+
+        return (int) transfer_d;
+    }
+
+    private static int getCapacity(int tier) {
+        if (tier == 7) return Integer.MAX_VALUE;
+
+        return BatteryBlock.CAPACITY * (int) Math.pow(10, tier - 1);
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
@@ -104,33 +102,6 @@ public class BatteryBlockEntity extends BlockEntity implements MenuProvider {
     public void saveToItem(CompoundTag tag) {
         CompoundTag energyTag = this.energyStorage.serializeNBT();
         tag.put("energy", energyTag);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        energy.invalidate();
-    }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            return energy.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.put("energy", energyStorage.serializeNBT());
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        energyStorage.deserializeNBT(pTag.getCompound("energy"));
     }
 
     @Override

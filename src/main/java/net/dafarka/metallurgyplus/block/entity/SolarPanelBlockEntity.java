@@ -1,42 +1,29 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-
-public class SolarPanelBlockEntity extends BlockEntity {
+public class SolarPanelBlockEntity extends EnergyBlockEntity {
 
     protected final ContainerData data;
 
-    private final GenericEnergyStorage energyStorage;
-    private final LazyOptional<IEnergyStorage> energy;
-
     private int generation = 0;
 
-
     public SolarPanelBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
-        super(ModBlockEntities.SOLAR_BLOCK_ENTITIES.get(tier).get(), pPos, pBlockState);
-        if (tier <= 0) {
-            throw new IllegalArgumentException("Tier must be greater than 0! Found: " + tier);
-        }
+        super(
+            ModBlockEntities.SOLAR_BLOCK_ENTITIES.get(tier).get(),
+            pPos,
+            pBlockState,
+            getGeneration(tier),
+            0,
+            getGeneration(tier)
+        );
 
-        this.generation = SolarPanelBlock.GENERATION * (int) Math.pow(2, tier - 1);
-        if (tier == 26) generation = Integer.MAX_VALUE;
-        this.energyStorage = new GenericEnergyStorage(generation, 0, generation);
-        this.energy = LazyOptional.of(() -> energyStorage);
+        this.generation = getGeneration(tier);
 
         this.data = new ContainerData() {
             @Override
@@ -62,6 +49,12 @@ public class SolarPanelBlockEntity extends BlockEntity {
         };
     }
 
+    private static int getGeneration(int tier) {
+        if (tier == 26) return Integer.MAX_VALUE;
+
+        return SolarPanelBlock.GENERATION * (int) Math.pow(2, tier - 1);
+    }
+
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (pLevel.isDay() && pLevel.canSeeSky(pPos.above())) {
             energyStorage.generateEnergy(generation);
@@ -80,31 +73,4 @@ public class SolarPanelBlockEntity extends BlockEntity {
     }
 
     public void drops() { }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        energy.invalidate();
-    }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            return energy.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.put("energy", energyStorage.serializeNBT());
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        energyStorage.deserializeNBT(pTag.getCompound("energy"));
-    }
 }

@@ -10,7 +10,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,9 +27,6 @@ import java.util.Map;
 
 public class SackStationBlockEntity extends BlockEntity {
 
-    protected final ContainerData data;
-
-    private int generation = 0;
     private static final String SACK_TAG = "sack";
     private static final int SACK_STATE_EVENT = 1;
     private ItemStack sack = ItemStack.EMPTY;
@@ -38,27 +34,6 @@ public class SackStationBlockEntity extends BlockEntity {
 
     public SackStationBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.SACK_STATION_BE.get(), pPos, pBlockState);
-
-        this.data = new ContainerData() {
-            @Override
-            public int get(int pIndex) {
-                return switch (pIndex) {
-                    default -> 0;
-                };
-            }
-
-            @Override
-            public void set(int pIndex, int pValue) {
-                switch (pIndex) {
-
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 0;
-            }
-        };
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {

@@ -1,12 +1,10 @@
 package net.dafarka.metallurgyplus.block.custom;
 
-import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.entity.BatteryBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,30 +14,19 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BatteryBlock extends BaseEntityBlock {
-    public static final VoxelShape SHAPE = Block.box(0,0, 0, 16, 16, 16);
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+public class BatteryBlock extends BaseBlock {
 
     public static final int CAPACITY = 10000;
 
@@ -47,18 +34,8 @@ public class BatteryBlock extends BaseEntityBlock {
 
     public BatteryBlock(Properties pProperties, int tier) {
         super(pProperties);
-        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+
         this.tier = tier;
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE;
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
     }
 
     @Override
@@ -83,7 +60,7 @@ public class BatteryBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof BatteryBlockEntity) {
+            if (entity instanceof BatteryBlockEntity) {
                 NetworkHooks.openScreen((ServerPlayer) pPlayer, (MenuProvider) entity, pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
@@ -108,18 +85,6 @@ public class BatteryBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BatteryBlockEntity(pPos, pState, tier);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        super.createBlockStateDefinition(pBuilder);
-        pBuilder.add(FACING);
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
     }
 
     @Override
