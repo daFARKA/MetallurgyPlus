@@ -1,6 +1,6 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.screen.menu.QuarryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,8 +27,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
     public static final int ENERGY_CONSUMPTION = 8000000;
@@ -59,9 +57,12 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
                     case 2 -> QuarryBlockEntity.this.energyStorage.getEnergyStored();
                     case 3 -> QuarryBlockEntity.this.energyStorage.getMaxEnergyStored();
                     case 4 -> QuarryBlockEntity.this.areaLocked ? 1 : 0;
-                    case 5 -> QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getX() : 0;
-                    case 6 -> QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getY() : 0;
-                    case 7 -> QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getZ() : 0;
+                    case 5 ->
+                        QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getX() : 0;
+                    case 6 ->
+                        QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getY() : 0;
+                    case 7 ->
+                        QuarryBlockEntity.this.targetStart != null ? QuarryBlockEntity.this.targetStart.getZ() : 0;
                     case 8 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getX() : 0;
                     case 9 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getY() : 0;
                     case 10 -> QuarryBlockEntity.this.targetEnd != null ? QuarryBlockEntity.this.targetEnd.getZ() : 0;
@@ -200,6 +201,7 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private int minX, maxX, minY, maxY, minZ, maxZ;
+
     public void setTargetArea(BlockPos start, BlockPos end) {
         this.targetStart = start;
         this.targetEnd = end;
@@ -326,15 +328,30 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
         return false;
     }
 
-    public void setTempStart(int x, int y, int z) { tempStartX = x; tempStartY = y; tempStartZ = z; setChanged(); }
-    public void setTempEnd(int x, int y, int z) { tempEndX = x; tempEndY = y; tempEndZ = z; setChanged(); }
+    public void setTempStart(int x, int y, int z) {
+        tempStartX = x;
+        tempStartY = y;
+        tempStartZ = z;
+        setChanged();
+    }
+
+    public void setTempEnd(int x, int y, int z) {
+        tempEndX = x;
+        tempEndY = y;
+        tempEndZ = z;
+        setChanged();
+    }
 
     public int getTempStartX() { return tempStartX; }
+
     public int getTempStartY() { return tempStartY; }
+
     public int getTempStartZ() { return tempStartZ; }
 
     public int getTempEndX() { return tempEndX; }
+
     public int getTempEndY() { return tempEndY; }
+
     public int getTempEndZ() { return tempEndZ; }
 
     public boolean isRunning() { return running; }

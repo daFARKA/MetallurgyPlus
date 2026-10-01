@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
@@ -13,7 +14,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CableBlockEntity extends EnergyBlockEntity {
+public class CableBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> {
 
     protected final ContainerData data;
 

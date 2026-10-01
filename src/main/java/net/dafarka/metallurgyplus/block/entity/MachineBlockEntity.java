@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
 import net.dafarka.metallurgyplus.screen.menu.MachineMenu;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
-public class MachineBlockEntity extends EnergyBlockEntity implements MenuProvider {
+public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> implements MenuProvider {
 
     private MachineBlock machineBlock;
 

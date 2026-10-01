@@ -6,6 +6,10 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 public class Utility {
 
     /**
@@ -73,5 +77,36 @@ public class Utility {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Formats a BigInteger into a compact, human-readable string with SI/engineering suffixes
+     * (e.g. 1.25K, 45.60M, 1.00G, 2.50T).
+     *
+     * @param number the BigInteger to format
+     *
+     * @return The formatted compact string
+     */
+    public static String formatCompact(@NotNull BigInteger number) {
+        final String[] SUFFIXES = {
+            "", "K", "M", "G", "T", "P", "E", "Z", "Y"
+        };
+
+        BigInteger abs = number.abs();
+        if (abs.compareTo(BigInteger.valueOf(1000)) < 0) {
+            return number.toString();
+        }
+
+        BigDecimal dec = new BigDecimal(number);
+        int unitIndex = 0;
+
+        while (dec.abs().compareTo(BigDecimal.valueOf(1000)) >= 0 && unitIndex < SUFFIXES.length - 1) {
+            dec = dec.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
+            unitIndex++;
+        }
+
+        String formattedNum = dec.stripTrailingZeros().toPlainString();
+
+        return formattedNum + SUFFIXES[unitIndex];
     }
 }

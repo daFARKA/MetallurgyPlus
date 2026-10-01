@@ -1,26 +1,33 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
+import net.dafarka.metallurgyplus.energy.IBigEnergyStorage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
-public class SolarPanelBlockEntity extends EnergyBlockEntity {
+import javax.annotation.Nullable;
+import java.math.BigInteger;
+
+public class SolarPanelBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
 
     protected final ContainerData data;
 
-    private int generation = 0;
+    private BigInteger generation;
 
     public SolarPanelBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
         super(
             ModBlockEntities.SOLAR_BLOCK_ENTITIES.get(tier).get(),
             pPos,
             pBlockState,
-            getGeneration(tier),
-            0,
-            getGeneration(tier)
+            () -> new BigEnergyStorage(getGeneration(tier), BigInteger.valueOf(0), getGeneration(tier))
         );
 
         this.generation = getGeneration(tier);
@@ -49,10 +56,25 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity {
         };
     }
 
-    private static int getGeneration(int tier) {
-        if (tier == 26) return Integer.MAX_VALUE;
+    @NotNull
+    @Override
+    public <T> LazyOptional<T> getCapability(
+        @NotNull Capability<T> cap,
+        @Nullable Direction side
+    ) {
+        if (cap == ForgeCapabilities.ENERGY) {
+            if (side == null || side == Direction.DOWN) {
+                return energyLazy.cast();
+            }
 
-        return SolarPanelBlock.GENERATION * (int) Math.pow(2, tier - 1);
+            return LazyOptional.empty();
+        }
+
+        return super.getCapability(cap, side);
+    }
+
+    private static BigInteger getGeneration(int tier) {
+        return BigInteger.valueOf(SolarPanelBlock.GENERATION).shiftLeft(tier - 1);
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
@@ -62,10 +84,22 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity {
 
         BlockPos belowPos = pPos.below();
         if (pLevel.getBlockEntity(belowPos) != null) {
-            pLevel.getBlockEntity(belowPos).getCapability(ForgeCapabilities.ENERGY, null).ifPresent(storage -> {
-                int energyToSend = energyStorage.extractEnergy(generation, true);
-                int accepted = storage.receiveEnergy(energyToSend, false);
-                energyStorage.extractEnergy(accepted, false);
+            pLevel.getBlockEntity(belowPos).getCapability(ForgeCapabilities.ENERGY, Direction.UP).ifPresent(storage -> {
+                if (storage instanceof IBigEnergyStorage bigStorage) {
+                    BigInteger canExtract = energyStorage.extractEnergyBig(generation, true);
+                    BigInteger accepted = bigStorage.receiveEnergyBig(canExtract, false);
+                    energyStorage.extractEnergyBig(accepted, false);
+                } else {
+                    BigInteger simulatedExtract = energyStorage.extractEnergyBig(generation, true);
+                    int intToSend = simulatedExtract.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+
+                    if (intToSend > 0) {
+                        int accepted = storage.receiveEnergy(intToSend, false);
+                        if (accepted > 0) {
+                            energyStorage.extractEnergyBig(BigInteger.valueOf(accepted), false);
+                        }
+                    }
+                }
             });
         }
 

@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,9 +19,11 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import javax.annotation.Nullable;
 
-public class BatteryBlockEntity extends EnergyBlockEntity implements MenuProvider {
+public class BatteryBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> implements MenuProvider {
 
     protected final ContainerData data;
+
+    private int transfer;
 
     public BatteryBlockEntity(BlockPos pPos, BlockState pBlockState, int tier) {
         super(
@@ -31,6 +34,8 @@ public class BatteryBlockEntity extends EnergyBlockEntity implements MenuProvide
             getTransfer(tier),
             getTransfer(tier)
         );
+
+        this.transfer = getTransfer(tier);
 
         this.data = new ContainerData() {
             @Override
@@ -77,7 +82,7 @@ public class BatteryBlockEntity extends EnergyBlockEntity implements MenuProvide
             BlockEntity neighbor = pLevel.getBlockEntity(pPos.relative(direction));
             if (neighbor != null) {
                 neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(neighborEnergy -> {
-                    int energyExtracted = this.energyStorage.extractEnergy(10000, true);
+                    int energyExtracted = this.energyStorage.extractEnergy(transfer, true);
                     int energyReceived = neighborEnergy.receiveEnergy(energyExtracted, false);
                     this.energyStorage.extractEnergy(energyReceived, false);
                 });
@@ -89,7 +94,7 @@ public class BatteryBlockEntity extends EnergyBlockEntity implements MenuProvide
             BlockEntity neighbor = pLevel.getBlockEntity(pPos.relative(direction));
             if (neighbor != null) {
                 neighbor.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(neighborEnergy -> {
-                    int energyPulled = neighborEnergy.extractEnergy(10000, true);
+                    int energyPulled = neighborEnergy.extractEnergy(transfer, true);
                     int accepted = this.energyStorage.receiveEnergy(energyPulled, false);
                     neighborEnergy.extractEnergy(accepted, false);
                 });

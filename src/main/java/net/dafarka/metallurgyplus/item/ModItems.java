@@ -469,7 +469,7 @@ public class ModItems {
     }
 
     private static void registerSolarPanels() {
-        for (int i = 1; i <= 26; i++) {
+        for (int i = 1; i <= TIER_COLORS.size() - 1; i++) {
             registerSolarPanel(i, TIER_COLORS.get(i));
         }
     }

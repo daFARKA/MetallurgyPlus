@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.block.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.energy.ISerializableEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -12,11 +13,22 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
-public abstract class EnergyBlockEntity extends BaseBlockEntity {
+public abstract class EnergyBlockEntity<T extends ISerializableEnergyStorage> extends BaseBlockEntity {
 
-    protected final GenericEnergyStorage energyStorage;
+    protected final T energyStorage;
     protected LazyOptional<IEnergyStorage> energyLazy = LazyOptional.empty();
+
+    protected EnergyBlockEntity(
+        BlockEntityType<?> type,
+        BlockPos pos,
+        BlockState state,
+        Supplier<T> storageSupplier
+    ) {
+        super(type, pos, state);
+        this.energyStorage = storageSupplier.get();
+    }
 
     protected EnergyBlockEntity(
         BlockEntityType<?> type,
@@ -26,13 +38,7 @@ public abstract class EnergyBlockEntity extends BaseBlockEntity {
         int maxReceive,
         int maxExtract
     ) {
-        super(type, pos, state);
-
-        this.energyStorage = new GenericEnergyStorage(
-            capacity,
-            maxReceive,
-            maxExtract
-        );
+        this(type, pos, state, () -> (T) new GenericEnergyStorage(capacity, maxReceive, maxExtract));
     }
 
     @Override

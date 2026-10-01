@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class SolarPanelBlock extends BaseBlock {
@@ -71,8 +72,8 @@ public class SolarPanelBlock extends BaseBlock {
     public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        int generation = GENERATION * (int) Math.pow(2, tier - 1);
-        if (tier == 26) generation = Integer.MAX_VALUE;
-        tooltip.add(Component.literal("Generates " + Utility.formatWithSeparator(generation, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        BigInteger generation = BigInteger.valueOf(GENERATION).shiftLeft(tier - 1);
+
+        tooltip.add(Component.literal("Generates " + Utility.formatCompact(generation) + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }
