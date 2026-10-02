@@ -481,17 +481,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(2).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(1).get())
-            .define('C', ModItems.ALLOY_MAP.get("cupronickel_plate").get())
-            .define('c', ModItems.COIL_MAP.get(2).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(1).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(1).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("cupronickel_plate").get()), has(ModItems.ALLOY_MAP.get("cupronickel_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
-            .save(pWriter);
+        buildCableRecipe(pWriter, 2, ModItems.ALLOY_MAP.get("cupronickel_plate").get());
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(3).get())
             .pattern("XCX")
@@ -566,109 +556,64 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .save(pWriter);
     }
 
+    private void buildCableRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(tier).get())
+            .pattern("XPX")
+            .pattern("PcP")
+            .pattern("XPX")
+            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(tier - 1).get())
+            .define('P', plate)
+            .define('c', ModItems.COIL_MAP.get(tier).get())
+            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(tier - 1).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(tier - 1).get()))
+            .unlockedBy(getHasName(plate), has(plate))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
+            .save(pWriter);
+    }
+
     private void buildCoilRecipes(Consumer<FinishedRecipe> pWriter) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(1).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', Items.COPPER_INGOT)
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.VANILLA_MAP.get("iron_rod").get())
-            .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_rod").get()), has(ModItems.VANILLA_MAP.get("iron_rod").get()))
-            .save(pWriter);
+        buildCoilRecipe(pWriter, 1, ModItems.VANILLA_MAP.get("iron_rod").get(), Items.COPPER_INGOT);
+        buildCoilRecipe(pWriter, 2, ModItems.ALLOY_MAP.get("wrought-iron_rod").get(), ModItems.MATERIAL_MAP.get("aluminum_ingot").get());
+        buildCoilRecipe(pWriter, 3, ModItems.ALLOY_MAP.get("steel_rod").get(), ModItems.MATERIAL_MAP.get("silver_ingot").get());
+        buildCoilRecipe(pWriter, 4, ModItems.ALLOY_MAP.get("invar_rod").get(), ModItems.MATERIAL_MAP.get("zinc_ingot").get());
+        buildCoilRecipe(pWriter, 5, ModItems.ALLOY_MAP.get("vanadium-steel_rod").get(), ModItems.ALLOY_MAP.get("nichrome_ingot").get());
+        buildCoilRecipe(pWriter, 6, ModItems.ALLOY_MAP.get("tungsten-steel_rod").get(), ModItems.MATERIAL_MAP.get("platinum_ingot").get());
+        buildCoilRecipe(pWriter, 7, ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get(), ModItems.ALLOY_MAP.get("electrum_ingot").get());
+        buildCoilRecipe(pWriter, 8, ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get(), ModItems.MATERIAL_MAP.get("tantalum_ingot").get());
+        buildCoilRecipe(pWriter, 9, ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get(), ModItems.ALLOY_MAP.get("niobium-titanium_ingot").get());
+        buildCoilRecipe(pWriter, 10, ModItems.ALLOY_MAP.get("samarium-cobalt_rod").get(), ModItems.ALLOY_MAP.get("niobium-titanium_ingot").get());
+        buildCoilRecipe(pWriter, 11, ModItems.ALLOY_MAP.get("neodymium-iron-boron_rod").get(), ModItems.ALLOY_MAP.get("niobium-titanium_ingot").get());
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(2).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.MATERIAL_MAP.get("tin_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("steel_rod").get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tin_ingot").get()), has(ModItems.MATERIAL_MAP.get("tin_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_rod").get()), has(ModItems.ALLOY_MAP.get("steel_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(3).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.ALLOY_MAP.get("bronze_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("manganese-steel_rod").get())
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("bronze_ingot").get()), has(ModItems.ALLOY_MAP.get("bronze_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("manganese-steel_rod").get()), has(ModItems.ALLOY_MAP.get("manganese-steel_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(4).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.MATERIAL_MAP.get("lead_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("invar_rod").get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_ingot").get()), has(ModItems.MATERIAL_MAP.get("lead_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("invar_rod").get()), has(ModItems.ALLOY_MAP.get("invar_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(5).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.ALLOY_MAP.get("solder_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("nitinol_rod").get())
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("solder_ingot").get()), has(ModItems.ALLOY_MAP.get("solder_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("nitinol_rod").get()), has(ModItems.ALLOY_MAP.get("nitinol_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(6).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get())
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-1_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(7).get())
-            .pattern("XRX")
-            .pattern(" I ")
-            .pattern("XRX")
-            .define('X', ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get())
-            .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get())
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get()), has(ModItems.ALLOY_MAP.get("aluminum-zirconium_ingot").get()))
-            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-2_rod").get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(8).get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(12).get())
             .pattern("xRX")
             .pattern(" I ")
             .pattern("XRx")
             .define('X', ModItems.MATERIAL_MAP.get("iridium_ingot").get())
             .define('x', ModItems.MATERIAL_MAP.get("osmium_ingot").get())
             .define('R', Items.REDSTONE)
-            .define('I', ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get())
+            .define('I', ModItems.ALLOY_MAP.get("terbium-dysprosium_rod").get())
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("iridium_ingot").get()), has(ModItems.MATERIAL_MAP.get("iridium_ingot").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("osmium_ingot").get()), has(ModItems.MATERIAL_MAP.get("osmium_ingot").get()))
             .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get()), has(ModItems.ALLOY_MAP.get("maraging-steel-3_rod").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("terbium-dysprosium_rod").get()), has(ModItems.ALLOY_MAP.get("terbium-dysprosium_rod").get()))
+            .save(pWriter);
+    }
+
+    private void buildCoilRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item rod, Item ingots) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.COIL_MAP.get(tier).get())
+            .pattern("XRX")
+            .pattern(" I ")
+            .pattern("XRX")
+            .define('X', ingots)
+            .define('R', Items.REDSTONE)
+            .define('I', rod)
+            .unlockedBy(getHasName(ingots), has(ingots))
+            .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+            .unlockedBy(getHasName(rod), has(rod))
             .save(pWriter);
     }
 
     private void buildSolarPanelRecipes(Consumer<FinishedRecipe> pWriter) {
-        int tier = 1;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(1).get())
             .pattern("sss")
             .pattern("IFI")
             .pattern("IcI")
@@ -682,439 +627,42 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
-        tier = 2;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', Items.COPPER_INGOT)
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(1).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
-            .save(pWriter);
+        List<Item> plates = List.of(
+            ModItems.VANILLA_MAP.get("copper_plate").get()
+        );
+        for (int i = 0; i < plates.size(); i++) {
+            int tier = i + 2;
+            buildSolarPanelRecipe(pWriter, tier, plates.get(i));
+        }
+    }
 
-        tier = 3;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("bronze_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(1).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("bronze_plate").get()), has(ModItems.ALLOY_MAP.get("bronze_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
-            .save(pWriter);
+    private void buildSolarPanelRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {
+        int coilTier = (tier - 1) / 6 + 1;
 
-        tier = 4;
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
+            .pattern("SsS")
+            .pattern("PFP")
+            .pattern("PcP")
+            .define('S', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
             .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("brass_plate").get())
+            .define('P', plate)
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(1).get())
+            .define('c', ModItems.COIL_MAP.get(coilTier).get())
             .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("brass_plate").get()), has(ModItems.ALLOY_MAP.get("brass_plate").get()))
+            .unlockedBy(getHasName(plate), has(plate))
             .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
-            .save(pWriter);
-
-        tier = 5;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("spring-copper_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(2).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("spring-copper_plate").get()), has(ModItems.ALLOY_MAP.get("spring-copper_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
-            .save(pWriter);
-
-        tier = 6;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("cupronickel_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(2).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("cupronickel_plate").get()), has(ModItems.ALLOY_MAP.get("cupronickel_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
-            .save(pWriter);
-
-        tier = 7;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.MATERIAL_MAP.get("graphite_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(2).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("graphite_plate").get()), has(ModItems.MATERIAL_MAP.get("graphite_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
-            .save(pWriter);
-
-        tier = 8;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("steel_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(2).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_plate").get()), has(ModItems.ALLOY_MAP.get("steel_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(2).get()), has(ModItems.COIL_MAP.get(2).get()))
-            .save(pWriter);
-
-        tier = 9;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("wrought-iron_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(3).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("wrought-iron_plate").get()), has(ModItems.ALLOY_MAP.get("wrought-iron_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
-            .save(pWriter);
-
-        tier = 10;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("pig-iron_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(3).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("pig-iron_plate").get()), has(ModItems.ALLOY_MAP.get("pig-iron_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
-            .save(pWriter);
-
-        tier = 11;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("spring-steel_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(3).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("spring-steel_plate").get()), has(ModItems.ALLOY_MAP.get("spring-steel_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
-            .save(pWriter);
-
-        tier = 12;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("tungsten-steel_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(3).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("tungsten-steel_plate").get()), has(ModItems.ALLOY_MAP.get("tungsten-steel_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
-            .save(pWriter);
-
-        tier = 13;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("stainless-steel_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(4).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()), has(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
-            .save(pWriter);
-
-        tier = 14;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("invar_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(4).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("invar_plate").get()), has(ModItems.ALLOY_MAP.get("invar_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
-            .save(pWriter);
-
-        tier = 15;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("zamak_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(4).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("zamak_plate").get()), has(ModItems.ALLOY_MAP.get("zamak_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
-            .save(pWriter);
-
-        tier = 16;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("aluminum-scandium_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(4).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-scandium_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-scandium_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
-            .save(pWriter);
-
-        tier = 17;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(5).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(5).get()), has(ModItems.COIL_MAP.get(5).get()))
-            .save(pWriter);
-
-        tier = 18;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(5).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium-zinc_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(5).get()), has(ModItems.COIL_MAP.get(5).get()))
-            .save(pWriter);
-
-        tier = 19;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("aluminum-zirconium_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(5).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-zirconium_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-zirconium_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(5).get()), has(ModItems.COIL_MAP.get(5).get()))
-            .save(pWriter);
-
-        tier = 20;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("nichrome_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(6).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("nichrome_plate").get()), has(ModItems.ALLOY_MAP.get("nichrome_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(6).get()), has(ModItems.COIL_MAP.get(6).get()))
-            .save(pWriter);
-
-        tier = 21;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("cobalt-chromium_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(6).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("cobalt-chromium_plate").get()), has(ModItems.ALLOY_MAP.get("cobalt-chromium_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(6).get()), has(ModItems.COIL_MAP.get(6).get()))
-            .save(pWriter);
-
-        tier = 22;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("titanium-6al-4v_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(6).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-4v_plate").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-4v_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(6).get()), has(ModItems.COIL_MAP.get(6).get()))
-            .save(pWriter);
-
-        tier = 23;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("titanium-6al-7nb_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(7).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-7nb_plate").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-7nb_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(7).get()), has(ModItems.COIL_MAP.get(7).get()))
-            .save(pWriter);
-
-        tier = 24;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(7).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_plate").get()), has(ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(7).get()), has(ModItems.COIL_MAP.get(7).get()))
-            .save(pWriter);
-
-        tier = 25;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("titanium-8al-1mo-1v_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(7).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-8al-1mo-1v_plate").get()), has(ModItems.ALLOY_MAP.get("titanium-8al-1mo-1v_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(7).get()), has(ModItems.COIL_MAP.get(7).get()))
-            .save(pWriter);
-
-        tier = 26;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier).get())
-            .pattern("PsP")
-            .pattern("IFI")
-            .pattern("IcI")
-            .define('P', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
-            .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
-            .define('I', ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_plate").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
-            .define('c', ModItems.COIL_MAP.get(8).get())
-            .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_plate").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_plate").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(8).get()), has(ModItems.COIL_MAP.get(8).get()))
+            .unlockedBy(getHasName(ModItems.COIL_MAP.get(coilTier).get()), has(ModItems.COIL_MAP.get(coilTier).get()))
             .save(pWriter);
     }
 
     private void buildBatteryRecipes(Consumer<FinishedRecipe> pWriter) {
         int tier = 1;
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
+            .pattern("PLP")
             .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("antimony_plate").get())
+            .pattern("PcP")
+            .define('P', ModItems.MATERIAL_MAP.get("antimony_plate").get())
             .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
             .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
             .define('c', ModItems.COIL_MAP.get(tier).get())
@@ -1124,91 +672,24 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
             .save(pWriter);
 
-        tier = 2;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("tantalum_plate").get())
-            .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
-            .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tantalum_plate").get()), has(ModItems.MATERIAL_MAP.get("tantalum_plate").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
-            .save(pWriter);
+        buildBatteryRecipe(pWriter, 2, ModItems.MATERIAL_MAP.get("tantalum_plate").get());
+        buildBatteryRecipe(pWriter, 3, ModItems.MATERIAL_MAP.get("bismuth_plate").get());
+        buildBatteryRecipe(pWriter, 4, ModItems.MATERIAL_MAP.get("cadmium_plate").get());
+        buildBatteryRecipe(pWriter, 5, ModItems.MATERIAL_MAP.get("indium_plate").get());
+        buildBatteryRecipe(pWriter, 6, ModItems.MATERIAL_MAP.get("palladium_plate").get());
+        buildBatteryRecipe(pWriter, 7, ModItems.MATERIAL_MAP.get("rhodium_plate").get());
+    }
 
-        tier = 3;
+    private static void buildBatteryRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("bismuth_plate").get())
+            .pattern("PLP")
+            .pattern("LBL")
+            .pattern("PcP")
+            .define('P', plate)
             .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
+            .define('B', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
             .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("bismuth_plate").get()), has(ModItems.MATERIAL_MAP.get("bismuth_plate").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
-            .save(pWriter);
-
-        tier = 4;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("cadmium_plate").get())
-            .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
-            .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("cadmium_plate").get()), has(ModItems.MATERIAL_MAP.get("cadmium_plate").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
-            .save(pWriter);
-
-        tier = 5;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("indium_plate").get())
-            .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
-            .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("indium_plate").get()), has(ModItems.MATERIAL_MAP.get("indium_plate").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
-            .save(pWriter);
-
-        tier = 6;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("palladium_plate").get())
-            .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
-            .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("palladium_plate").get()), has(ModItems.MATERIAL_MAP.get("palladium_plate").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
-            .save(pWriter);
-
-        tier = 7;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BATTERY_BLOCK_MAP.get(tier).get())
-            .pattern("ILI")
-            .pattern("LFL")
-            .pattern("IcI")
-            .define('I', ModItems.MATERIAL_MAP.get("rhodium_plate").get())
-            .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get())
-            .define('c', ModItems.COIL_MAP.get(tier).get())
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("rhodium_plate").get()), has(ModItems.MATERIAL_MAP.get("rhodium_plate").get()))
+            .unlockedBy(getHasName(plate), has(plate))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
             .unlockedBy(getHasName(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.BATTERY_BLOCK_MAP.get(tier - 1).get()))
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
@@ -1231,109 +712,28 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_gear").get()), has(ModItems.VANILLA_MAP.get("copper_gear").get()))
             .save(pWriter);
 
-        tier = 2;
+        buildSackRecipe(pWriter, 2, Items.LEATHER, ModItems.VANILLA_MAP.get("diamond_gear").get());
+        buildSackRecipe(pWriter, 3, Items.LEATHER, ModItems.ALLOY_MAP.get("wrought-iron_gear").get());
+        buildSackRecipe(pWriter, 4, Items.LEATHER, ModItems.ALLOY_MAP.get("brass_gear").get());
+        buildSackRecipe(pWriter, 5, ModItems.CUSTOM_ITEM_MAP.get("rubber").get(), ModItems.ALLOY_MAP.get("invar_gear").get());
+        buildSackRecipe(pWriter, 6, ModItems.CUSTOM_ITEM_MAP.get("rubber").get(), ModItems.MATERIAL_MAP.get("zirconium_gear").get());
+        buildSackRecipe(pWriter, 7, ModItems.CUSTOM_ITEM_MAP.get("rubber").get(), ModItems.MATERIAL_MAP.get("lead_gear").get());
+        buildSackRecipe(pWriter, 8, ModItems.CUSTOM_ITEM_MAP.get("rubber").get(), ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get());
+    }
+
+    private static void buildSackRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item leather, Item gear) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
             .pattern("SLS")
             .pattern("LsL")
-            .pattern("LgL")
+            .pattern("LGL")
             .define('S', Items.STRING)
-            .define('L', Items.LEATHER)
+            .define('L', leather)
             .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.VANILLA_MAP.get("diamond_gear").get())
+            .define('G', gear)
             .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+            .unlockedBy(getHasName(leather), has(leather))
             .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
-            .save(pWriter);
-
-        tier = 3;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SLS")
-            .pattern("LsL")
-            .pattern("LgL")
-            .define('S', Items.STRING)
-            .define('L', Items.LEATHER)
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.ALLOY_MAP.get("wrought-iron_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("wrought-iron_gear").get()), has(ModItems.ALLOY_MAP.get("wrought-iron_gear").get()))
-            .save(pWriter);
-
-        tier = 4;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SLS")
-            .pattern("LsL")
-            .pattern("LgL")
-            .define('S', Items.STRING)
-            .define('L', Items.LEATHER)
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.ALLOY_MAP.get("brass_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("brass_gear").get()), has(ModItems.ALLOY_MAP.get("brass_gear").get()))
-            .save(pWriter);
-
-        tier = 5;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SRS")
-            .pattern("RsR")
-            .pattern("RgR")
-            .define('S', Items.STRING)
-            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.ALLOY_MAP.get("invar_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("invar_gear").get()), has(ModItems.ALLOY_MAP.get("invar_gear").get()))
-            .save(pWriter);
-
-        tier = 6;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SRS")
-            .pattern("RsR")
-            .pattern("RgR")
-            .define('S', Items.STRING)
-            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.MATERIAL_MAP.get("zirconium_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("zirconium_gear").get()), has(ModItems.MATERIAL_MAP.get("zirconium_gear").get()))
-            .save(pWriter);
-
-        tier = 7;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SRS")
-            .pattern("RsR")
-            .pattern("RgR")
-            .define('S', Items.STRING)
-            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.MATERIAL_MAP.get("lead_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_gear").get()), has(ModItems.MATERIAL_MAP.get("lead_gear").get()))
-            .save(pWriter);
-
-        tier = 8;
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SACK_MAP.get(tier).get())
-            .pattern("SRS")
-            .pattern("RsR")
-            .pattern("RgR")
-            .define('S', Items.STRING)
-            .define('R', ModItems.CUSTOM_ITEM_MAP.get("rubber").get())
-            .define('s', ModItems.SACK_MAP.get(tier - 1).get())
-            .define('g', ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get())
-            .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-            .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()), has(ModItems.CUSTOM_ITEM_MAP.get("rubber").get()))
-            .unlockedBy(getHasName(ModItems.SACK_MAP.get(tier - 1).get()), has(ModItems.SACK_MAP.get(tier - 1).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_gear").get()))
+            .unlockedBy(getHasName(gear), has(gear))
             .save(pWriter);
     }
 }

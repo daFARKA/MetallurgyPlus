@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
@@ -11,10 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CableBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> {
+public class CableBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
 
     protected final ContainerData data;
 
@@ -23,9 +24,7 @@ public class CableBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> {
             ModBlockEntities.CABLE_BLOCK_ENTITIES.get(tier).get(),
             pPos,
             pBlockState,
-            getCapacity(tier),
-            getTransfer(tier),
-            getTransfer(tier)
+            () -> new BigEnergyStorage(getTransfer(tier), getTransfer(tier), getTransfer(tier))
         );
 
         this.data = new ContainerData() {
@@ -52,14 +51,8 @@ public class CableBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> {
         };
     }
 
-    private static int getTransfer(int tier) {
-        if (tier == 8) return Integer.MAX_VALUE;
-
-        return CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
-    }
-
-    private static int getCapacity(int tier) {
-        return getTransfer(tier);
+    public static BigInteger getTransfer(int tier) {
+        return BigInteger.valueOf(CableBlock.TRANSFER).multiply(BigInteger.TEN.pow(tier - 1));
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {

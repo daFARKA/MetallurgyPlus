@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 public class SolarPanelBlock extends BaseBlock {
-    public static final int GENERATION = (int) Math.pow(2, 6);
+    public static final int GENERATION = (int) Math.pow(2, 4);
 
     private int tier = 0;
 
@@ -72,8 +72,7 @@ public class SolarPanelBlock extends BaseBlock {
     public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        BigInteger generation = BigInteger.valueOf(GENERATION).shiftLeft(tier - 1);
-
+        BigInteger generation = SolarPanelBlockEntity.getGeneration(tier);
         tooltip.add(Component.literal("Generates " + Utility.formatCompact(generation) + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

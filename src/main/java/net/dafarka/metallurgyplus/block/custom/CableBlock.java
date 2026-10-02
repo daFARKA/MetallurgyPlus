@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class CableBlock extends BaseBlock {
@@ -71,8 +72,7 @@ public class CableBlock extends BaseBlock {
     public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        int transfer = CableBlock.TRANSFER * (int) Math.pow(10, tier - 1);
-        if (tier == 8) transfer = Integer.MAX_VALUE;
-        tooltip.add(Component.literal("Transfers " + Utility.formatWithSeparator(transfer, ',') + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        BigInteger transfer = CableBlockEntity.getTransfer(tier);
+        tooltip.add(Component.literal("Transfers " + Utility.formatCompact(transfer) + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }

@@ -27,25 +27,60 @@ import java.util.Map;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
 
-    private static final List<Integer> TIER_COLORS = List.of(0x000000,
-        0x0000ff, 0x0040ff, 0x0070ff, 0x00a0ff, 0x40d0ff, 0x80f0ff,   // Blue family
-        0x00ff00, 0x40ff20, 0x80ff30, 0xbfff60, 0x7fff80, 0xc0ffb0,   // Green family
-        0xff0000, 0xff4000, 0xff7000, 0xcc6600, 0x996633, 0x663300,   // Red -> Brown family
-        0xffff00, 0xffdf20, 0xffbf40, 0xffa040, 0xffd080, 0xfff0a0,   // Yellow/Gold family
-        0x6a00ff, 0x7f40ff, 0x9966ff, 0xb080ff, 0xc0a0ff, 0xd0bfff,   // Purple/Violet family
-        0xff00ff, 0xff40df, 0xff80bf, 0xffa0ff, 0xff80cf, 0xffb0e0    // Magenta/Pink family
+    private static final List<Integer> TIER_COLORS = List.of(
+        0x000000, // Tier 0: Base / Neutral
+
+        // 1. B (Pure Blue: Pale Sky -> Saturated Pure Blue)
+        0xdbeafe, 0x93c5fd, 0x60a5fa, 0x3b82f6, 0x1d4ed8, 0x0026ff,
+
+        // 2. G (Pure Green: Pale Minty-Green -> Vivid Pure Green)
+        0xdcfce7, 0x86efac, 0x4ade80, 0x22c55e, 0x16a34a, 0x00c814,
+
+        // 3. R (Pure Red: Pale Pinkish-Red -> Vivid Pure Red)
+        0xffe4e6, 0xfca5a5, 0xf87171, 0xef4444, 0xdc2626, 0xff0000,
+
+        // 4. BG (Balanced Blue-Green / Cyan: Pale Aqua -> Vivid Cyan)
+        0xcffafe, 0x67e8f9, 0x22d3ee, 0x06b6d4, 0x00bfff, 0x00e1e1,
+
+        // 5. Bg (Blue dominant, minor green / Deep Sky: Pale Ice -> Saturated Azure)
+        0xdbeafe, 0x7dd3fc, 0x38bdf8, 0x0ea5e9, 0x0284c7, 0x0066ff,
+
+        // 6. Gb (Green dominant, minor blue / Teal: Pale Seafoam -> Vivid Teal)
+        0xccfbf1, 0x5eead4, 0x2dd4bf, 0x14b8a6, 0x0d9488, 0x00b386,
+
+        // 7. GR (Balanced Green-Red / Yellow: Pale Cream -> Pure Vivid Yellow)
+        0xfef9c3, 0xfef08a, 0xfde047, 0xfacc15, 0xffeb3b, 0xffff00,
+
+        // 8. Gr (Green dominant, minor red / Lime-Chartreuse: Soft Lime -> Vibrant Lime)
+        0xecfccb, 0xbef264, 0xa3e635, 0x84cc16, 0x65a30d, 0x66cc00,
+
+        // 9. Rg (Red dominant, minor green / Orange -> Amber Brown: Soft Peach -> Rich Amber Brown)
+        0xffedd5, 0xfba368, 0xf97316, 0xe05615, 0xbf4000, 0x8f3000,
+
+        // 10. BR (Balanced Blue-Red / Magenta: Pale Lavender-Pink -> Pure Magenta)
+        0xfae8ff, 0xf0abfc, 0xe879f9, 0xd946ef, 0xc026d3, 0xff00ff,
+
+        // 11. Br (Blue dominant, minor red / Electric Violet: Soft Periwinkle -> Vivid Violet)
+        0xe0e7ff, 0xa5b4fc, 0x818cf8, 0x6366f1, 0x4f46e5, 0x6a00ff,
+
+        // 12. Rb (Red dominant, minor blue / Crimson-Rose: Pale Blush -> Deep Radiant Crimson)
+        0xfce7f3, 0xf472b6, 0xf43f5e, 0xe11d48, 0xbe123c, 0xd00048
     );
 
     private static final List<Integer> MAJOR_TIER_COLORS = List.of(
-        0x000000,
-        TIER_COLORS.get(1),
-        TIER_COLORS.get(7),
-        TIER_COLORS.get(13),
-        TIER_COLORS.get(19),
-        TIER_COLORS.get(15),
-        TIER_COLORS.get(17),
-        TIER_COLORS.get(28),
-        TIER_COLORS.get(31)
+        TIER_COLORS.get(0),  // Base / Neutral (0x000000)
+        TIER_COLORS.get(6),  // 1. B  peak (Deep Cobalt)
+        TIER_COLORS.get(12), // 2. G  peak (Deep Forest Green)
+        TIER_COLORS.get(18), // 3. R  peak (Deep Crimson)
+        TIER_COLORS.get(24), // 4. BG peak (Deep Cyan)
+        TIER_COLORS.get(30), // 5. Bg peak (Midnight Ocean)
+        TIER_COLORS.get(36), // 6. Gb peak (Dark Pine/Teal)
+        TIER_COLORS.get(42), // 7. GR peak (Pure Saturated Yellow)
+        TIER_COLORS.get(48), // 8. Gr peak (Deep Olive Green)
+        TIER_COLORS.get(54), // 9. Rg peak (Deep Warm Brown)
+        TIER_COLORS.get(60), // 10. BR peak (Deep Rich Magenta)
+        TIER_COLORS.get(66), // 11. Br peak (Deep Midnight Indigo)
+        TIER_COLORS.get(72)  // 12. Rb peak (Deep Bordeaux/Wine)
     );
 
     public static final Map<String, RegistryObject<Item>> CUSTOM_ITEM_MAP = new HashMap<>();
@@ -323,7 +358,7 @@ public class ModItems {
         registerBatteries();
 
         // Coils
-        registerMajorTierItems(8, "coil", COIL_MAP, COIL_COLOR_MAP);
+        registerMajorTierItems(12, "coil", COIL_MAP, COIL_COLOR_MAP);
 
         // Sacks
         registerSacks();
@@ -455,7 +490,7 @@ public class ModItems {
     }
 
     private static void registerCables() {
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 12; i++) {
             registerCable(i, MAJOR_TIER_COLORS.get(i));
         }
     }

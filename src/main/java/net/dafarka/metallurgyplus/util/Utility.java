@@ -88,10 +88,6 @@ public class Utility {
      * @return The formatted compact string
      */
     public static String formatCompact(@NotNull BigInteger number) {
-        final String[] SUFFIXES = {
-            "", "K", "M", "G", "T", "P", "E", "Z", "Y"
-        };
-
         BigInteger abs = number.abs();
         if (abs.compareTo(BigInteger.valueOf(1000)) < 0) {
             return number.toString();
@@ -100,13 +96,13 @@ public class Utility {
         BigDecimal dec = new BigDecimal(number);
         int unitIndex = 0;
 
-        while (dec.abs().compareTo(BigDecimal.valueOf(1000)) >= 0 && unitIndex < SUFFIXES.length - 1) {
+        while (dec.abs().compareTo(BigDecimal.valueOf(1000)) >= 0 && unitIndex < NumberSuffixes.SUFFIXES.length - 1) {
             dec = dec.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
             unitIndex++;
         }
 
         String formattedNum = dec.stripTrailingZeros().toPlainString();
 
-        return formattedNum + SUFFIXES[unitIndex];
+        return formattedNum + NumberSuffixes.SUFFIXES[unitIndex];
     }
 }

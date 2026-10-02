@@ -73,7 +73,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
         return super.getCapability(cap, side);
     }
 
-    private static BigInteger getGeneration(int tier) {
+    public static BigInteger getGeneration(int tier) {
         return BigInteger.valueOf(SolarPanelBlock.GENERATION).shiftLeft(tier - 1);
     }
 
