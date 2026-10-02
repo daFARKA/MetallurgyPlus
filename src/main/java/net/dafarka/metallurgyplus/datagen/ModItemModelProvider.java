@@ -2,10 +2,8 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -19,6 +17,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Map;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -47,11 +46,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("power_source");
         simpleBlockItemModel("sack_station");
 
-        createCableBlockItems();
-        createSolarPanelBlockItems();
-        createBatteryBlockItems();
+        simpleBlockItemModels(ModBlocks.CABLE_BLOCKS_MAP.values());
+        simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
+        simpleBlockItemModels(ModBlocks.BATTERY_BLOCK_MAP.values());
+
         createCoilItems();
         createSackItems();
+
+        multiBlockItemModels();
     }
 
     private ItemModelBuilder groupItem(RegistryObject<Item> item, String group) {
@@ -85,6 +87,17 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void simpleBlockItemModel(String modelName) {
         getBuilder(modelName)
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)))
+            .transforms()
+            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+            .rotation(10, -45, 170)
+            .translation(0, 1.5f, -2.75f)
+            .scale(0.375f, 0.375f, 0.375f)
+            .end();
+    }
+
+    public void simpleBlockItemModel(String modelName, String texturePath) {
+        getBuilder("item/" + modelName)
+            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + texturePath)))
             .transforms()
             .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
             .rotation(10, -45, 170)
@@ -128,24 +141,31 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void createCableBlockItems() {
-        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            String name = block.get().getDescriptionId().split("\\.")[2];
-            simpleBlockItemModel(name);
+    private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks) {
+        for (RegistryObject<? extends Block> block : blocks) {
+            simpleBlockItemModel(block.getId().getPath());
         }
     }
 
-    private void createSolarPanelBlockItems() {
-        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            String name = block.get().getDescriptionId().split("\\.")[2];
-            simpleBlockItemModel(name);
-        }
-    }
+    private void multiBlockItemModels() {
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = Utility.getMultiBlockNames(block);
 
-    private void createBatteryBlockItems() {
-        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
-            String name = block.get().getDescriptionId().split("\\.")[2];
-            simpleBlockItemModel(name);
+            String multiblock = parts[0];
+            String group = parts[1];
+            String blockName = parts[2];
+
+            String texturePath = "multiblock/" + multiblock + "/" + group + "/" + blockName;
+            if (group.isEmpty()) {
+                texturePath = "multiblock/" + multiblock + "/" + blockName;
+            }
+
+            String modelName = multiblock + "/" + group + "/" + blockName;
+            if (group.isEmpty()) {
+                modelName = multiblock + "/" + blockName;
+            }
+
+            simpleBlockItemModel(modelName, texturePath);
         }
     }
 

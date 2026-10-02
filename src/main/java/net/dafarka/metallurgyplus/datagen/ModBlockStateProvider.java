@@ -2,10 +2,8 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SackStationBlock;
-import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +14,8 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Collection;
 
 public class ModBlockStateProvider extends BlockStateProvider {
 
@@ -40,9 +40,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         sackStationBlock();
 
-        cableBlocks();
-        solarPanelBlocks();
-        batteryBlocks();
+        horizontalFacingBlocks(ModBlocks.CABLE_BLOCKS_MAP.values());
+        horizontalFacingBlocks(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
+        horizontalFacingBlocks(ModBlocks.BATTERY_BLOCK_MAP.values());
+
+        multiBlockBlocks();
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject, String group) {
@@ -78,12 +80,21 @@ public class ModBlockStateProvider extends BlockStateProvider {
     public void simpleBlockState(Block block) {
         String blockName = block.getDescriptionId().split("\\.")[2];
         ResourceLocation model = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
+        simpleBlockState(block, model);
+    }
 
+    public void simpleBlockState(Block block, ResourceLocation texture) {
         getVariantBuilder(block).forAllStates(state ->
             ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(model))
+                .modelFile(models().getExistingFile(texture))
                 .build()
         );
+    }
+
+    private void horizontalFacingBlocks(Collection<? extends RegistryObject<? extends Block>> blocks) {
+        for (RegistryObject<? extends Block> block : blocks) {
+            horizontalFacingBlock(block.getId().getPath(), block.get());
+        }
     }
 
     private void horizontalFacingBlock(String name, Block block) {
@@ -109,21 +120,38 @@ public class ModBlockStateProvider extends BlockStateProvider {
             .build());
     }
 
-    private void cableBlocks() {
-        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+    private void multiBlockBlocks() {
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = Utility.getMultiBlockNames(block);
+
+            String multiblock = parts[0];
+            String group = parts[1];
+            String blockName = parts[2];
+
+            if (multiblock.equals("battery")) {
+                batteryPart(group, blockName, block);
+            }
         }
     }
 
-    private void solarPanelBlocks() {
-        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+    private void batteryPart(String group, String blockName, RegistryObject<? extends Block> registryObject) {
+        String groupName = "multiblock/battery/" + group;
+        if (group.isEmpty()) {
+            groupName = "multiblock/battery";
         }
-    }
 
-    private void batteryBlocks() {
-        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+        String texturePath = "block/" + groupName + "/" + blockName;
+
+        Block block = registryObject.get();
+        if (group.equals("base")) {
+            simpleBlockState(block);
+        } else {
+            switch (blockName) {
+                case "controller" -> {
+                    horizontalFacingBlock(blockName, block);
+                }
+                default -> simpleBlockState(block, modLoc(texturePath));
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModLangProvider extends LanguageProvider {
 
@@ -58,6 +59,7 @@ public class ModLangProvider extends LanguageProvider {
         addBlockMapTranslations(ModBlocks.GEM_BLOCKS_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
+        addMultiBlockTranslations();
     }
 
     private void addCreativeTabsTranslations() {
@@ -168,6 +170,28 @@ public class ModLangProvider extends LanguageProvider {
             int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
 
             add("block." + MetallurgyPlus.MODID + "." + fullName, "Battery Tier " + tier);
+        }
+    }
+
+    private void addMultiBlockTranslations() {
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = block.get().getDescriptionId().split("\\.");
+
+            String multiblock = parts[2];
+            String blockName = parts[parts.length - 1];
+
+            String multiblockName = Arrays.stream(multiblock.split("_"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "));
+
+            String blockNameFormatted = Arrays.stream(blockName.split("_"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "));
+
+            add(
+                block.get().getDescriptionId(),
+                multiblockName + " " + blockNameFormatted
+            );
         }
     }
 

@@ -3,7 +3,9 @@ package net.dafarka.metallurgyplus.util;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -104,5 +106,27 @@ public class Utility {
         String formattedNum = dec.stripTrailingZeros().toPlainString();
 
         return formattedNum + NumberSuffixes.SUFFIXES[unitIndex];
+    }
+
+    /**
+     * Gets the multiblock name, group, and block name of a specific multiblock block.
+     * <p>
+     * Examples: <br>
+     * "battery/casing"     -> multiblock="battery", group="",     blockName="casing" <br>
+     * "battery/base/cell"  -> multiblock="battery", group="base", blockName="cell"
+     *
+     * @param block The block to get the name parts of.
+     *
+     * @return A string array of the 3 parts. The return array is guaranteed to have 3 parts.
+     */
+    public static String[] getMultiBlockNames(RegistryObject<? extends Block> block) {
+        String path = block.getId().getPath();
+        String[] parts = path.split("/");
+
+        String multiblock = parts[0];
+        String group = parts.length > 2 ? parts[1] : "";
+        String blockName = parts[parts.length - 1];
+
+        return new String[]{multiblock, group, blockName};
     }
 }

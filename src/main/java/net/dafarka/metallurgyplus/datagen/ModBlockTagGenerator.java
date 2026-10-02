@@ -15,6 +15,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,8 +26,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         super(output, lookupProvider, MetallurgyPlus.MODID, existingFileHelper);
     }
 
+    private Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP_COPY = new HashMap<>();
+
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+        CUSTOM_BLOCKS_MAP_COPY.clear();
+        CUSTOM_BLOCKS_MAP_COPY.putAll(ModBlocks.CUSTOM_BLOCKS_MAP);
+
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksAddTags();
         mapBlocksAddTags(ModBlocks.ALLOY_BLOCKS_MAP);
@@ -34,7 +40,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         cableBlockAddTags();
         solarPanelBlockAddTags();
         batteryBlockAddTags();
-        mapBlocksAddTags(ModBlocks.CUSTOM_BLOCKS_MAP);
+        mapBlocksAddTags(ModBlocks.MULTIBLOCKS_MAP);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
@@ -55,6 +61,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(Tags.Blocks.ORES)
             .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
+
+        mapBlocksAddTags(CUSTOM_BLOCKS_MAP_COPY);
     }
 
     private void mapBlocksAddTags(Map<String, RegistryObject<Block>> blockMap) {

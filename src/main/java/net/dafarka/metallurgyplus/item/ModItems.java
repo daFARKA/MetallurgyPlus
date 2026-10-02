@@ -362,6 +362,9 @@ public class ModItems {
 
         // Sacks
         registerSacks();
+
+        // MultiBlock Blocks
+        registerMultiBlockBlocks();
     }
 
     private static void registerCustomItem(String name) {
@@ -535,5 +538,24 @@ public class ModItems {
         for (int i = 1; i <= 8; i++) {
             registerSack(i, MAJOR_TIER_COLORS.get(i));
         }
+    }
+
+    private static void registerMultiBlockBlocks() {
+        registerMBBatteryBlocks();
+    }
+
+    private static void registerMapBlocks(Map<String, RegistryObject<Block>> blockMap, List<String> blockNames, BlockBehaviour blockBehaviour, SoundType soundType) {
+        for (String name : blockNames) {
+            ModBlocks.registerMapBlock(blockMap, name, blockBehaviour, soundType);
+        }
+    }
+
+    private static void registerMBBatteryBlocks() {
+        List<String> blockNames = List.of(
+            "battery/casing",
+            "battery/input",
+            "battery/output"
+        );
+        registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, Blocks.IRON_BLOCK, SoundType.METAL);
     }
 }
