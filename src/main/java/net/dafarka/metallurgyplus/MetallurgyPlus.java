@@ -109,7 +109,7 @@ public class MetallurgyPlus {
             }
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SACK_STATION.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.MACHINE_FRAME.get(), RenderType.cutout());
 
             ItemColors itemColors = Minecraft.getInstance().getItemColors();
             for (RegistryObject<Item> item : ModItems.ITEMS.getEntries()) {

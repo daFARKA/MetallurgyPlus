@@ -48,13 +48,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SACK_STATION.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
         this.tag(Tags.Blocks.ORES)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
     }
 
     private void mapBlocksAddTags(Map<String, RegistryObject<Block>> blockMap) {

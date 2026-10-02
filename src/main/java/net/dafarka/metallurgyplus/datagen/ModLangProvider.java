@@ -25,7 +25,7 @@ public class ModLangProvider extends LanguageProvider {
     protected void addTranslations() {
         add("item.metallurgyplus.llamkana", "Llamkana");
 
-        add("block.metallurgyplus.clay_mineral", "Clay Mineral");
+        add("block.metallurgyplus.machine_frame", "Machine Frame");
 
         add("block.metallurgyplus.ore_processing_unit", "Ore Processing Unit");
         add("block.metallurgyplus.alloy_smelter", "Alloy Smelter");
@@ -188,6 +188,7 @@ public class ModLangProvider extends LanguageProvider {
      * Capitalizes the first letter of every word in the provided string.
      *
      * @param input string whose words should be capitalized
+     *
      * @return the input string with the first letter of each word capitalized
      */
     public String capitalizeFirstLetterEach(String input) {
@@ -213,6 +214,7 @@ public class ModLangProvider extends LanguageProvider {
      * @param fullName The full name of the entity, of the following form:
      *                 name<-tag>_component, where -tag is optional.
      *                 There can even be more tags, e.g: name<-tag1-tag2-tag3>_component
+     *
      * @return a nicely formatted name, such as: Name Tag Component
      */
     private String getName(String fullName) {
@@ -242,6 +244,7 @@ public class ModLangProvider extends LanguageProvider {
      * x is a number and El1 the first element (that is not Titanium) and so on.
      *
      * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
+     *
      * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
      */
     private String getTitaniumAlloyName(String[] parts) {

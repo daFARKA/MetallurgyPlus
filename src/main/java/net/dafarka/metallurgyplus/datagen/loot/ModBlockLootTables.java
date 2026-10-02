@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,9 +26,15 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
+    private Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP_COPY = new HashMap<>();
 
     @Override
     protected void generate() {
+        CUSTOM_BLOCKS_MAP_COPY.clear();
+        CUSTOM_BLOCKS_MAP_COPY.putAll(ModBlocks.CUSTOM_BLOCKS_MAP);
+
+        customBlocksCustomBehaviour();
+
         mapBlocksDropSelf(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksRaw();
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
@@ -36,6 +43,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         solarPanelBlocksDropSelf();
         batteryBlocksDropSelf();
         customBlocksDropSelf();
+
+        this.dropSelf(ModBlocks.MACHINE_FRAME.get());
 
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
@@ -46,9 +55,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.QUARRY.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
         this.dropSelf(ModBlocks.SACK_STATION.get());
-
-        this.add(ModBlocks.CLAY_MINERAL.get(),
-            block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
@@ -95,8 +101,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         }
     }
 
+    private void customBlocksCustomBehaviour() {
+        this.add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get(),
+            block -> createCopperLikeOreDrops(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));
+        CUSTOM_BLOCKS_MAP_COPY.remove("clay_mineral");
+    }
+
     private void customBlocksDropSelf() {
-        for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
+        for (RegistryObject<Block> block : CUSTOM_BLOCKS_MAP_COPY.values()) {
             this.dropSelf(block.get());
         }
     }

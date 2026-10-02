@@ -38,6 +38,7 @@ public class ModCreativeTabs {
             .displayItems((pParameters, pOutput) -> {
                 pOutput.accept(ModItems.LLAMKANA.get());
                 addSortedItems(ModItems.CUSTOM_ITEM_MAP, pOutput);
+                addSortedBlocks(ModBlocks.CUSTOM_BLOCKS_MAP, pOutput);
                 addSortedItems(ModItems.COIL_MAP, pOutput);
                 addSortedItems(ModItems.SACK_MAP, pOutput);
             })
@@ -55,7 +56,7 @@ public class ModCreativeTabs {
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.ORE_BLOCKS_MAP.get("ilmenite_stone_block").get()))
             .title(Component.translatable("creativetab.metallurgyplus_ores"))
             .displayItems((pParameters, pOutput) -> {
-                pOutput.accept(ModBlocks.CLAY_MINERAL.get());
+                pOutput.accept(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
                 addSortedItems(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP, pOutput);
             })
@@ -89,6 +90,8 @@ public class ModCreativeTabs {
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.ALLOY_SMELTER.get()))
             .title(Component.translatable("creativetab.metallurgyplus_machines"))
             .displayItems((pParameters, pOutput) -> {
+                pOutput.accept(ModBlocks.MACHINE_FRAME.get());
+
                 pOutput.accept(ModBlocks.ALLOY_SMELTER.get());
                 pOutput.accept(ModBlocks.ORE_PROCESSING_UNIT.get());
                 pOutput.accept(ModBlocks.GRINDER.get());
@@ -98,8 +101,6 @@ public class ModCreativeTabs {
                 pOutput.accept(ModBlocks.QUARRY.get());
                 pOutput.accept(ModBlocks.POWER_SOURCE.get());
                 pOutput.accept(ModBlocks.SACK_STATION.get());
-
-                addSortedBlocks(ModBlocks.CUSTOM_BLOCKS_MAP, pOutput);
 
                 addSortedBlocks(ModBlocks.CABLE_BLOCKS_MAP, pOutput);
                 addSortedBlocks(ModBlocks.BATTERY_BLOCK_MAP, pOutput);

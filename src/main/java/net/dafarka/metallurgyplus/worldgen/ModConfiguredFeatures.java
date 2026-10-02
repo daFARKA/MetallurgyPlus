@@ -62,7 +62,8 @@ public class ModConfiguredFeatures {
         }
 
         ResourceKey<ConfiguredFeature<?, ?>> clayMineralKey = registerKey("clay_mineral");
-        List<OreConfiguration.TargetBlockState> clayMineralOres = List.of(OreConfiguration.target(clayReplaceables, ModBlocks.CLAY_MINERAL.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> clayMineralOres = List.of(OreConfiguration.target(
+            clayReplaceables, ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get().defaultBlockState()));
         register(context, clayMineralKey, Feature.ORE, new OreConfiguration(clayMineralOres, 16));
     }
 }

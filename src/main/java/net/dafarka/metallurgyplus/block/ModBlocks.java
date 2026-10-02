@@ -47,8 +47,8 @@ public class ModBlocks {
 
     public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
-    public static final RegistryObject<Block> CLAY_MINERAL = registerBlock("clay_mineral",
-        () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));
+    public static final RegistryObject<Block> MACHINE_FRAME = registerBlock("machine_frame",
+        () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
     public static final int[][] ORE_PROCESSING_UNIT_INPUT_POSITION = {{8, 39}};
     public static final int[][] ORE_PROCESSING_UNIT_OUTPUT_POSITIONS = {{62, 21}, {80, 21}, {98, 21}, {116, 21}, {134, 21}, {152, 21},
@@ -152,12 +152,16 @@ public class ModBlocks {
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
 
-        // Custom Blocks
-        registerCustomBlock("machine_frame", Blocks.IRON_BLOCK, SoundType.METAL);
+        registerCustomBlocks();
+    }
+
+    private static void registerCustomBlocks() {
+        registerCustomBlock("clay_mineral", Blocks.CLAY, SoundType.GRAVEL);
     }
 
     private static void registerCustomBlock(String name, BlockBehaviour blockBehaviour, SoundType soundType) {
-        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType).noOcclusion()));
+        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType)));
+
         CUSTOM_BLOCKS_MAP.put(name, block);
     }
 }
