@@ -125,33 +125,28 @@ public class ModBlockStateProvider extends BlockStateProvider {
             String[] parts = Utility.getMultiBlockNames(block);
 
             String multiblock = parts[0];
-            String group = parts[1];
-            String blockName = parts[2];
+            String blockName = parts[1];
 
             if (multiblock.equals("battery")) {
-                batteryPart(group, blockName, block);
+                batteryPart(blockName, block);
             }
         }
     }
 
-    private void batteryPart(String group, String blockName, RegistryObject<? extends Block> registryObject) {
-        String groupName = "multiblock/battery/" + group;
-        if (group.isEmpty()) {
-            groupName = "multiblock/battery";
-        }
+    private void batteryPart(String blockName, RegistryObject<? extends Block> registryObject) {
+        String groupName = "multiblock/battery";
 
         String texturePath = "block/" + groupName + "/" + blockName;
 
         Block block = registryObject.get();
-        if (group.equals("base")) {
-            simpleBlockState(block);
-        } else {
-            switch (blockName) {
-                case "controller" -> {
-                    horizontalFacingBlock(blockName, block);
-                }
-                default -> simpleBlockState(block, modLoc(texturePath));
+        switch (blockName) {
+            case "controller" -> {
+                horizontalFacingBlock(blockName, block);
             }
+            case "cell" -> {
+                simpleBlockState(block);
+            }
+            default -> simpleBlockState(block, modLoc(texturePath));
         }
     }
 }

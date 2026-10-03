@@ -11,8 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utility {
+
+    private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
     /**
      * Gets an item from ForgeRegistries using the name.
@@ -109,24 +113,69 @@ public class Utility {
     }
 
     /**
-     * Gets the multiblock name, group, and block name of a specific multiblock block.
+     * Gets the multiblock and block name of a specific multiblock block.
      * <p>
-     * Examples: <br>
-     * "battery/casing"     -> multiblock="battery", group="",     blockName="casing" <br>
-     * "battery/base/cell"  -> multiblock="battery", group="base", blockName="cell"
+     * Example: <br>
+     * "battery/casing" -> multiblock="battery", blockName="casing"
      *
      * @param block The block to get the name parts of.
      *
-     * @return A string array of the 3 parts. The return array is guaranteed to have 3 parts.
+     * @return A string array of the 3 parts. The return array is guaranteed to have 2 parts.
      */
     public static String[] getMultiBlockNames(RegistryObject<? extends Block> block) {
         String path = block.getId().getPath();
         String[] parts = path.split("/");
 
         String multiblock = parts[0];
-        String group = parts.length > 2 ? parts[1] : "";
         String blockName = parts[parts.length - 1];
 
-        return new String[]{multiblock, group, blockName};
+        return new String[]{multiblock, blockName};
+    }
+
+    /**
+     * Gets the tier of a given name.
+     * <p>
+     * Examples: <br>
+     * "name1"  -> 1 <br>
+     * "name22" -> 22
+     *
+     * @param name The name with an integer in it (trailing).
+     *
+     * @return the tier
+     */
+    public static int getTier(String name) {
+        if (name == null || name.isEmpty()) {
+            return 0;
+        }
+
+        Matcher matcher = DIGIT_PATTERN.matcher(name);
+        if (matcher.find()) {
+            try {
+                return Integer.parseInt(matcher.group());
+            } catch (NumberFormatException ignored) {
+                return 0;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Gets the base name of a given string by stripping trailing digits.
+     * <p>
+     * Examples: <br>
+     * "name1"          -> "name" <br>
+     * "solar_panel_22" -> "solar_panel" <br>
+     * "cable/cell_3"   -> "cable/cell"
+     *
+     * @param name The name with trailing tier.
+     *
+     * @return The base name without the tier.
+     */
+    public static String getBaseName(String name) {
+        if (name == null) {
+            return "";
+        }
+        return name.replaceAll("[_/]?\\d+$", "");
     }
 }

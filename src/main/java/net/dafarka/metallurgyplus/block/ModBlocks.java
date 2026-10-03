@@ -18,7 +18,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -46,7 +48,10 @@ public class ModBlocks {
     public static final Map<Integer, Integer> SOLAR_PANEL_COLOR_MAP = new HashMap<>();
 
     public static final Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP = new HashMap<>();
-    public static final Map<String, RegistryObject<Block>> MULTIBLOCKS_MAP = new HashMap<>();
+
+    public static final Map<String, RegistryObject<? extends Block>> MULTIBLOCKS_MAP = new HashMap<>();
+
+    public static final Map<String, Integer> MULTIBLOCK_COLOR_MAP = new HashMap<>();
 
     public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
@@ -162,8 +167,37 @@ public class ModBlocks {
         registerMapBlock(ModBlocks.CUSTOM_BLOCKS_MAP, "clay_mineral", Blocks.CLAY, SoundType.GRAVEL);
     }
 
-    public static void registerMapBlock(Map<String, RegistryObject<Block>> blockMap, String name, BlockBehaviour blockBehaviour, SoundType soundType) {
-        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType)));
-        blockMap.put(name, block);
+    public static <T extends Block> RegistryObject<T> registerMapBlock(
+        Map<String, ? extends RegistryObject<? extends Block>> blockMap,
+        String name,
+        Function<BlockBehaviour.Properties, T> factory,
+        BlockBehaviour blockBehaviour,
+        SoundType soundType
+    ) {
+        RegistryObject<T> block = registerBlock(name, () -> factory.apply(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType)));
+
+        ((Map<String, RegistryObject<? extends Block>>) blockMap).put(name, block);
+
+        return block;
+    }
+
+    public static RegistryObject<Block> registerMapBlock(
+        Map<String, ? extends RegistryObject<? extends Block>> blockMap,
+        String name,
+        BlockBehaviour blockBehaviour,
+        SoundType soundType
+    ) {
+        return registerMapBlock(blockMap, name, Block::new, blockBehaviour, soundType);
+    }
+
+    public static void registerMapBlocks(
+        Map<String, RegistryObject<? extends Block>> blockMap,
+        List<String> blockNames,
+        Function<String, ? extends Block> blockSupplier
+    ) {
+        for (String name : blockNames) {
+            RegistryObject<? extends Block> block = registerBlock(name, () -> blockSupplier.apply(name));
+            blockMap.put(name, block);
+        }
     }
 }

@@ -20,6 +20,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -544,18 +545,32 @@ public class ModItems {
         registerMBBatteryBlocks();
     }
 
-    private static void registerMapBlocks(Map<String, RegistryObject<Block>> blockMap, List<String> blockNames, BlockBehaviour blockBehaviour, SoundType soundType) {
-        for (String name : blockNames) {
-            ModBlocks.registerMapBlock(blockMap, name, blockBehaviour, soundType);
-        }
-    }
-
     private static void registerMBBatteryBlocks() {
-        List<String> blockNames = List.of(
+        List<String> blockNames = new ArrayList<>(List.of(
             "battery/casing",
             "battery/input",
             "battery/output"
-        );
-        registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, Blocks.IRON_BLOCK, SoundType.METAL);
+        ));
+
+        appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
+
+        ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
+            BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
+
+            /*Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = CONTROLLER_TYPES.get(name);
+            if (beSupplier != null) {
+                return new MBControllerBlock(properties, beSupplier);
+            }*/
+
+            return new Block(properties);
+        });
+    }
+
+    private static void appendTieredBlocks(List<String> blockNames, String name, int tier, Map<String, Integer> colorMap, List<Integer> colors) {
+        for (int i = 1; i <= tier; i++) {
+            String blockName = name + i;
+            blockNames.add(blockName);
+            colorMap.put(blockName, colors.get(i));
+        }
     }
 }

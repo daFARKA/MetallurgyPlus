@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.util.color;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class DynamicBatteryColor implements BlockColor, ItemColor {
 
-    public DynamicBatteryColor() {}
+    public DynamicBatteryColor() { }
 
     @Override
     public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos, int pTintIndex) {
@@ -28,7 +29,7 @@ public class DynamicBatteryColor implements BlockColor, ItemColor {
         if (pTintIndex == 0) {
             String fullName = pStack.getDescriptionId();
             String name = fullName.split("\\.")[2];
-            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+            int tier = Utility.getTier(name);
 
             return ModBlocks.BATTERY_COLOR_MAP.get(tier) != null ? ModBlocks.BATTERY_COLOR_MAP.get(tier) : -1;
         }

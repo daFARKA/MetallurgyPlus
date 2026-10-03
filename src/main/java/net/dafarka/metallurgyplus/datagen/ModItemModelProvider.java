@@ -152,18 +152,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             String[] parts = Utility.getMultiBlockNames(block);
 
             String multiblock = parts[0];
-            String group = parts[1];
-            String blockName = parts[2];
-
-            String texturePath = "multiblock/" + multiblock + "/" + group + "/" + blockName;
-            if (group.isEmpty()) {
-                texturePath = "multiblock/" + multiblock + "/" + blockName;
-            }
-
-            String modelName = multiblock + "/" + group + "/" + blockName;
-            if (group.isEmpty()) {
-                modelName = multiblock + "/" + blockName;
-            }
+            String blockName = parts[1];
+            
+            String texturePath = "multiblock/" + multiblock + "/" + blockName;
+            String modelName = multiblock + "/" + blockName;
 
             simpleBlockItemModel(modelName, texturePath);
         }

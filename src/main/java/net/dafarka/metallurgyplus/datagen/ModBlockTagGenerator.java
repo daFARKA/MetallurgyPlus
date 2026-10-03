@@ -65,8 +65,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         mapBlocksAddTags(CUSTOM_BLOCKS_MAP_COPY);
     }
 
-    private void mapBlocksAddTags(Map<String, RegistryObject<Block>> blockMap) {
-        for (RegistryObject<Block> block : blockMap.values()) {
+    private void mapBlocksAddTags(Map<String, ? extends RegistryObject<? extends Block>> blockMap) {
+        for (RegistryObject<? extends Block> block : blockMap.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(block.get());
         }

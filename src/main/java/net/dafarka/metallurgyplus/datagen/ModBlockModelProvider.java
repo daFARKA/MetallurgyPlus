@@ -68,11 +68,10 @@ public class ModBlockModelProvider extends BlockModelProvider {
             String[] parts = Utility.getMultiBlockNames(block);
 
             String multiblock = parts[0];
-            String group = parts[1];
-            String blockName = parts[2];
+            String blockName = parts[1];
 
             if (multiblock.equals("battery")) {
-                registerBatteryPart(group, blockName);
+                registerBatteryPart(blockName);
             }
         }
 
@@ -206,22 +205,20 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .renderType(mcLoc("cutout"));
     }
 
-    private void registerBatteryPart(String group, String blockName) {
-        String groupName = "multiblock/battery/" + group;
-        if (group.isEmpty()) {
-            groupName = "multiblock/battery";
-        }
+    private void registerBatteryPart(String blockName) {
+        String groupName = "multiblock/battery";
 
-        String name = "block/" + groupName + "/" + blockName;
-        if (group.equals("base")) {
-            registerOrientable(name, groupName, "cell", "_", "side", "side", "top", "top", new int[]{0, 0, 0, 0, 1, 1});
-        } else {
-            switch (blockName) {
-                case "controller" -> {
-                    registerOrientable(name, groupName, "controller", "casing", "casing", "casing", null);
-                }
-                default -> registerCubeAllModel(name, blockName, groupName);
+        String pathName = "block/" + groupName + "/" + blockName;
+        String name = Utility.getBaseName(blockName);
+        switch (name) {
+            case "controller" -> {
+                registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
             }
+            case "cell" -> {
+                groupName = groupName + "/base";
+                registerOrientable(pathName, groupName, "cell", "_", "side", "side", "top", "top", new int[]{0, 0, 0, 0, 1, 1});
+            }
+            default -> registerCubeAllModel(pathName, blockName, groupName);
         }
     }
 }
