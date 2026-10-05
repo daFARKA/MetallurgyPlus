@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.block.custom.*;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.item.custom.OreBlockItem;

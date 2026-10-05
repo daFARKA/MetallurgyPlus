@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.block.entity;
 
+import net.dafarka.metallurgyplus.block.entity.base.EnergyBlockEntity;
 import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

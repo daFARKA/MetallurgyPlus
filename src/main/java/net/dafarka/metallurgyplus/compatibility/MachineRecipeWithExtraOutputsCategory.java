@@ -4,7 +4,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

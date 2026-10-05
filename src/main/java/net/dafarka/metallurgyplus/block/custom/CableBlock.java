@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.block.custom;
 
+import net.dafarka.metallurgyplus.block.base.BaseBlock;
 import net.dafarka.metallurgyplus.block.entity.CableBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.util.Utility;

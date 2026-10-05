@@ -141,11 +141,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         Block block = registryObject.get();
         switch (blockName) {
             case "controller" -> {
-                horizontalFacingBlock(blockName, block);
+                horizontalFacingBlock(texturePath.substring(6), block);
             }
-            case "cell" -> {
-                simpleBlockState(block);
-            }
+            case "cell" -> simpleBlockState(block);
             default -> simpleBlockState(block, modLoc(texturePath));
         }
     }

@@ -1,4 +1,4 @@
-package net.dafarka.metallurgyplus.block.custom;
+package net.dafarka.metallurgyplus.block.base;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

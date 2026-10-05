@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.compatibility;
 
 import mezz.jei.api.helpers.IGuiHelper;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.minecraft.resources.ResourceLocation;
 

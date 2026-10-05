@@ -1,8 +1,8 @@
 package net.dafarka.metallurgyplus.screen.menu;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
-import net.dafarka.metallurgyplus.block.entity.MachineBlockEntity;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
+import net.dafarka.metallurgyplus.block.entity.base.MachineBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;

@@ -1,6 +1,6 @@
-package net.dafarka.metallurgyplus.block.custom;
+package net.dafarka.metallurgyplus.block.base;
 
-import net.dafarka.metallurgyplus.block.entity.MachineBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.base.MachineBlockEntity;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

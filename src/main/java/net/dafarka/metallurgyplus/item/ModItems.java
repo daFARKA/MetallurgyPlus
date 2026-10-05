@@ -2,9 +2,12 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.base.MBBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.minecraft.ChatFormatting;
@@ -14,6 +17,7 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
@@ -547,6 +552,7 @@ public class ModItems {
 
     private static void registerMBBatteryBlocks() {
         List<String> blockNames = new ArrayList<>(List.of(
+            "battery/controller",
             "battery/casing",
             "battery/input",
             "battery/output"
@@ -557,10 +563,10 @@ public class ModItems {
         ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
             BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
 
-            /*Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = CONTROLLER_TYPES.get(name);
+            Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {
-                return new MBControllerBlock(properties, beSupplier);
-            }*/
+                return new MBBlock(properties, beSupplier);
+            }
 
             return new Block(properties);
         });

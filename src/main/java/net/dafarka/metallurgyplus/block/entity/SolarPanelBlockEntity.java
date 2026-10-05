@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.block.entity.base.EnergyBlockEntity;
 import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
 import net.dafarka.metallurgyplus.energy.IBigEnergyStorage;
 import net.minecraft.core.BlockPos;
