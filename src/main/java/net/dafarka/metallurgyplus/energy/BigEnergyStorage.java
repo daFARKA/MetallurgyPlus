@@ -18,6 +18,26 @@ public class BigEnergyStorage implements IBigEnergyStorage, ISerializableEnergyS
         this.maxExtract = maxExtract != null ? maxExtract : BigInteger.ZERO;
     }
 
+    public boolean setLimits(BigInteger capacity, BigInteger maxReceive, BigInteger maxExtract) {
+        BigInteger nextCapacity = nonNegative(capacity);
+        BigInteger nextMaxReceive = nonNegative(maxReceive);
+        BigInteger nextMaxExtract = nonNegative(maxExtract);
+        if (this.capacity.equals(nextCapacity)
+            && this.maxReceive.equals(nextMaxReceive)
+            && this.maxExtract.equals(nextMaxExtract)) {
+            return false;
+        }
+
+        this.capacity = nextCapacity;
+        this.maxReceive = nextMaxReceive;
+        this.maxExtract = nextMaxExtract;
+        return true;
+    }
+
+    private static BigInteger nonNegative(BigInteger value) {
+        return value == null ? BigInteger.ZERO : value.max(BigInteger.ZERO);
+    }
+
     @Override
     public void generateEnergy(BigInteger generation) {
         this.energy = this.energy.add(generation);

@@ -35,6 +35,8 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.sack_station", "Sack Docking Station");
 
+        add("message.metallurgyplus.multiblock.formed", "Multiblock formed");
+
         addCreativeTabsTranslations();
 
         add("tooltip.metallurgyplus.common", "Y-Level: 80 to -64");

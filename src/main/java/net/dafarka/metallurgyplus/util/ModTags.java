@@ -13,6 +13,8 @@ public class ModTags {
         private static TagKey<Block> tag(String name) {
             return BlockTags.create(new ResourceLocation(MetallurgyPlus.MODID, name));
         }
+
+        public static final TagKey<Block> BATTERY_CELLS = tag("battery_cells");
     }
 
     public static class Items {
