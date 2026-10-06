@@ -209,8 +209,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
         String groupName = "multiblock/battery";
 
         String pathName = "block/" + groupName + "/" + blockName;
-        String name = Utility.getBaseName(blockName);
-        switch (name) {
+        String baseName = Utility.getBaseName(blockName);
+        switch (baseName) {
             case "controller" -> {
                 registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
             }

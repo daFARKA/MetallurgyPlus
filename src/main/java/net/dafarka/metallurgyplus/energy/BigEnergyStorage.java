@@ -90,6 +90,14 @@ public class BigEnergyStorage implements IBigEnergyStorage, ISerializableEnergyS
         return this.capacity;
     }
 
+    public BigInteger getMaxReceiveBig() {
+        return this.maxReceive;
+    }
+
+    public BigInteger getMaxExtractBig() {
+        return this.maxExtract;
+    }
+
     @Override
     public boolean canExtract() {
         return this.maxExtract.compareTo(BigInteger.ZERO) > 0;

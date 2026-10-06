@@ -33,6 +33,9 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
     protected void onStructureInvalidated() {
     }
 
+    protected void onServerTick() {
+    }
+
     /**
      * Validates the structure and updates this controller's derived formed state.
      */
@@ -88,8 +91,14 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, MBControllerBlockEntity controller) {
-        if (!level.isClientSide && level.getGameTime() % 20L == 0L) {
+        if (level.isClientSide) {
+            return;
+        }
+
+        if (level.getGameTime() % 20L == 0L) {
             controller.form(controller.getStructureDefinition());
         }
+
+        controller.onServerTick();
     }
 }

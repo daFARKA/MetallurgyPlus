@@ -26,6 +26,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<SackMenu>> SACK_MENU =
         registerMenuType("sack_menu", SackMenu::new);
 
+    public static final RegistryObject<MenuType<MBBatteryMenu>> MULTIBLOCK_BATTERY_MENU =
+        registerMenuType("multiblock_battery_menu", MBBatteryMenu::new);
+
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }

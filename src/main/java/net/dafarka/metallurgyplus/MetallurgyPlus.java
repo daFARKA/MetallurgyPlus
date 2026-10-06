@@ -11,10 +11,7 @@ import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.network.ModMessages;
 import net.dafarka.metallurgyplus.recipe.ModRecipeSerializers;
-import net.dafarka.metallurgyplus.screen.BatteryScreen;
-import net.dafarka.metallurgyplus.screen.MachineScreen;
-import net.dafarka.metallurgyplus.screen.QuarryScreen;
-import net.dafarka.metallurgyplus.screen.SackScreen;
+import net.dafarka.metallurgyplus.screen.*;
 import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
 import net.dafarka.metallurgyplus.util.color.DynamicItemColor;
 import net.dafarka.metallurgyplus.util.color.DynamicKeyColor;
@@ -194,6 +191,8 @@ public class MetallurgyPlus {
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);
+
+            MenuScreens.register(ModMenuTypes.MULTIBLOCK_BATTERY_MENU.get(), MBBatteryScreen::new);
 
             for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
                 ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.cutout());

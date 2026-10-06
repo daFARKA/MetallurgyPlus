@@ -7,14 +7,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class MachineMenu extends AbstractContainerMenu {
+public class MachineMenu extends BaseMenu {
 
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -34,7 +37,7 @@ public class MachineMenu extends AbstractContainerMenu {
     }
 
     public MachineMenu(int containerId, Inventory inventory, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.MACHINE_MENU.get(), containerId);
+        super(ModMenuTypes.MACHINE_MENU.get(), containerId, 0);
 
         blockEntity = (MachineBlockEntity) entity;
         level = inventory.player.level();
@@ -101,7 +104,7 @@ public class MachineMenu extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player player, int index) {
         Slot sourceSlot = slots.get(index);
 
-        if (sourceSlot == null || !sourceSlot.hasItem()) {
+        if (!sourceSlot.hasItem()) {
             return ItemStack.EMPTY;
         }
 
@@ -155,19 +158,5 @@ public class MachineMenu extends AbstractContainerMenu {
             player,
             blockEntity.getBlockState().getBlock()
         );
-    }
-
-    private void addPlayerInventory(Inventory inventory) {
-        for (int row = 0; row < 3; ++row) {
-            for (int column = 0; column < 9; ++column) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, 8 + column * 18, 84 + row * 18));
-            }
-        }
-    }
-
-    private void addPlayerHotbar(Inventory inventory) {
-        for (int i = 0; i < 9; ++i) {
-            addSlot(new Slot(inventory, i, 8 + i * 18, 142));
-        }
     }
 }
