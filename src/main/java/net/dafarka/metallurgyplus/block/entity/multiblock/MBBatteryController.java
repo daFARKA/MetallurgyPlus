@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity.multiblock;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
 import net.dafarka.metallurgyplus.energy.IBigEnergyStorage;
 import net.dafarka.metallurgyplus.screen.menu.MBBatteryMenu;
@@ -31,9 +32,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class MBBatteryController extends MBControllerBlockEntity implements MenuProvider {
-    private static final String CELL_BLOCK_PREFIX = "battery/cell";
-    private static final BigInteger CELL_BASE_CAPACITY = BigInteger.valueOf(2000000000);
-    private static final BigInteger CELL_BASE_TRANSFER = BigInteger.valueOf(2000000000);
+    private static final String CELL_BLOCK_PREFIX = BatteryCellBlock.BLOCK_ID_PREFIX;
     private static final int ENERGY_WORDS = 6;
     private static final int ENERGY_WORD_BITS = 15;
     private static final BigInteger ENERGY_WORD_MASK = BigInteger.ONE.shiftLeft(ENERGY_WORD_BITS).subtract(BigInteger.ONE);
@@ -109,7 +108,6 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     @Override
     protected void onStructureFormed(MBStructure structure) {
         BigInteger capacity = BigInteger.ZERO;
-        BigInteger transfer = BigInteger.ZERO;
 
         if (level == null) return;
 
@@ -119,11 +117,10 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
                 continue;
             }
 
-            capacity = capacity.add(CELL_BASE_CAPACITY.multiply(BigInteger.TEN.pow(tier - 1)));
-            transfer = transfer.add(CELL_BASE_TRANSFER.multiply(BigInteger.TEN.pow(tier - 1)));
+            capacity = capacity.add(BatteryCellBlock.getCapacityForTier(tier));
         }
 
-        if (energyStorage.setLimits(capacity, transfer, transfer)) {
+        if (energyStorage.setLimits(capacity)) {
             setChanged();
         }
     }

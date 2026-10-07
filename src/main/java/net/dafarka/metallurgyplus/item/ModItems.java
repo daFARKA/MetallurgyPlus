@@ -4,12 +4,14 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.base.MBBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -562,6 +564,11 @@ public class ModItems {
 
         ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
             BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
+
+            if (name.startsWith(BatteryCellBlock.BLOCK_ID_PREFIX)) {
+                int tier = Utility.getTier(name);
+                return new BatteryCellBlock(properties, tier);
+            }
 
             Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {

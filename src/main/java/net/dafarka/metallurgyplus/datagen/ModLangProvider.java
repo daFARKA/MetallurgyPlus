@@ -45,6 +45,8 @@ public class ModLangProvider extends LanguageProvider {
         add("tooltip.metallurgyplus.very_rare", "Y-Level: -10 to -64");
         add("tooltip.metallurgyplus.extremely_rare", "Y-Level: -30 to -64");
 
+        add("tooltip.metallurgyplus.battery_cell_capacity", "Adds %s FE to battery capacity");
+
         add("block." + MetallurgyPlus.MODID + ".battery", "Battery");
         addTieredBlockTranslations(ModBlocks.BATTERY_BLOCK_MAP, "Battery");
         addTieredBlockTranslations(ModBlocks.CABLE_BLOCKS_MAP, "Cable");

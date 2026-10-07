@@ -34,6 +34,14 @@ public class BigEnergyStorage implements IBigEnergyStorage, ISerializableEnergyS
         return true;
     }
 
+    public boolean setLimits(BigInteger capacity, BigInteger transfer) {
+        return setLimits(capacity, transfer, transfer);
+    }
+
+    public boolean setLimits(BigInteger capacity) {
+        return setLimits(capacity, capacity, capacity);
+    }
+
     private static BigInteger nonNegative(BigInteger value) {
         return value == null ? BigInteger.ZERO : value.max(BigInteger.ZERO);
     }
