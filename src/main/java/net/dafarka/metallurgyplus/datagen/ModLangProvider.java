@@ -49,7 +49,7 @@ public class ModLangProvider extends LanguageProvider {
 
         add("block." + MetallurgyPlus.MODID + ".battery", "Battery");
         addTieredBlockTranslations(ModBlocks.BATTERY_BLOCK_MAP, "Battery");
-        addTieredBlockTranslations(ModBlocks.CABLE_BLOCKS_MAP, "Cable");
+        addTieredBlockTranslations(ModBlocks.CABLE_BLOCKS_MAP);
         addTieredBlockTranslations(ModBlocks.SOLAR_PANEL_BLOCK_MAP, "Solar Panel");
 
 
@@ -153,6 +153,14 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
+    private <T extends Block> void addTieredBlockTranslations(Map<?, ? extends RegistryObject<T>> blockMap) {
+        for (RegistryObject<T> entry : blockMap.values()) {
+            String path = entry.getId().getPath();
+            int tier = Utility.getTier(path);
+            add(entry.get(), capitalizeFirstLetterEach(getName(Utility.removeTrailingDigits(Utility.removeInString(path, "_block")))) + " Tier " + tier);
+        }
+    }
+
     private void addMultiBlockTranslations() {
         for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
             String[] parts = Utility.getMultiBlockNames(block);
@@ -222,19 +230,28 @@ public class ModLangProvider extends LanguageProvider {
      * Formats the name of an entity.
      *
      * @param fullName The full name of the entity, of the following form:
-     *                 name<-tag>_component, where -tag is optional.
-     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3>_component
+     *                 name<-tag><_component>, where -tag and _component are optional.
+     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3><_component>
      *
      * @return a nicely formatted name, such as: Name Tag Component
      */
     private String getName(String fullName) {
-        String[] parts = fullName.split("_");
+        String[] parts = {fullName};
 
-        String name = parts[0] + " " + parts[1];
+        if (fullName.contains("_")) {
+            parts = fullName.split("_");
+        }
+
+        String name = parts[0];
+        String component = "";
+        if (parts.length == 2) {
+            component = parts[1];
+            name = parts[0] + " " + component;
+        }
         if (parts[0].split("-").length > 1) {
             String[] _parts = parts[0].split("-");
             if (_parts[0].equals("titanium") && _parts.length > 2) {
-                return getTitaniumAlloyName(_parts) + " " + parts[1];
+                return getTitaniumAlloyName(_parts) + " " + component;
             }
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -242,7 +259,7 @@ public class ModLangProvider extends LanguageProvider {
                 stringBuilder.append(text);
                 stringBuilder.append(" ");
             }
-            stringBuilder.append(parts[1]);
+            stringBuilder.append(component);
             name = stringBuilder.toString();
         }
         return name;

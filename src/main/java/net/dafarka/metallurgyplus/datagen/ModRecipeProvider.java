@@ -481,13 +481,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
-        buildCableRecipe(pWriter, 2, ModItems.ALLOY_MAP.get("cupronickel_plate").get());
-        buildCableRecipe(pWriter, 3, ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get());
-        buildCableRecipe(pWriter, 4, ModItems.MATERIAL_MAP.get("silver_plate").get());
-        buildCableRecipe(pWriter, 5, ModItems.ALLOY_MAP.get("electrum_plate").get());
-        buildCableRecipe(pWriter, 6, ModItems.MATERIAL_MAP.get("palladium_plate").get());
-        buildCableRecipe(pWriter, 7, ModItems.MATERIAL_MAP.get("platinum_plate").get());
-        buildCableRecipe(pWriter, 8, ModItems.ALLOY_MAP.get("niobium-titanium_plate").get());
+        
     }
 
     private void buildCableRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {

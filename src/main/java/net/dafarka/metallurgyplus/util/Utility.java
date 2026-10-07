@@ -161,7 +161,7 @@ public class Utility {
     }
 
     /**
-     * Gets the base name of a given string by stripping trailing digits.
+     * Gets the base name of a given string by removing trailing digits.
      * <p>
      * Examples: <br>
      * "name1"          -> "name" <br>
@@ -172,10 +172,39 @@ public class Utility {
      *
      * @return The base name without the tier.
      */
-    public static String getBaseName(String name) {
+    public static String removeTrailingDigits(String name) {
         if (name == null) {
             return "";
         }
         return name.replaceAll("[_/]?\\d+$", "");
+    }
+
+    /**
+     * Replaces in a given string a string with a different string.
+     *
+     * @param input       The given string.
+     * @param toReplace   The string to replace.
+     * @param replaceWith The string to replace with.
+     *
+     * @return The replaced string.
+     */
+    public static String replaceInString(String input, String toReplace, String replaceWith) {
+        if (input == null || toReplace == null || replaceWith == null || toReplace.isEmpty()) {
+            return input;
+        }
+
+        return input.replace(toReplace, replaceWith);
+    }
+
+    /**
+     * Removes in a given string a string.
+     *
+     * @param input    The given string.
+     * @param toRemove The string to remove.
+     *
+     * @return The replaced string.
+     */
+    public static String removeInString(String input, String toRemove) {
+        return replaceInString(input, toRemove, "");
     }
 }

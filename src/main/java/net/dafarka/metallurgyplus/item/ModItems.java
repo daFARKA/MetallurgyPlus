@@ -492,17 +492,22 @@ public class ModItems {
         }
     }
 
-    private static void registerCable(int tier, int color) {
-        String name = "cable" + tier + "_block";
+    private static void registerCable(String cableName, int tier, int displayTier, int color, BlockBehaviour.Properties properties) {
+        String name = cableName + displayTier + "_block";
         RegistryObject<CableBlock> block = ModBlocks.registerBlock(name,
-            () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL), tier));
+            () -> new CableBlock(properties, tier));
         ModBlocks.CABLE_BLOCKS_MAP.put(tier, block);
         ModBlocks.CABLE_COLOR_MAP.put(tier, color);
     }
 
     private static void registerCables() {
         for (int i = 1; i <= 12; i++) {
-            registerCable(i, MAJOR_TIER_COLORS.get(i));
+            registerCable("cable", i, i, MAJOR_TIER_COLORS.get(i), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL));
+        }
+
+        for (int i = 13; i <= 24; i++) {
+            int displayTier = i - 12;
+            registerCable("resonant-cable", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL));
         }
     }
 

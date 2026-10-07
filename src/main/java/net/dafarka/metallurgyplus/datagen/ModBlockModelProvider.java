@@ -51,7 +51,9 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "base", "cable", "", "", "", "", "", defaultTintIndices);
+            String baseName = Utility.removeInString(blockName, "_block");
+            baseName = Utility.removeTrailingDigits(baseName);
+            registerOrientable(blockName, "base", baseName, "", "", "", "", "", defaultTintIndices);
         }
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
@@ -209,7 +211,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         String groupName = "multiblock/battery";
 
         String pathName = "block/" + groupName + "/" + blockName;
-        String baseName = Utility.getBaseName(blockName);
+        String baseName = Utility.removeTrailingDigits(blockName);
         switch (baseName) {
             case "controller" -> {
                 registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);

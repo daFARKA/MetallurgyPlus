@@ -90,13 +90,13 @@ public class ModBlockEntities {
     }
 
     private static void registerCableBlocks() {
-        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+        for (Map.Entry<Integer, RegistryObject<CableBlock>> entry : ModBlocks.CABLE_BLOCKS_MAP.entrySet()) {
+            int tier = entry.getKey();
+            RegistryObject<CableBlock> cable = entry.getValue();
             String path = cable.getId().getPath();
-            String digits = path.replaceAll("\\D+", "");
-            int tier = digits.isEmpty() ? 0 : Integer.parseInt(digits);
 
             RegistryObject<BlockEntityType<CableBlockEntity>> cableBE =
-                BLOCK_ENTITIES.register("cable" + tier + "_be",
+                BLOCK_ENTITIES.register(path + "_be",
                     () -> BlockEntityType.Builder
                         .of((pos, state) -> new CableBlockEntity(pos, state, tier), cable.get())
                         .build(null)

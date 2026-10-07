@@ -25,7 +25,7 @@ public class CableBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
             ModBlockEntities.CABLE_BLOCK_ENTITIES.get(tier).get(),
             pPos,
             pBlockState,
-            () -> new BigEnergyStorage(getTransfer(tier), getTransfer(tier), getTransfer(tier))
+            () -> new BigEnergyStorage(getTransfer(tier))
         );
 
         this.data = new ContainerData() {
