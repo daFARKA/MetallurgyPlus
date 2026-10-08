@@ -178,9 +178,9 @@ public class ModLangProvider extends LanguageProvider {
 
             String cleanedMultiblock = multiblock.replace("_", " ").trim();
 
-            String name = capitalizeFirstLetterEach(cleanedMultiblock + " " + cleanedBlockName);
+            String name = capitalizeFirstLetterEach(cleanedMultiblock + " " + getName(cleanedBlockName));
 
-            if (tier != null && tier > 0) {
+            if (tier > 0) {
                 name += " Tier " + tier;
             }
 

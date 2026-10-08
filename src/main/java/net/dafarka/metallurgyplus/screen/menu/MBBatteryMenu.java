@@ -15,10 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.math.BigInteger;
 
 public class MBBatteryMenu extends BaseMenu {
-    private static final int ENERGY_WORD_BITS = 15;
-    private static final int ENERGY_WORDS = 6;
-    private static final int ENERGY_DATA_COUNT = ENERGY_WORDS * 2 + 1;
-
     private final MBBatteryController blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -28,7 +24,7 @@ public class MBBatteryMenu extends BaseMenu {
             containerId,
             inventory,
             inventory.player.level().getBlockEntity(buffer.readBlockPos()),
-            new SimpleContainerData(ENERGY_DATA_COUNT)
+            new SimpleContainerData(MBBatteryController.ENERGY_DATA_COUNT)
         );
     }
 
@@ -52,11 +48,11 @@ public class MBBatteryMenu extends BaseMenu {
     }
 
     public BigInteger getMaxEnergy() {
-        return readEnergyValue(ENERGY_WORDS);
+        return readEnergyValue(MBBatteryController.ENERGY_WORDS);
     }
 
     public boolean isFormed() {
-        return data.get(ENERGY_WORDS * 2) == 1;
+        return data.get(MBBatteryController.ENERGY_WORDS * 2) == 1;
     }
 
     public int getScaledEnergy() {
@@ -72,8 +68,8 @@ public class MBBatteryMenu extends BaseMenu {
 
     private BigInteger readEnergyValue(int firstWord) {
         BigInteger value = BigInteger.ZERO;
-        for (int word = ENERGY_WORDS - 1; word >= 0; word--) {
-            value = value.shiftLeft(ENERGY_WORD_BITS).or(BigInteger.valueOf(data.get(firstWord + word)));
+        for (int word = MBBatteryController.ENERGY_WORDS - 1; word >= 0; word--) {
+            value = value.shiftLeft(MBBatteryController.ENERGY_WORD_BITS).or(BigInteger.valueOf(data.get(firstWord + word)));
         }
         return value;
     }

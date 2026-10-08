@@ -45,7 +45,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         var batteryCells = this.tag(ModTags.Blocks.BATTERY_CELLS);
         ModBlocks.MULTIBLOCKS_MAP.forEach((name, block) -> {
-            if (name.startsWith("battery/cell")) {
+            if (name.startsWith("battery/") && name.contains("cell")) {
                 batteryCells.add(block.get());
             }
         });

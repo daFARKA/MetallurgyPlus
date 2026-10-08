@@ -8,7 +8,6 @@ import net.dafarka.metallurgyplus.screen.menu.MBBatteryMenu;
 import net.dafarka.metallurgyplus.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,9 +31,9 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class MBBatteryController extends MBControllerBlockEntity implements MenuProvider {
-    private static final String CELL_BLOCK_PREFIX = BatteryCellBlock.BLOCK_ID_PREFIX;
-    private static final int ENERGY_WORDS = 6;
-    private static final int ENERGY_WORD_BITS = 15;
+    public static final int ENERGY_WORDS = 11;
+    public static final int ENERGY_WORD_BITS = 15;
+    public static final int ENERGY_DATA_COUNT = ENERGY_WORDS * 2 + 1;
     private static final BigInteger ENERGY_WORD_MASK = BigInteger.ONE.shiftLeft(ENERGY_WORD_BITS).subtract(BigInteger.ONE);
     private static final BigInteger MAX_STANDARD_TRANSFER = BigInteger.valueOf(Integer.MAX_VALUE);
 
@@ -60,7 +59,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
 
         @Override
         public int getCount() {
-            return ENERGY_WORDS * 2 + 1;
+            return ENERGY_DATA_COUNT;
         }
     };
 
@@ -320,16 +319,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     }
 
     private static int getCellTier(BlockState state) {
-        String path = BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
-        if (!path.startsWith(CELL_BLOCK_PREFIX)) {
-            return 0;
-        }
-
-        try {
-            return Integer.parseInt(path.substring(CELL_BLOCK_PREFIX.length()));
-        } catch (NumberFormatException ignored) {
-            return 0;
-        }
+        return state.getBlock() instanceof BatteryCellBlock cell ? cell.getTier() : 0;
     }
 
     private static final class BatteryStructureDefinition {
@@ -341,7 +331,10 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
                 || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/output").get())
                 || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
             .controller(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
-            .requireInterior(state -> state.is(ModTags.Blocks.BATTERY_CELLS), 1)
+            .requireInterior(
+                state -> state.is(ModTags.Blocks.BATTERY_CELLS) || state.getBlock() instanceof BatteryCellBlock,
+                1
+            )
             .build();
     }
 }

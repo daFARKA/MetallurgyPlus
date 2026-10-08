@@ -571,12 +571,21 @@ public class ModItems {
         ));
 
         appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
+        appendTieredBlocks(blockNames, "battery/resonant-cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
+        appendTieredBlocks(blockNames, "battery/superconductor-cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
 
         ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
             BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
 
-            if (name.startsWith(BatteryCellBlock.BLOCK_ID_PREFIX)) {
+            if (name.contains("cell")) {
                 int tier = Utility.getTier(name);
+
+                if (name.contains("resonant-cell")) {
+                    tier += 12;
+                } else if (name.contains("superconductor-cell")) {
+                    tier += 24;
+                }
+
                 return new BatteryCellBlock(properties, tier);
             }
 

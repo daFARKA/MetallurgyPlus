@@ -212,15 +212,16 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         String pathName = "block/" + groupName + "/" + blockName;
         String baseName = Utility.removeTrailingDigits(blockName);
-        switch (baseName) {
-            case "controller" -> {
-                registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
-            }
-            case "cell" -> {
-                groupName = groupName + "/base";
-                registerOrientable(pathName, groupName, "cell", "_", "side", "side", "top", "top", new int[]{0, 0, 0, 0, 1, 1});
-            }
-            default -> registerCubeAllModel(pathName, blockName, groupName);
+        if (baseName.contains("controller")) {
+            registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
+        } else if (baseName.contains("cell")) {
+            groupName = groupName + "/base";
+            String textureName = Utility.removeTrailingDigits(baseName);
+            String sideTextureName = textureName + "_side";
+            String topTextureName = "cell_top";
+            registerOrientable(pathName, groupName, sideTextureName, sideTextureName, topTextureName, topTextureName, new int[]{0, 0, 0, 0, 1, 1});
+        } else {
+            registerCubeAllModel(pathName, blockName, groupName);
         }
     }
 }

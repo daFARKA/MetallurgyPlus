@@ -139,10 +139,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         String texturePath = "block/" + groupName + "/" + blockName;
 
         Block block = registryObject.get();
-        switch (blockName) {
-            case "controller" -> horizontalFacingBlock(texturePath.substring(6), block);
-            case "cell" -> simpleBlockState(block);
-            default -> simpleBlockState(block, modLoc(texturePath));
+        if (blockName.contains("controller")) {
+            horizontalFacingBlock(texturePath.substring(6), block);
+        } else {
+            simpleBlockState(block, modLoc(texturePath));
         }
     }
 }

@@ -13,7 +13,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 public class BatteryCellBlock extends Block {
-    public static final String BLOCK_ID_PREFIX = "battery/cell";
 
     private static final BigInteger BASE_CAPACITY = BigInteger.valueOf(1_000_000_000L);
 
@@ -22,6 +21,10 @@ public class BatteryCellBlock extends Block {
     public BatteryCellBlock(BlockBehaviour.Properties properties, int tier) {
         super(properties);
         this.tier = tier;
+    }
+
+    public int getTier() {
+        return tier;
     }
 
     public static BigInteger getCapacityForTier(int tier) {
