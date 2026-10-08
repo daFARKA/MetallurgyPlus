@@ -1,9 +1,6 @@
 package net.dafarka.metallurgyplus.datagen.loot;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -17,6 +14,8 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,17 +24,26 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
+    private Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP_COPY = new HashMap<>();
 
     @Override
     protected void generate() {
+        CUSTOM_BLOCKS_MAP_COPY.clear();
+        CUSTOM_BLOCKS_MAP_COPY.putAll(ModBlocks.CUSTOM_BLOCKS_MAP);
+
+        customBlocksCustomBehaviour();
+
         mapBlocksDropSelf(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksRaw();
         mapBlocksDropSelf(ModBlocks.ALLOY_BLOCKS_MAP);
         mapBlocksDropSelf(ModBlocks.GEM_BLOCKS_MAP);
-        cableBlocksDropSelf();
-        solarPanelBlocksDropSelf();
-        batteryBlocksDropSelf();
+        dropSelves(ModBlocks.CABLE_BLOCKS_MAP.values());
+        dropSelves(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
+        dropSelves(ModBlocks.BATTERY_BLOCK_MAP.values());
+        dropSelves(ModBlocks.MULTIBLOCKS_MAP.values());
         customBlocksDropSelf();
+
+        this.dropSelf(ModBlocks.MACHINE_FRAME.get());
 
         this.dropSelf(ModBlocks.ORE_PROCESSING_UNIT.get());
         this.dropSelf(ModBlocks.ALLOY_SMELTER.get());
@@ -46,9 +54,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.QUARRY.get());
         this.dropSelf(ModBlocks.POWER_SOURCE.get());
         this.dropSelf(ModBlocks.SACK_STATION.get());
-
-        this.add(ModBlocks.CLAY_MINERAL.get(),
-            block -> createCopperLikeOreDrops(ModBlocks.CLAY_MINERAL.get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
@@ -77,26 +82,20 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         }
     }
 
-    private void cableBlocksDropSelf() {
-        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            this.dropSelf(cable.get());
+    private void dropSelves(Collection<? extends RegistryObject<? extends Block>> blocks) {
+        for (RegistryObject<? extends Block> block : blocks) {
+            this.dropSelf(block.get());
         }
     }
 
-    private void solarPanelBlocksDropSelf() {
-        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            this.dropSelf(panel.get());
-        }
-    }
-
-    private void batteryBlocksDropSelf() {
-        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
-            this.dropSelf(battery.get());
-        }
+    private void customBlocksCustomBehaviour() {
+        this.add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get(),
+            block -> createCopperLikeOreDrops(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get(), ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get()));
+        CUSTOM_BLOCKS_MAP_COPY.remove("clay_mineral");
     }
 
     private void customBlocksDropSelf() {
-        for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
+        for (RegistryObject<Block> block : CUSTOM_BLOCKS_MAP_COPY.values()) {
             this.dropSelf(block.get());
         }
     }

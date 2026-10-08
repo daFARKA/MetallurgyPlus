@@ -3,14 +3,20 @@ package net.dafarka.metallurgyplus.util;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utility {
+
+    private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
     /**
      * Gets an item from ForgeRegistries using the name.
@@ -104,5 +110,101 @@ public class Utility {
         String formattedNum = dec.stripTrailingZeros().toPlainString();
 
         return formattedNum + NumberSuffixes.SUFFIXES[unitIndex];
+    }
+
+    /**
+     * Gets the multiblock and block name of a specific multiblock block.
+     * <p>
+     * Example: <br>
+     * "battery/casing" -> multiblock="battery", blockName="casing"
+     *
+     * @param block The block to get the name parts of.
+     *
+     * @return A string array of the 3 parts. The return array is guaranteed to have 2 parts.
+     */
+    public static String[] getMultiBlockNames(RegistryObject<? extends Block> block) {
+        String path = block.getId().getPath();
+        String[] parts = path.split("/");
+
+        String multiblock = parts[0];
+        String blockName = parts[parts.length - 1];
+
+        return new String[]{multiblock, blockName};
+    }
+
+    /**
+     * Gets the tier of a given name.
+     * <p>
+     * Examples: <br>
+     * "name1"  -> 1 <br>
+     * "name22" -> 22
+     *
+     * @param name The name with an integer in it (trailing).
+     *
+     * @return the tier
+     */
+    public static int getTier(String name) {
+        if (name == null || name.isEmpty()) {
+            return 0;
+        }
+
+        Matcher matcher = DIGIT_PATTERN.matcher(name);
+        if (matcher.find()) {
+            try {
+                return Integer.parseInt(matcher.group());
+            } catch (NumberFormatException ignored) {
+                return 0;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Gets the base name of a given string by removing trailing digits.
+     * <p>
+     * Examples: <br>
+     * "name1"          -> "name" <br>
+     * "solar_panel_22" -> "solar_panel" <br>
+     * "cable/cell_3"   -> "cable/cell"
+     *
+     * @param name The name with trailing tier.
+     *
+     * @return The base name without the tier.
+     */
+    public static String removeTrailingDigits(String name) {
+        if (name == null) {
+            return "";
+        }
+        return name.replaceAll("[_/]?\\d+$", "");
+    }
+
+    /**
+     * Replaces in a given string a string with a different string.
+     *
+     * @param input       The given string.
+     * @param toReplace   The string to replace.
+     * @param replaceWith The string to replace with.
+     *
+     * @return The replaced string.
+     */
+    public static String replaceInString(String input, String toReplace, String replaceWith) {
+        if (input == null || toReplace == null || replaceWith == null || toReplace.isEmpty()) {
+            return input;
+        }
+
+        return input.replace(toReplace, replaceWith);
+    }
+
+    /**
+     * Removes in a given string a string.
+     *
+     * @param input    The given string.
+     * @param toRemove The string to remove.
+     *
+     * @return The replaced string.
+     */
+    public static String removeInString(String input, String toRemove) {
+        return replaceInString(input, toRemove, "");
     }
 }

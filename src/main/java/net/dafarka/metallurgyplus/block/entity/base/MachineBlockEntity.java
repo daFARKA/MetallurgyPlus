@@ -1,7 +1,8 @@
-package net.dafarka.metallurgyplus.block.entity;
+package net.dafarka.metallurgyplus.block.entity.base;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
+import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -49,7 +51,6 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
     protected final ItemStackHandler inputHandler;
     protected final ItemStackHandler outputHandler;
     protected final CombinedInvWrapper allHandler;
-    protected final UtilBlockEntity utilBlockEntity;
 
     protected LazyOptional<IItemHandler> inputLazy = LazyOptional.empty();
     protected LazyOptional<IItemHandler> outputLazy = LazyOptional.empty();
@@ -114,7 +115,6 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         };
 
         allHandler = new CombinedInvWrapper(inputHandler, outputHandler);
-        utilBlockEntity = new UtilBlockEntity(allHandler);
     }
 
     private MachineBlock getMachineBlock() {
@@ -123,6 +123,27 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
 
     protected RecipeType<? extends MachineRecipe> getRecipeType() {
         return getMachineBlock().getRecipeType();
+    }
+
+    private int getFirstEmptyOutputSlot() {
+        for (int slot = machineBlock.getInputSlots(); slot < allHandler.getSlots(); slot++) {
+            if (allHandler.getStackInSlot(slot).isEmpty()) {
+                return slot;
+            }
+        }
+
+        return -1;
+    }
+
+    private int getFirstAvailableOutputSlot(Item item, int amount) {
+        for (int slot = machineBlock.getInputSlots(); slot < allHandler.getSlots(); slot++) {
+            ItemStack stack = allHandler.getStackInSlot(slot);
+            if (stack.is(item) && stack.getCount() + amount <= stack.getMaxStackSize()) {
+                return slot;
+            }
+        }
+
+        return getFirstEmptyOutputSlot();
     }
 
     @Override
@@ -270,7 +291,7 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
 
         ItemStack result = currentRecipe.getResultItem(getLevel().registryAccess());
 
-        outputSlot = utilBlockEntity.getFirstAvailableSlot(result.getItem(), result.getCount(), machineBlock.getInputSlots());
+        outputSlot = getFirstAvailableOutputSlot(result.getItem(), result.getCount());
 
         if (outputSlot == -1) {
             return false;
@@ -282,7 +303,7 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
 
             if (extraOutputs != null) {
                 for (ItemStack extraOutput : extraOutputs) {
-                    if (utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), machineBlock.getInputSlots()) == -1) {
+                    if (getFirstAvailableOutputSlot(extraOutput.getItem(), extraOutput.getCount()) == -1) {
                         return false;
                     }
                 }
@@ -367,7 +388,7 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
                         continue;
                     }
 
-                    int extraOutputSlot = utilBlockEntity.getFirstAvailableSlot(extraOutput.getItem(), extraOutput.getCount(), machineBlock.getInputSlots());
+                    int extraOutputSlot = getFirstAvailableOutputSlot(extraOutput.getItem(), extraOutput.getCount());
 
                     if (extraOutputSlot == -1) {
                         continue;

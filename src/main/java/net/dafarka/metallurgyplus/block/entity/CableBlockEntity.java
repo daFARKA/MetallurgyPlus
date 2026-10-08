@@ -1,7 +1,9 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
+import net.dafarka.metallurgyplus.block.entity.base.EnergyBlockEntity;
 import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
+import net.dafarka.metallurgyplus.energy.IBigEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.ContainerData;
@@ -24,7 +26,7 @@ public class CableBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
             ModBlockEntities.CABLE_BLOCK_ENTITIES.get(tier).get(),
             pPos,
             pBlockState,
-            () -> new BigEnergyStorage(getTransfer(tier), getTransfer(tier), getTransfer(tier))
+            () -> new BigEnergyStorage(getTransfer(tier))
         );
 
         this.data = new ContainerData() {
@@ -71,15 +73,46 @@ public class CableBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
 
         if (receivers.isEmpty()) return;
 
-        int energyAvailable = energyStorage.getEnergyStored();
-        int energyPerReceiver = energyAvailable / receivers.size();
+        BigInteger energyAvailable = energyStorage.getEnergyStoredBig();
+        if (energyAvailable.signum() <= 0) return;
+
+        BigInteger[] share = energyAvailable.divideAndRemainder(BigInteger.valueOf(receivers.size()));
+        int remainder = share[1].intValue();
+        int receiverIndex = 0;
 
         for (IEnergyStorage receiver : receivers.keySet()) {
-            int accepted = receiver.receiveEnergy(energyPerReceiver, false);
-            energyStorage.extractEnergy(accepted, false);
+            BigInteger offered = share[0];
+            if (receiverIndex < remainder) {
+                offered = offered.add(BigInteger.ONE);
+            }
+
+            BigInteger accepted = receiveEnergy(receiver, offered);
+            if (accepted.signum() > 0) {
+                energyStorage.extractEnergyBig(accepted, false);
+            }
+            receiverIndex++;
         }
 
         setChanged(pLevel, pPos, pState);
+    }
+
+    private static BigInteger receiveEnergy(IEnergyStorage receiver, BigInteger offered) {
+        if (offered.signum() <= 0) {
+            return BigInteger.ZERO;
+        }
+
+        BigInteger accepted;
+        BigInteger acceptanceLimit = offered;
+        if (receiver instanceof IBigEnergyStorage bigReceiver) {
+            accepted = bigReceiver.receiveEnergyBig(offered, false);
+        } else {
+            BigInteger standardOfferBig = offered.min(BigInteger.valueOf(Integer.MAX_VALUE));
+            int standardOffer = standardOfferBig.intValue();
+            accepted = BigInteger.valueOf(receiver.receiveEnergy(standardOffer, false));
+            acceptanceLimit = standardOfferBig;
+        }
+
+        return accepted.max(BigInteger.ZERO).min(acceptanceLimit);
     }
 
     public void drops() { }

@@ -18,6 +18,42 @@ public class BigEnergyStorage implements IBigEnergyStorage, ISerializableEnergyS
         this.maxExtract = maxExtract != null ? maxExtract : BigInteger.ZERO;
     }
 
+    public BigEnergyStorage(BigInteger capacity, BigInteger transfer) {
+        this(capacity, transfer, transfer);
+    }
+
+    public BigEnergyStorage(BigInteger capacity) {
+        this(capacity, capacity, capacity);
+    }
+
+    public boolean setLimits(BigInteger capacity, BigInteger maxReceive, BigInteger maxExtract) {
+        BigInteger nextCapacity = nonNegative(capacity);
+        BigInteger nextMaxReceive = nonNegative(maxReceive);
+        BigInteger nextMaxExtract = nonNegative(maxExtract);
+        if (this.capacity.equals(nextCapacity)
+            && this.maxReceive.equals(nextMaxReceive)
+            && this.maxExtract.equals(nextMaxExtract)) {
+            return false;
+        }
+
+        this.capacity = nextCapacity;
+        this.maxReceive = nextMaxReceive;
+        this.maxExtract = nextMaxExtract;
+        return true;
+    }
+
+    public boolean setLimits(BigInteger capacity, BigInteger transfer) {
+        return setLimits(capacity, transfer, transfer);
+    }
+
+    public boolean setLimits(BigInteger capacity) {
+        return setLimits(capacity, capacity, capacity);
+    }
+
+    private static BigInteger nonNegative(BigInteger value) {
+        return value == null ? BigInteger.ZERO : value.max(BigInteger.ZERO);
+    }
+
     @Override
     public void generateEnergy(BigInteger generation) {
         this.energy = this.energy.add(generation);
@@ -68,6 +104,14 @@ public class BigEnergyStorage implements IBigEnergyStorage, ISerializableEnergyS
     @Override
     public BigInteger getMaxEnergyStoredBig() {
         return this.capacity;
+    }
+
+    public BigInteger getMaxReceiveBig() {
+        return this.maxReceive;
+    }
+
+    public BigInteger getMaxExtractBig() {
+        return this.maxExtract;
     }
 
     @Override

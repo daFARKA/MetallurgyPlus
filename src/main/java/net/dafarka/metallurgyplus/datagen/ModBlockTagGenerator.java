@@ -5,6 +5,7 @@ import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,8 +27,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         super(output, lookupProvider, MetallurgyPlus.MODID, existingFileHelper);
     }
 
+    private Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP_COPY = new HashMap<>();
+
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+        CUSTOM_BLOCKS_MAP_COPY.clear();
+        CUSTOM_BLOCKS_MAP_COPY.putAll(ModBlocks.CUSTOM_BLOCKS_MAP);
+
         mapBlocksAddTags(ModBlocks.MATERIAL_BLOCKS_MAP);
         oreBlocksAddTags();
         mapBlocksAddTags(ModBlocks.ALLOY_BLOCKS_MAP);
@@ -34,7 +41,14 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         cableBlockAddTags();
         solarPanelBlockAddTags();
         batteryBlockAddTags();
-        mapBlocksAddTags(ModBlocks.CUSTOM_BLOCKS_MAP);
+        mapBlocksAddTags(ModBlocks.MULTIBLOCKS_MAP);
+
+        var batteryCells = this.tag(ModTags.Blocks.BATTERY_CELLS);
+        ModBlocks.MULTIBLOCKS_MAP.forEach((name, block) -> {
+            if (name.startsWith("battery/cell")) {
+                batteryCells.add(block.get());
+            }
+        });
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .add(ModBlocks.ORE_PROCESSING_UNIT.get(),
@@ -48,17 +62,19 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SACK_STATION.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
         this.tag(Tags.Blocks.ORES)
-            .add(ModBlocks.CLAY_MINERAL.get());
+            .add(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
+
+        mapBlocksAddTags(CUSTOM_BLOCKS_MAP_COPY);
     }
 
-    private void mapBlocksAddTags(Map<String, RegistryObject<Block>> blockMap) {
-        for (RegistryObject<Block> block : blockMap.values()) {
+    private void mapBlocksAddTags(Map<String, ? extends RegistryObject<? extends Block>> blockMap) {
+        for (RegistryObject<? extends Block> block : blockMap.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(block.get());
         }

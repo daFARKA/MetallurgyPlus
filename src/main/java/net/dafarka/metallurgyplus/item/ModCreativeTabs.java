@@ -2,6 +2,7 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -38,6 +39,7 @@ public class ModCreativeTabs {
             .displayItems((pParameters, pOutput) -> {
                 pOutput.accept(ModItems.LLAMKANA.get());
                 addSortedItems(ModItems.CUSTOM_ITEM_MAP, pOutput);
+                addSortedBlocks(ModBlocks.CUSTOM_BLOCKS_MAP, pOutput);
                 addSortedItems(ModItems.COIL_MAP, pOutput);
                 addSortedItems(ModItems.SACK_MAP, pOutput);
             })
@@ -55,7 +57,7 @@ public class ModCreativeTabs {
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.ORE_BLOCKS_MAP.get("ilmenite_stone_block").get()))
             .title(Component.translatable("creativetab.metallurgyplus_ores"))
             .displayItems((pParameters, pOutput) -> {
-                pOutput.accept(ModBlocks.CLAY_MINERAL.get());
+                pOutput.accept(ModBlocks.CUSTOM_BLOCKS_MAP.get("clay_mineral").get());
 
                 addSortedItems(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP, pOutput);
             })
@@ -89,6 +91,8 @@ public class ModCreativeTabs {
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.ALLOY_SMELTER.get()))
             .title(Component.translatable("creativetab.metallurgyplus_machines"))
             .displayItems((pParameters, pOutput) -> {
+                pOutput.accept(ModBlocks.MACHINE_FRAME.get());
+
                 pOutput.accept(ModBlocks.ALLOY_SMELTER.get());
                 pOutput.accept(ModBlocks.ORE_PROCESSING_UNIT.get());
                 pOutput.accept(ModBlocks.GRINDER.get());
@@ -99,11 +103,17 @@ public class ModCreativeTabs {
                 pOutput.accept(ModBlocks.POWER_SOURCE.get());
                 pOutput.accept(ModBlocks.SACK_STATION.get());
 
-                addSortedBlocks(ModBlocks.CUSTOM_BLOCKS_MAP, pOutput);
-
                 addSortedBlocks(ModBlocks.CABLE_BLOCKS_MAP, pOutput);
                 addSortedBlocks(ModBlocks.BATTERY_BLOCK_MAP, pOutput);
                 addSortedBlocks(ModBlocks.SOLAR_PANEL_BLOCK_MAP, pOutput);
+            })
+            .build());
+
+    public static final RegistryObject<CreativeModeTab> MULTIBLOCKS = CREATIVE_TABS.register("metallurgyplus_multiblocks",
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get()))
+            .title(Component.translatable("creativetab.metallurgyplus_multiblocks"))
+            .displayItems((pParameters, pOutput) -> {
+                addSortedBlocks(ModBlocks.MULTIBLOCKS_MAP, pOutput);
             })
             .build());
 
@@ -120,7 +130,11 @@ public class ModCreativeTabs {
 
     private static void addSortedItems(Map<?, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap, CreativeModeTab.Output output) {
         itemMap.values().stream()
-            .sorted(Comparator.comparing(item -> item.getId().getPath()))
+            .sorted(Comparator
+                .comparing((RegistryObject<Item> item) -> item.getId().getPath().replaceAll("\\d+", ""))
+                .thenComparingInt(item -> Utility.getTier(item.getId().getPath()))
+                .thenComparing(item -> item.getId().getPath())
+            )
             .forEach(item -> {
                 output.accept(item.get());
 
@@ -136,20 +150,30 @@ public class ModCreativeTabs {
                         String blockName = entry.getKey();
 
                         return blockName.equals(baseName + "_block")
-                            || blockName.startsWith(baseName + "_")
-                            && blockName.endsWith("_block");
+                            || (blockName.startsWith(baseName + "_") && blockName.endsWith("_block"));
                     })
-                    .sorted(Map.Entry.comparingByKey())
+                    .sorted(Comparator
+                        .comparing((Map.Entry<String, RegistryObject<Block>> entry) -> entry.getKey().replaceAll("\\d+", ""))
+                        .thenComparingInt(entry -> Utility.getTier(entry.getKey()))
+                        .thenComparing(Map.Entry::getKey)
+                    )
                     .forEach(entry -> output.accept(entry.getValue().get()));
             });
     }
 
     private static void addSortedBlocks(Map<?, ? extends RegistryObject<? extends Block>> blockMap, CreativeModeTab.Output output) {
         blockMap.values().stream()
-            .sorted(Comparator.comparingInt(block -> {
-                String name = block.getId().getPath();
-                return Integer.parseInt(name.replaceAll("\\D+", ""));
-            }))
-            .forEach(block -> output.accept(new ItemStack(block.get())));
+            .sorted(Comparator
+                .comparing((RegistryObject<? extends Block> regObj) -> {
+                    String path = regObj.getId().getPath();
+                    return path.replaceAll("\\d+", "").replace("_block", "");
+                })
+                .thenComparingInt(regObj -> {
+                    String path = regObj.getId().getPath();
+                    return Utility.getTier(path);
+                })
+                .thenComparing(regObj -> regObj.getId().getPath())
+            )
+            .forEach(regObj -> output.accept(regObj.get()));
     }
 }

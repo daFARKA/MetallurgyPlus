@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.command;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;

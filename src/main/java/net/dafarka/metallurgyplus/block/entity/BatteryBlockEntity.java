@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.block.entity.base.EnergyBlockEntity;
 import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.screen.menu.BatteryMenu;
 import net.minecraft.core.BlockPos;

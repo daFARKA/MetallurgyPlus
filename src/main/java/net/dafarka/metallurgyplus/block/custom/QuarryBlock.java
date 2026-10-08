@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.block.custom;
 
+import net.dafarka.metallurgyplus.block.base.BaseBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.QuarryBlockEntity;
 import net.minecraft.core.BlockPos;

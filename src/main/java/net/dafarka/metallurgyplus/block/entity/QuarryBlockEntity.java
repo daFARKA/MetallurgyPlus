@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity;
 
-import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
+import net.dafarka.metallurgyplus.block.entity.base.EnergyBlockEntity;
+import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
 import net.dafarka.metallurgyplus.screen.menu.QuarryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,7 +18,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -28,7 +28,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
+import java.math.BigInteger;
+
+public class QuarryBlockEntity extends EnergyBlockEntity<BigEnergyStorage> implements MenuProvider {
     public static final int ENERGY_CONSUMPTION = 8000000;
 
     protected final ContainerData data;
@@ -43,11 +45,14 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
     private int tempStartX, tempStartY, tempStartZ;
     private int tempEndX, tempEndY, tempEndZ;
 
-    private final GenericEnergyStorage energyStorage = new GenericEnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-    private LazyOptional<GenericEnergyStorage> energyLazy = LazyOptional.empty();
-
     public QuarryBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.QUARRY_BE.get(), pPos, pBlockState);
+        super(
+            ModBlockEntities.QUARRY_BE.get(),
+            pPos,
+            pBlockState,
+            () -> new BigEnergyStorage(BigInteger.valueOf(ENERGY_CONSUMPTION * 4))
+        );
+
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
@@ -103,16 +108,16 @@ public class QuarryBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public void onLoad() {
         super.onLoad();
-        outputLazy = LazyOptional.of(() -> outputHandler);
 
+        outputLazy = LazyOptional.of(() -> outputHandler);
         energyLazy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        outputLazy.invalidate();
 
+        outputLazy.invalidate();
         energyLazy.invalidate();
     }
 
