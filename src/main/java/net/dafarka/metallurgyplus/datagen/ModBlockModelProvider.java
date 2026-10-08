@@ -53,7 +53,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
             String baseName = Utility.removeInString(blockName, "_block");
             baseName = Utility.removeTrailingDigits(baseName);
-            registerOrientable(blockName, "base", baseName, "", "", "", "", "", defaultTintIndices);
+            registerCubeAllModel(blockName, baseName, "base");
         }
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {

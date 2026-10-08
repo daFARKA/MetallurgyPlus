@@ -507,7 +507,7 @@ public class ModItems {
 
         for (int i = 13; i <= 24; i++) {
             int displayTier = i - 12;
-            registerCable("resonant-cable", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL));
+            registerCable("resonant-cable", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL));
         }
     }
 
