@@ -9,6 +9,14 @@ public class GenericEnergyStorage extends EnergyStorage implements ISerializable
         super(capacity, maxReceive, maxExtract);
     }
 
+    public GenericEnergyStorage(int capacity, int transfer) {
+        super(capacity, transfer, transfer);
+    }
+
+    public GenericEnergyStorage(int capacity) {
+        super(capacity, capacity, capacity);
+    }
+
     public void generateEnergy(int amount) {
         this.energy = (int) Math.min((long) this.energy + amount, (long) this.capacity);
     }

@@ -509,6 +509,11 @@ public class ModItems {
             int displayTier = i - 12;
             registerCable("resonant-cable", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL));
         }
+
+        for (int i = 25; i <= 36; i++) {
+            int displayTier = i - 24;
+            registerCable("superconductor", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.AMETHYST));
+        }
     }
 
     private static void registerSolarPanel(int tier, int color) {
