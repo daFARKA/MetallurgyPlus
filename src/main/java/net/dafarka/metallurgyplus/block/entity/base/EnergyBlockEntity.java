@@ -1,9 +1,10 @@
-package net.dafarka.metallurgyplus.block.entity;
+package net.dafarka.metallurgyplus.block.entity.base;
 
 import net.dafarka.metallurgyplus.energy.GenericEnergyStorage;
 import net.dafarka.metallurgyplus.energy.ISerializableEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public abstract class EnergyBlockEntity<T extends ISerializableEnergyStorage> extends BaseBlockEntity {
+public abstract class EnergyBlockEntity<T extends ISerializableEnergyStorage> extends BlockEntity {
 
     protected final T energyStorage;
     protected LazyOptional<IEnergyStorage> energyLazy = LazyOptional.empty();

@@ -2,10 +2,8 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
-import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -25,7 +23,7 @@ public class ModLangProvider extends LanguageProvider {
     protected void addTranslations() {
         add("item.metallurgyplus.llamkana", "Llamkana");
 
-        add("block.metallurgyplus.clay_mineral", "Clay Mineral");
+        add("block.metallurgyplus.machine_frame", "Machine Frame");
 
         add("block.metallurgyplus.ore_processing_unit", "Ore Processing Unit");
         add("block.metallurgyplus.alloy_smelter", "Alloy Smelter");
@@ -37,6 +35,8 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.sack_station", "Sack Docking Station");
 
+        add("message.metallurgyplus.multiblock.formed", "Multiblock formed");
+
         addCreativeTabsTranslations();
 
         add("tooltip.metallurgyplus.common", "Y-Level: 80 to -64");
@@ -45,12 +45,17 @@ public class ModLangProvider extends LanguageProvider {
         add("tooltip.metallurgyplus.very_rare", "Y-Level: -10 to -64");
         add("tooltip.metallurgyplus.extremely_rare", "Y-Level: -30 to -64");
 
+        add("tooltip.metallurgyplus.battery_cell_capacity", "Adds %s FE to battery capacity");
+
+        add("block." + MetallurgyPlus.MODID + ".battery", "Battery");
+        addTieredBlockTranslations(ModBlocks.BATTERY_BLOCK_MAP, "Battery");
+        addTieredBlockTranslations(ModBlocks.CABLE_BLOCKS_MAP);
+        addTieredBlockTranslations(ModBlocks.SOLAR_PANEL_BLOCK_MAP, "Solar Panel");
+
+
         addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
-        addCableTranslations();
-        addSolarPanelTranslations();
-        addBatteryTranslations();
         addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
@@ -58,6 +63,7 @@ public class ModLangProvider extends LanguageProvider {
         addBlockMapTranslations(ModBlocks.GEM_BLOCKS_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
+        addMultiBlockTranslations();
     }
 
     private void addCreativeTabsTranslations() {
@@ -69,6 +75,7 @@ public class ModLangProvider extends LanguageProvider {
         add("creativetab.metallurgyplus_vanilla_items", "MetallurgyPlus Vanilla Items");
         add("creativetab.metallurgyplus_gems", "MetallurgyPlus Gemstones");
         add("creativetab.metallurgyplus_machines", "MetallurgyPlus Machines");
+        add("creativetab.metallurgyplus_multiblocks", "MetallurgyPlus Multiblock Parts");
     }
 
     private void addMapsTranslations(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap) {
@@ -139,35 +146,45 @@ public class ModLangProvider extends LanguageProvider {
         }
     }
 
-    private void addCableTranslations() {
-        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            String fullName = cable.getId().getPath();
-            String name = cable.get().getDescriptionId().split("\\.")[2];
-            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
-
-            add("block." + MetallurgyPlus.MODID + "." + fullName, "Cable Tier " + tier);
+    private <T extends Block> void addTieredBlockTranslations(Map<?, ? extends RegistryObject<T>> blockMap, String displayNamePrefix) {
+        for (RegistryObject<T> entry : blockMap.values()) {
+            int tier = Utility.getTier(entry.getId().getPath());
+            add(entry.get(), displayNamePrefix + " Tier " + tier);
         }
     }
 
-    private void addSolarPanelTranslations() {
-        for (RegistryObject<SolarPanelBlock> panel : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            String fullName = panel.getId().getPath();
-            String name = panel.get().getDescriptionId().split("\\.")[2];
-            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
-
-            add("block." + MetallurgyPlus.MODID + "." + fullName, "Solar Panel Tier " + tier);
+    private <T extends Block> void addTieredBlockTranslations(Map<?, ? extends RegistryObject<T>> blockMap) {
+        for (RegistryObject<T> entry : blockMap.values()) {
+            String path = entry.getId().getPath();
+            int tier = Utility.getTier(path);
+            add(entry.get(), capitalizeFirstLetterEach(getName(Utility.removeTrailingDigits(Utility.removeInString(path, "_block")))) + " Tier " + tier);
         }
     }
 
-    private void addBatteryTranslations() {
-        add("block." + MetallurgyPlus.MODID + ".battery", "Battery");
+    private void addMultiBlockTranslations() {
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = Utility.getMultiBlockNames(block);
 
-        for (RegistryObject<BatteryBlock> battery : ModBlocks.BATTERY_BLOCK_MAP.values()) {
-            String fullName = battery.getId().getPath();
-            String name = battery.get().getDescriptionId().split("\\.")[2];
-            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+            String multiblock = parts[0];
+            String rawBlockName = parts[1];
 
-            add("block." + MetallurgyPlus.MODID + "." + fullName, "Battery Tier " + tier);
+            Integer tier = Utility.getTier(rawBlockName);
+
+            String cleanedBlockName = rawBlockName
+                .replaceAll("\\d+", "")
+                .replace("_block", "")
+                .replace("_", " ")
+                .trim();
+
+            String cleanedMultiblock = multiblock.replace("_", " ").trim();
+
+            String name = capitalizeFirstLetterEach(cleanedMultiblock + " " + cleanedBlockName);
+
+            if (tier != null && tier > 0) {
+                name += " Tier " + tier;
+            }
+
+            add(block.get(), name);
         }
     }
 
@@ -178,7 +195,7 @@ public class ModLangProvider extends LanguageProvider {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = item.get().getDescriptionId().split("\\.")[2];
-            int tier = Integer.parseInt(name.replaceAll("\\D+", ""));
+            int tier = Utility.getTier(name);
 
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name.split("_")[0].replaceAll("\\d+$", "")) + " Tier " + tier);
         }
@@ -186,8 +203,10 @@ public class ModLangProvider extends LanguageProvider {
 
     /**
      * Capitalizes the first letter of every word in the provided string.
+     * The strings need to be separated by a space.
      *
      * @param input string whose words should be capitalized
+     *
      * @return the input string with the first letter of each word capitalized
      */
     public String capitalizeFirstLetterEach(String input) {
@@ -211,18 +230,28 @@ public class ModLangProvider extends LanguageProvider {
      * Formats the name of an entity.
      *
      * @param fullName The full name of the entity, of the following form:
-     *                 name<-tag>_component, where -tag is optional.
-     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3>_component
+     *                 name<-tag><_component>, where -tag and _component are optional.
+     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3><_component>
+     *
      * @return a nicely formatted name, such as: Name Tag Component
      */
     private String getName(String fullName) {
-        String[] parts = fullName.split("_");
+        String[] parts = {fullName};
 
-        String name = parts[0] + " " + parts[1];
+        if (fullName.contains("_")) {
+            parts = fullName.split("_");
+        }
+
+        String name = parts[0];
+        String component = "";
+        if (parts.length == 2) {
+            component = parts[1];
+            name = parts[0] + " " + component;
+        }
         if (parts[0].split("-").length > 1) {
             String[] _parts = parts[0].split("-");
             if (_parts[0].equals("titanium") && _parts.length > 2) {
-                return getTitaniumAlloyName(_parts) + " " + parts[1];
+                return getTitaniumAlloyName(_parts) + " " + component;
             }
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -230,7 +259,7 @@ public class ModLangProvider extends LanguageProvider {
                 stringBuilder.append(text);
                 stringBuilder.append(" ");
             }
-            stringBuilder.append(parts[1]);
+            stringBuilder.append(component);
             name = stringBuilder.toString();
         }
         return name;
@@ -242,6 +271,7 @@ public class ModLangProvider extends LanguageProvider {
      * x is a number and El1 the first element (that is not Titanium) and so on.
      *
      * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
+     *
      * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
      */
     private String getTitaniumAlloyName(String[] parts) {

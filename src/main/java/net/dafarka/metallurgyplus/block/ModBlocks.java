@@ -1,6 +1,7 @@
 package net.dafarka.metallurgyplus.block;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.block.custom.*;
 import net.dafarka.metallurgyplus.item.ModItems;
 import net.dafarka.metallurgyplus.item.custom.OreBlockItem;
@@ -18,7 +19,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -28,6 +31,7 @@ public class ModBlocks {
     public static final int ENERGY_MAX_EXTRACT = 10000;
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MetallurgyPlus.MODID);
+
     public static final Map<String, RegistryObject<Block>> MATERIAL_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ORE_BLOCKS_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> ALLOY_BLOCKS_MAP = new HashMap<>();
@@ -35,6 +39,7 @@ public class ModBlocks {
     public static final Map<Integer, RegistryObject<CableBlock>> CABLE_BLOCKS_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<BatteryBlock>> BATTERY_BLOCK_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<SolarPanelBlock>> SOLAR_PANEL_BLOCK_MAP = new HashMap<>();
+
     public static final Map<String, Integer> MATERIAL_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ORE_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
@@ -45,10 +50,14 @@ public class ModBlocks {
 
     public static final Map<String, RegistryObject<Block>> CUSTOM_BLOCKS_MAP = new HashMap<>();
 
+    public static final Map<String, RegistryObject<? extends Block>> MULTIBLOCKS_MAP = new HashMap<>();
+
+    public static final Map<String, Integer> MULTIBLOCK_COLOR_MAP = new HashMap<>();
+
     public static final Map<RegistryObject<Block>, OreRarity> ORE_RARITY_MAP = new HashMap<>();
 
-    public static final RegistryObject<Block> CLAY_MINERAL = registerBlock("clay_mineral",
-        () -> new Block(BlockBehaviour.Properties.copy(Blocks.CLAY).sound(SoundType.GRAVEL)));
+    public static final RegistryObject<Block> MACHINE_FRAME = registerBlock("machine_frame",
+        () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 
     public static final int[][] ORE_PROCESSING_UNIT_INPUT_POSITION = {{8, 39}};
     public static final int[][] ORE_PROCESSING_UNIT_OUTPUT_POSITIONS = {{62, 21}, {80, 21}, {98, 21}, {116, 21}, {134, 21}, {152, 21},
@@ -152,12 +161,44 @@ public class ModBlocks {
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
 
-        // Custom Blocks
-        registerCustomBlock("machine_frame", Blocks.IRON_BLOCK, SoundType.METAL);
+        registerCustomBlocks();
     }
 
-    private static void registerCustomBlock(String name, BlockBehaviour blockBehaviour, SoundType soundType) {
-        RegistryObject<Block> block = registerBlock(name, () -> new Block(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType).noOcclusion()));
-        CUSTOM_BLOCKS_MAP.put(name, block);
+    private static void registerCustomBlocks() {
+        registerMapBlock(ModBlocks.CUSTOM_BLOCKS_MAP, "clay_mineral", Blocks.CLAY, SoundType.GRAVEL);
+    }
+
+    public static <T extends Block> RegistryObject<T> registerMapBlock(
+        Map<String, ? extends RegistryObject<? extends Block>> blockMap,
+        String name,
+        Function<BlockBehaviour.Properties, T> factory,
+        BlockBehaviour blockBehaviour,
+        SoundType soundType
+    ) {
+        RegistryObject<T> block = registerBlock(name, () -> factory.apply(BlockBehaviour.Properties.copy(blockBehaviour).sound(soundType)));
+
+        ((Map<String, RegistryObject<? extends Block>>) blockMap).put(name, block);
+
+        return block;
+    }
+
+    public static RegistryObject<Block> registerMapBlock(
+        Map<String, ? extends RegistryObject<? extends Block>> blockMap,
+        String name,
+        BlockBehaviour blockBehaviour,
+        SoundType soundType
+    ) {
+        return registerMapBlock(blockMap, name, Block::new, blockBehaviour, soundType);
+    }
+
+    public static void registerMapBlocks(
+        Map<String, RegistryObject<? extends Block>> blockMap,
+        List<String> blockNames,
+        Function<String, ? extends Block> blockSupplier
+    ) {
+        for (String name : blockNames) {
+            RegistryObject<? extends Block> block = registerBlock(name, () -> blockSupplier.apply(name));
+            blockMap.put(name, block);
+        }
     }
 }

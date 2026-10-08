@@ -309,7 +309,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(Items.REDSTONE_BLOCK), has(Items.REDSTONE_BLOCK))
             .save(pWriter);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.MACHINE_FRAME.get(), 1)
             .pattern("IGI")
             .pattern("GCG")
             .pattern("IGI")
@@ -342,10 +342,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("IFI")
             .pattern("III")
             .define('I', Items.IRON_INGOT)
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('P', Items.PISTON)
             .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
             .save(pWriter);
 
@@ -355,12 +355,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("ICI")
             .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
             .define('D', ModItems.VANILLA_MAP.get("diamond_gear").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('G', ModItems.VANILLA_MAP.get("iron_gear").get())
             .define('C', ModItems.VANILLA_MAP.get("copper_gear").get())
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_gear").get()), has(ModItems.VANILLA_MAP.get("iron_gear").get()))
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("copper_gear").get()), has(ModItems.VANILLA_MAP.get("copper_gear").get()))
             .save(pWriter);
@@ -371,12 +371,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("NSN")
             .define('N', ModItems.MATERIAL_MAP.get("nickel_plate").get())
             .define('C', ModItems.MATERIAL_MAP.get("chromium_rod").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('G', ModItems.MATERIAL_MAP.get("graphite_gear").get())
             .define('S', ModItems.MATERIAL_MAP.get("selenium_plate").get())
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_plate").get()), has(ModItems.MATERIAL_MAP.get("nickel_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("chromium_rod").get()), has(ModItems.MATERIAL_MAP.get("chromium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("graphite_gear").get()), has(ModItems.MATERIAL_MAP.get("graphite_gear").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("selenium_plate").get()), has(ModItems.MATERIAL_MAP.get("selenium_plate").get()))
             .save(pWriter);
@@ -388,14 +388,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('B', Items.BRICK)
             .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
             .define('L', ModItems.MATERIAL_MAP.get("lead_gear").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('N', ModItems.MATERIAL_MAP.get("nickel_gear").get())
             .define('T', ModItems.MATERIAL_MAP.get("tin_gear").get())
             .define('A', ModItems.MATERIAL_MAP.get("aluminum_gear").get())
             .unlockedBy(getHasName(Items.BRICK), has(Items.BRICK))
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lead_gear").get()), has(ModItems.MATERIAL_MAP.get("lead_gear").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_gear").get()), has(ModItems.MATERIAL_MAP.get("nickel_gear").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("tin_gear").get()), has(ModItems.MATERIAL_MAP.get("tin_gear").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("aluminum_gear").get()), has(ModItems.MATERIAL_MAP.get("aluminum_gear").get()))
@@ -408,13 +408,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('f', Items.FLINT)
             .define('P', Items.PISTON)
             .define('Z', ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('S', ModItems.ALLOY_MAP.get("steel_gear").get())
             .define('s', ModItems.ALLOY_MAP.get("steel_plate").get())
             .unlockedBy(getHasName(Items.FLINT), has(Items.FLINT))
             .unlockedBy(getHasName(Items.PISTON), has(Items.PISTON))
             .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("zamak_block").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_gear").get()), has(ModItems.ALLOY_MAP.get("steel_gear").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("steel_plate").get()), has(ModItems.ALLOY_MAP.get("steel_plate").get()))
             .save(pWriter);
@@ -426,13 +426,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('P', ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get())
             .define('p', ModItems.MATERIAL_MAP.get("promethium_rod").get())
             .define('E', ModItems.MATERIAL_MAP.get("europium_gear").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('H', ModItems.MATERIAL_MAP.get("holmium_gear").get())
             .define('Y', ModItems.MATERIAL_MAP.get("ytterbium_gear").get())
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get()), has(ModItems.CUSTOM_ITEM_MAP.get("mixed_rare_earth_alloy_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("promethium_rod").get()), has(ModItems.MATERIAL_MAP.get("promethium_rod").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("europium_gear").get()), has(ModItems.MATERIAL_MAP.get("europium_gear").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("holmium_gear").get()), has(ModItems.MATERIAL_MAP.get("holmium_gear").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()), has(ModItems.MATERIAL_MAP.get("ytterbium_gear").get()))
             .save(pWriter);
@@ -443,11 +443,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("IHI")
             .define('I', ModItems.VANILLA_MAP.get("iron_plate").get())
             .define('G', Items.GLASS)
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('H', Items.HOPPER)
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("iron_plate").get()), has(ModItems.VANILLA_MAP.get("iron_plate").get()))
             .unlockedBy(getHasName(Items.GLASS), has(Items.GLASS))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(Items.HOPPER), has(Items.HOPPER))
             .save(pWriter);
 
@@ -458,12 +458,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('P', ModItems.ALLOY_MAP.get("stainless-steel_plate").get())
             .define('G', ModItems.VANILLA_MAP.get("diamond_gear").get())
             .define('R', ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('B', ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get())
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()), has(ModItems.ALLOY_MAP.get("stainless-steel_plate").get()))
             .unlockedBy(getHasName(ModItems.VANILLA_MAP.get("diamond_gear").get()), has(ModItems.VANILLA_MAP.get("diamond_gear").get()))
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()))
             .save(pWriter);
     }
@@ -481,79 +481,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
-        buildCableRecipe(pWriter, 2, ModItems.ALLOY_MAP.get("cupronickel_plate").get());
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(3).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(2).get())
-            .define('C', ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get())
-            .define('c', ModItems.COIL_MAP.get(3).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(2).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(2).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()), has(ModItems.ALLOY_MAP.get("aluminum-magnesium_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(3).get()), has(ModItems.COIL_MAP.get(3).get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(4).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(3).get())
-            .define('C', ModItems.MATERIAL_MAP.get("silver_plate").get())
-            .define('c', ModItems.COIL_MAP.get(4).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(3).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(3).get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("silver_plate").get()), has(ModItems.MATERIAL_MAP.get("silver_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(4).get()), has(ModItems.COIL_MAP.get(4).get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(5).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(4).get())
-            .define('C', ModItems.ALLOY_MAP.get("electrum_plate").get())
-            .define('c', ModItems.COIL_MAP.get(5).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(4).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(4).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("electrum_plate").get()), has(ModItems.ALLOY_MAP.get("electrum_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(5).get()), has(ModItems.COIL_MAP.get(5).get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(6).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(5).get())
-            .define('C', ModItems.MATERIAL_MAP.get("palladium_plate").get())
-            .define('c', ModItems.COIL_MAP.get(6).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(5).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(5).get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("palladium_plate").get()), has(ModItems.MATERIAL_MAP.get("palladium_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(6).get()), has(ModItems.COIL_MAP.get(6).get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(7).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(6).get())
-            .define('C', ModItems.MATERIAL_MAP.get("platinum_plate").get())
-            .define('c', ModItems.COIL_MAP.get(7).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(6).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(6).get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("platinum_plate").get()), has(ModItems.MATERIAL_MAP.get("platinum_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(7).get()), has(ModItems.COIL_MAP.get(7).get()))
-            .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CABLE_BLOCKS_MAP.get(8).get())
-            .pattern("XCX")
-            .pattern("CcC")
-            .pattern("XCX")
-            .define('X', ModBlocks.CABLE_BLOCKS_MAP.get(7).get())
-            .define('C', ModItems.ALLOY_MAP.get("niobium-titanium_plate").get())
-            .define('c', ModItems.COIL_MAP.get(8).get())
-            .unlockedBy(getHasName(ModBlocks.CABLE_BLOCKS_MAP.get(7).get()), has(ModBlocks.CABLE_BLOCKS_MAP.get(7).get()))
-            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("niobium-titanium_plate").get()), has(ModItems.ALLOY_MAP.get("niobium-titanium_plate").get()))
-            .unlockedBy(getHasName(ModItems.COIL_MAP.get(8).get()), has(ModItems.COIL_MAP.get(8).get()))
-            .save(pWriter);
+        
     }
 
     private void buildCableRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {
@@ -619,11 +547,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("IcI")
             .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
             .define('I', Items.IRON_INGOT)
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('c', ModItems.COIL_MAP.get(1).get())
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
             .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
@@ -646,12 +574,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('S', ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get())
             .define('s', ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get())
             .define('P', plate)
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('c', ModItems.COIL_MAP.get(coilTier).get())
             .unlockedBy(getHasName(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()), has(ModBlocks.SOLAR_PANEL_BLOCK_MAP.get(tier - 1).get()))
             .unlockedBy(getHasName(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()), has(ModItems.CUSTOM_ITEM_MAP.get("solar_cell").get()))
             .unlockedBy(getHasName(plate), has(plate))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(coilTier).get()), has(ModItems.COIL_MAP.get(coilTier).get()))
             .save(pWriter);
     }
@@ -664,11 +592,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .pattern("PcP")
             .define('P', ModItems.MATERIAL_MAP.get("antimony_plate").get())
             .define('L', ModItems.MATERIAL_MAP.get("lithium_rod").get())
-            .define('F', ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
             .define('c', ModItems.COIL_MAP.get(tier).get())
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("antimony_plate").get()), has(ModItems.MATERIAL_MAP.get("antimony_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("lithium_rod").get()), has(ModItems.MATERIAL_MAP.get("lithium_rod").get()))
-            .unlockedBy(getHasName(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()), has(ModBlocks.CUSTOM_BLOCKS_MAP.get("machine_frame").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(tier).get()), has(ModItems.COIL_MAP.get(tier).get()))
             .save(pWriter);
 

@@ -2,10 +2,8 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
-import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SackStationBlock;
-import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +14,8 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Collection;
 
 public class ModBlockStateProvider extends BlockStateProvider {
 
@@ -28,7 +28,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlocksWithItem();
         customBlocksWithItem();
 
-        blockWithItem(ModBlocks.CLAY_MINERAL);
+        simpleBlockWithItem(ModBlocks.MACHINE_FRAME.get(), models().getExistingFile(modLoc("block/machine_frame")));
 
         horizontalFacingBlock("alloy_smelter", ModBlocks.ALLOY_SMELTER.get());
         horizontalFacingBlock("ore_processing_unit", ModBlocks.ORE_PROCESSING_UNIT.get());
@@ -40,13 +40,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         sackStationBlock();
 
-        cableBlocks();
-        solarPanelBlocks();
-        batteryBlocks();
+        horizontalFacingBlocks(ModBlocks.CABLE_BLOCKS_MAP.values());
+        horizontalFacingBlocks(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
+        horizontalFacingBlocks(ModBlocks.BATTERY_BLOCK_MAP.values());
+
+        multiBlockBlocks();
     }
 
-    private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
-        simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
+    private void blockWithItem(RegistryObject<Block> blockRegistryObject, String group) {
+        String blockName = blockRegistryObject.get().getDescriptionId().split("\\.")[2];
+        ResourceLocation texture = modLoc("block/" + group + "/" + blockName);
+        simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(blockName, texture));
     }
 
     private void simpleBlocksWithItem() {
@@ -69,24 +73,28 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void customBlocksWithItem() {
         for (RegistryObject<Block> block : ModBlocks.CUSTOM_BLOCKS_MAP.values()) {
-            String blockName = block.get().getDescriptionId().split("\\.")[2];
-            if (blockName.equals("machine_frame")) {
-                simpleBlockWithItem(block.get(), models().getExistingFile(modLoc("block/machine_frame")));
-            } else {
-                blockWithItem(block);
-            }
+            blockWithItem(block, "custom");
         }
     }
 
     public void simpleBlockState(Block block) {
         String blockName = block.getDescriptionId().split("\\.")[2];
         ResourceLocation model = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
+        simpleBlockState(block, model);
+    }
 
+    public void simpleBlockState(Block block, ResourceLocation texture) {
         getVariantBuilder(block).forAllStates(state ->
             ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(model))
+                .modelFile(models().getExistingFile(texture))
                 .build()
         );
+    }
+
+    private void horizontalFacingBlocks(Collection<? extends RegistryObject<? extends Block>> blocks) {
+        for (RegistryObject<? extends Block> block : blocks) {
+            horizontalFacingBlock(block.getId().getPath(), block.get());
+        }
     }
 
     private void horizontalFacingBlock(String name, Block block) {
@@ -112,21 +120,29 @@ public class ModBlockStateProvider extends BlockStateProvider {
             .build());
     }
 
-    private void cableBlocks() {
-        for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+    private void multiBlockBlocks() {
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = Utility.getMultiBlockNames(block);
+
+            String multiblock = parts[0];
+            String blockName = parts[1];
+
+            if (multiblock.equals("battery")) {
+                batteryPart(blockName, block);
+            }
         }
     }
 
-    private void solarPanelBlocks() {
-        for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
-        }
-    }
+    private void batteryPart(String blockName, RegistryObject<? extends Block> registryObject) {
+        String groupName = "multiblock/battery";
 
-    private void batteryBlocks() {
-        for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
-            horizontalFacingBlock(block.get().getDescriptionId().split("\\.")[2], block.get());
+        String texturePath = "block/" + groupName + "/" + blockName;
+
+        Block block = registryObject.get();
+        switch (blockName) {
+            case "controller" -> horizontalFacingBlock(texturePath.substring(6), block);
+            case "cell" -> simpleBlockState(block);
+            default -> simpleBlockState(block, modLoc(texturePath));
         }
     }
 }

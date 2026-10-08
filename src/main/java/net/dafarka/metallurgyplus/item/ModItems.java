@@ -2,11 +2,16 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.base.MBBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
+import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
+import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -14,15 +19,18 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
@@ -362,6 +370,9 @@ public class ModItems {
 
         // Sacks
         registerSacks();
+
+        // MultiBlock Blocks
+        registerMultiBlockBlocks();
     }
 
     private static void registerCustomItem(String name) {
@@ -481,17 +492,27 @@ public class ModItems {
         }
     }
 
-    private static void registerCable(int tier, int color) {
-        String name = "cable" + tier + "_block";
+    private static void registerCable(String cableName, int tier, int displayTier, int color, BlockBehaviour.Properties properties) {
+        String name = cableName + displayTier + "_block";
         RegistryObject<CableBlock> block = ModBlocks.registerBlock(name,
-            () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL), tier));
+            () -> new CableBlock(properties, tier));
         ModBlocks.CABLE_BLOCKS_MAP.put(tier, block);
         ModBlocks.CABLE_COLOR_MAP.put(tier, color);
     }
 
     private static void registerCables() {
         for (int i = 1; i <= 12; i++) {
-            registerCable(i, MAJOR_TIER_COLORS.get(i));
+            registerCable("cable", i, i, MAJOR_TIER_COLORS.get(i), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.WOOL));
+        }
+
+        for (int i = 13; i <= 24; i++) {
+            int displayTier = i - 12;
+            registerCable("resonant-cable", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL));
+        }
+
+        for (int i = 25; i <= 36; i++) {
+            int displayTier = i - 24;
+            registerCable("superconductor", i, displayTier, MAJOR_TIER_COLORS.get(displayTier), BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.AMETHYST));
         }
     }
 
@@ -534,6 +555,45 @@ public class ModItems {
     private static void registerSacks() {
         for (int i = 1; i <= 8; i++) {
             registerSack(i, MAJOR_TIER_COLORS.get(i));
+        }
+    }
+
+    private static void registerMultiBlockBlocks() {
+        registerMBBatteryBlocks();
+    }
+
+    private static void registerMBBatteryBlocks() {
+        List<String> blockNames = new ArrayList<>(List.of(
+            "battery/controller",
+            "battery/casing",
+            "battery/input",
+            "battery/output"
+        ));
+
+        appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
+
+        ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
+            BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
+
+            if (name.startsWith(BatteryCellBlock.BLOCK_ID_PREFIX)) {
+                int tier = Utility.getTier(name);
+                return new BatteryCellBlock(properties, tier);
+            }
+
+            Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
+            if (beSupplier != null) {
+                return new MBBlock(properties, beSupplier);
+            }
+
+            return new Block(properties);
+        });
+    }
+
+    private static void appendTieredBlocks(List<String> blockNames, String name, int tier, Map<String, Integer> colorMap, List<Integer> colors) {
+        for (int i = 1; i <= tier; i++) {
+            String blockName = name + i;
+            blockNames.add(blockName);
+            colorMap.put(blockName, colors.get(i));
         }
     }
 }

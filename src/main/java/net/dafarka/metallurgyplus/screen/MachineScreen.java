@@ -1,7 +1,7 @@
 package net.dafarka.metallurgyplus.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.dafarka.metallurgyplus.block.custom.MachineBlock;
+import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.screen.menu.MachineMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

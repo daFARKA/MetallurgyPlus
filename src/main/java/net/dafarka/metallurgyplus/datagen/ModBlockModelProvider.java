@@ -6,6 +6,7 @@ import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +31,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<Block> block : ModBlocks.MATERIAL_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerSimpleBlockModel(blockName, "base_metal_block");
+            registerCubeAllModel(blockName, "metal_block", "base");
         }
 
         for (RegistryObject<Block> block : ModBlocks.ORE_BLOCKS_MAP.values()) {
@@ -40,42 +41,58 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<Block> block : ModBlocks.ALLOY_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerSimpleBlockModel(blockName, "base_metal_block");
+            registerCubeAllModel(blockName, "metal_block", "base");
         }
 
         for (RegistryObject<Block> block : ModBlocks.GEM_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerSimpleBlockModel(blockName, "base_gem_block");
+            registerCubeAllModel(blockName, "gem_block", "base");
         }
 
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "base_cable", "", "", "", "", "", defaultTintIndices);
+            String baseName = Utility.removeInString(blockName, "_block");
+            baseName = Utility.removeTrailingDigits(baseName);
+            registerCubeAllModel(blockName, baseName, "energy");
         }
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "solar_panel", "_", "side", "side", "top", "bottom", new int[]{0, 0, 0, 0, 1, 0});
+            registerOrientable(blockName, "energy", "solar_panel", "_", "side", "side", "top", "bottom", new int[]{0, 0, 0, 0, 1, 0});
         }
 
         for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "base_battery", "", "", "", "", "", defaultTintIndices);
+            registerOrientable(blockName, "energy", "battery", "", "", "", "", "", defaultTintIndices);
         }
 
-        registerOrientable("alloy_smelter", "alloy_smelter", "_", "front", "side", "top", "top", null);
-        registerOrientable("ore_processing_unit", "ore_processing_unit", "_", "front", "side", "top", "top", null);
-        registerOrientable("grinder", "grinder", "_", "front", "side", "top", "top", null);
-        registerOrientable("press", "press", "_", "front", "side", "top", "top", null);
-        registerOrientable("extractor", "extractor", "_", "front", "side", "top", "top", null);
-        registerOrientable("gemstone_cutter", "gemstone_cutter", "_", "front", "side", "top", "top", null);
-        registerOrientable("quarry", "quarry", "_", "front", "side", "top", "top", null);
-        registerOrientable("power_source", "power_source", "", "", "", "", "", null);
+        for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
+            String[] parts = Utility.getMultiBlockNames(block);
+
+            String multiblock = parts[0];
+            String blockName = parts[1];
+
+            if (multiblock.equals("battery")) {
+                registerBatteryPart(blockName);
+            }
+        }
+
+        registerOrientable("alloy_smelter", "machine", "alloy_smelter", "_", "front", "side", "top", "top", null);
+        registerOrientable("ore_processing_unit", "machine", "ore_processing_unit", "_", "front", "side", "top", "top", null);
+        registerOrientable("grinder", "machine", "grinder", "_", "front", "side", "top", "top", null);
+        registerOrientable("press", "machine", "press", "_", "front", "side", "top", "top", null);
+        registerOrientable("extractor", "machine", "extractor", "_", "front", "side", "top", "top", null);
+        registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", "_", "front", "side", "top", "top", null);
+        registerOrientable("quarry", "machine", "quarry", "_", "front", "side", "top", "top", null);
+        registerOrientable("power_source", "energy", "power_source", "", "", "", "", "", null);
         registerSackStation();
     }
 
-    private void registerSimpleBlockModel(String blockName, String baseName) {
-        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + baseName);
+    private void registerCubeAllModel(String blockName, String textureName, String group) {
+        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + group + "/" + textureName);
+        if (group.isEmpty()) {
+            texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
+        }
 
         getBuilder(blockName)
             .parent(getExistingFile(mcLoc("block/cube_all")))
@@ -93,13 +110,13 @@ public class ModBlockModelProvider extends BlockModelProvider {
     }
 
     private void registerOreModel(String blockName) {
-        ResourceLocation textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/stone");
+        ResourceLocation textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/ore/stone");
         for (int i = 1; i < ModItems.ORE_BASE_NAME.length; i++) {
             if (blockName.split("_")[1].equals(ModItems.ORE_BASE_NAME[i])) {
-                textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/" + ModItems.ORE_BASE_NAME[i]);
+                textureBase = new ResourceLocation(MetallurgyPlus.MODID, "block/ore/" + ModItems.ORE_BASE_NAME[i]);
             }
         }
-        ResourceLocation textureOreLayer = new ResourceLocation(MetallurgyPlus.MODID, "block/ore_layer");
+        ResourceLocation textureOreLayer = new ResourceLocation(MetallurgyPlus.MODID, "block/ore/ore_layer");
 
         getBuilder(blockName)
             .parent(getExistingFile(mcLoc("block/cube_all")))
@@ -128,21 +145,38 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .end();
     }
 
-    private void registerOrientable(String name, String textureName, String connector, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+    private void registerOrientable(String name, String group, String textureName, String connector, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+        registerOrientable(
+            name,
+            group,
+            textureName + connector + front,
+            textureName + connector + side,
+            textureName + connector + top,
+            textureName + connector + bottom,
+            tintIndices
+        );
+    }
+
+    private void registerOrientable(String name, String group, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+        ResourceLocation frontTexture = modLoc("block/" + group + "/" + front);
+        ResourceLocation sideTexture = modLoc("block/" + group + "/" + side);
+        ResourceLocation topTexture = modLoc("block/" + group + "/" + top);
+        ResourceLocation bottomTexture = modLoc("block/" + group + "/" + bottom);
+
         if (tintIndices == null || tintIndices.length != 6) {
             getBuilder(name)
                 .parent(getExistingFile(modLoc("block_entity_orientable")))
-                .texture("front", modLoc("block/" + textureName + connector + front))
-                .texture("side", modLoc("block/" + textureName + connector + side))
-                .texture("top", modLoc("block/" + textureName + connector + top))
-                .texture("bottom", modLoc("block/" + textureName + connector + bottom));
+                .texture("front", frontTexture)
+                .texture("side", sideTexture)
+                .texture("top", topTexture)
+                .texture("bottom", bottomTexture);
         } else {
             getBuilder(name)
                 .parent(getExistingFile(modLoc("block_entity_orientable")))
-                .texture("front", modLoc("block/" + textureName + connector + front))
-                .texture("side", modLoc("block/" + textureName + connector + side))
-                .texture("top", modLoc("block/" + textureName + connector + top))
-                .texture("bottom", modLoc("block/" + textureName + connector + bottom))
+                .texture("front", frontTexture)
+                .texture("side", sideTexture)
+                .texture("top", topTexture)
+                .texture("bottom", bottomTexture)
                 .element()
                 .from(0, 0, 0)
                 .to(16, 16, 16)
@@ -159,17 +193,34 @@ public class ModBlockModelProvider extends BlockModelProvider {
     private void registerSackStation() {
         getBuilder("sack_station")
             .parent(getExistingFile(modLoc("block_entity_orientable")))
-            .texture("front", modLoc("block/sack_station"))
-            .texture("side", modLoc("block/sack_station"))
-            .texture("top", modLoc("block/sack_station"))
-            .texture("bottom", modLoc("block/sack_station_bottom"))
+            .texture("front", modLoc("block/machine/sack_station"))
+            .texture("side", modLoc("block/machine/sack_station"))
+            .texture("top", modLoc("block/machine/sack_station"))
+            .texture("bottom", modLoc("block/machine/sack_station_bottom"))
             .renderType(mcLoc("cutout"));
     }
 
     private void registerMachineFrame() {
         getBuilder("machine_frame")
             .parent(getExistingFile(mcLoc("block/cube_all")))
-            .texture("all", modLoc("block/machine_frame"))
+            .texture("all", modLoc("block/custom/machine_frame"))
             .renderType(mcLoc("cutout"));
+    }
+
+    private void registerBatteryPart(String blockName) {
+        String groupName = "multiblock/battery";
+
+        String pathName = "block/" + groupName + "/" + blockName;
+        String baseName = Utility.removeTrailingDigits(blockName);
+        switch (baseName) {
+            case "controller" -> {
+                registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
+            }
+            case "cell" -> {
+                groupName = groupName + "/base";
+                registerOrientable(pathName, groupName, "cell", "_", "side", "side", "top", "top", new int[]{0, 0, 0, 0, 1, 1});
+            }
+            default -> registerCubeAllModel(pathName, blockName, groupName);
+        }
     }
 }

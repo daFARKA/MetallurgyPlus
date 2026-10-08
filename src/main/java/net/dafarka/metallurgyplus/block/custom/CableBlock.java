@@ -1,5 +1,6 @@
 package net.dafarka.metallurgyplus.block.custom;
 
+import net.dafarka.metallurgyplus.block.base.BaseBlock;
 import net.dafarka.metallurgyplus.block.entity.CableBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.util.Utility;
@@ -26,12 +27,16 @@ import java.util.List;
 public class CableBlock extends BaseBlock {
     public static final int TRANSFER = 1000;
 
-    private int tier = 0;
+    private int tier;
 
     public CableBlock(Properties pProperties, int tier) {
         super(pProperties);
 
         this.tier = tier;
+    }
+
+    public BigInteger getTransfer() {
+        return CableBlockEntity.getTransfer(tier);
     }
 
     @Override
@@ -72,7 +77,6 @@ public class CableBlock extends BaseBlock {
     public void appendHoverText(ItemStack stack, BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        BigInteger transfer = CableBlockEntity.getTransfer(tier);
-        tooltip.add(Component.literal("Transfers " + Utility.formatCompact(transfer) + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        tooltip.add(Component.literal("Transfers " + Utility.formatCompact(getTransfer()) + " FE/t").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
     }
 }
