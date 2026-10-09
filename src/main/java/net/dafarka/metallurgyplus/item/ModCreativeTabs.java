@@ -124,7 +124,11 @@ public class ModCreativeTabs {
 
     private static void addSortedItems(Map<?, ? extends RegistryObject<? extends Item>> itemMap, CreativeModeTab.Output output) {
         itemMap.values().stream()
-            .sorted(Comparator.comparing(item -> item.getId().getPath()))
+            .sorted(Comparator
+                .comparing((RegistryObject<? extends Item> item) -> item.getId().getPath().replaceAll("\\d+", ""))
+                .thenComparingInt(item -> Utility.getTier(item.getId().getPath()))
+                .thenComparing(item -> item.getId().getPath())
+            )
             .forEach(item -> output.accept(item.get()));
     }
 

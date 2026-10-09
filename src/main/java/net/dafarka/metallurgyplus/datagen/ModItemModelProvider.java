@@ -49,7 +49,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("sack_station", "sack_station", "cutout");
 
         simpleBlockItemModels(ModBlocks.CABLE_BLOCKS_MAP.values());
-        simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values(), "cutout");
+        simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
         simpleBlockItemModels(ModBlocks.BATTERY_BLOCK_MAP.values());
 
         createCoilItems();
