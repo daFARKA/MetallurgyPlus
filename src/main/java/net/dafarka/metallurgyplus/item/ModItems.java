@@ -127,7 +127,6 @@ public class ModItems {
         registerCustomItem("silicon");
         registerCustomItem("clay_mineral_raw");
         registerCustomItem("kaolinite");
-        registerCustomItem("platinum_like_metals");
         registerCustomItem("sulphur");
         registerCustomItem("rare_earth_1");
         registerCustomItem("rare_earth_2");
