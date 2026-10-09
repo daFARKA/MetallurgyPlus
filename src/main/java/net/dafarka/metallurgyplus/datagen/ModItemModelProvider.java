@@ -28,11 +28,13 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         generateMaps(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP, "material");
-        generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP, "ore");
+        generateMaps(ModItems.ORE_MAP, ModBlocks.ORE_BLOCKS_MAP, "ore", "cutout");
         generateMaps(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP, "alloy");
         generateItemMap(ModItems.CUSTOM_ITEM_MAP, "custom");
         generateItemMapBase(ModItems.VANILLA_MAP);
         generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, "gem");
+
+        simpleBlockItemModel("machine_frame", "machine_frame", "cutout");
 
         groupItem(ModItems.LLAMKANA, "custom");
 
@@ -44,10 +46,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("gemstone_cutter");
         simpleBlockItemModel("quarry");
         simpleBlockItemModel("power_source");
-        simpleBlockItemModel("sack_station");
+        simpleBlockItemModel("sack_station", "sack_station", "cutout");
 
         simpleBlockItemModels(ModBlocks.CABLE_BLOCKS_MAP.values());
-        simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
+        simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values(), "cutout");
         simpleBlockItemModels(ModBlocks.BATTERY_BLOCK_MAP.values());
 
         createCoilItems();
@@ -85,20 +87,22 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     public void simpleBlockItemModel(String modelName) {
-        getBuilder(modelName)
-            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)))
-            .transforms()
-            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-            .rotation(10, -45, 170)
-            .translation(0, 1.5f, -2.75f)
-            .scale(0.375f, 0.375f, 0.375f)
-            .end();
+        simpleBlockItemModel(modelName, modelName, null);
     }
 
-    public void simpleBlockItemModel(String modelName, String texturePath) {
-        getBuilder("item/" + modelName)
-            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + texturePath)))
-            .transforms()
+    public void simpleBlockItemModel(String modelName, String parentBlockPath) {
+        simpleBlockItemModel(modelName, parentBlockPath, null);
+    }
+
+    public void simpleBlockItemModel(String modelName, String parentBlockPath, @Nullable String renderType) {
+        var builder = getBuilder(modelName)
+            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + parentBlockPath)));
+
+        if (renderType != null) {
+            builder.renderType(renderType);
+        }
+
+        builder.transforms()
             .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
             .rotation(10, -45, 170)
             .translation(0, 1.5f, -2.75f)
@@ -119,13 +123,17 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap, String group) {
+        generateMaps(itemMap, blockMap, group, null);
+    }
+
+    private void generateMaps(Map<String, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap, String group, @Nullable String renderType) {
         for (RegistryObject<Item> item : itemMap.values()) {
             dynamicItem(item, group);
         }
 
         for (RegistryObject<Block> block : blockMap.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            simpleBlockItemModel(blockName);
+            simpleBlockItemModel(blockName, blockName, renderType);
         }
     }
 
@@ -142,8 +150,13 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks) {
+        simpleBlockItemModels(blocks, null);
+    }
+
+    private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks, @Nullable String renderType) {
         for (RegistryObject<? extends Block> block : blocks) {
-            simpleBlockItemModel(block.getId().getPath());
+            String blockName = block.getId().getPath();
+            simpleBlockItemModel(blockName, blockName, renderType);
         }
     }
 
@@ -154,10 +167,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             String multiblock = parts[0];
             String blockName = parts[1];
 
-            String texturePath = "multiblock/" + multiblock + "/" + blockName;
-            String modelName = multiblock + "/" + blockName;
+            String parentBlockPath = "multiblock/" + multiblock + "/" + blockName;
+            String modelName = "item/" + multiblock + "/" + blockName;
 
-            simpleBlockItemModel(modelName, texturePath);
+            simpleBlockItemModel(modelName, parentBlockPath);
         }
     }
 

@@ -58,7 +58,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "energy", "solar_panel", "_", "side", "side", "top", "bottom", new int[]{0, 0, 0, 0, 1, 0});
+            registerSolarPanel(blockName);
         }
 
         for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
@@ -120,6 +120,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         getBuilder(blockName)
             .parent(getExistingFile(mcLoc("block/cube_all")))
+            .renderType(mcLoc("cutout"))
             .texture("particle", textureBase)
             .texture("layer0", textureBase)
             .texture("layer1", textureOreLayer)
@@ -188,6 +189,43 @@ public class ModBlockModelProvider extends BlockModelProvider {
                 .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).end()
                 .end();
         }
+    }
+
+    private void registerSolarPanel(String name) {
+        ResourceLocation sideTexture = modLoc("block/energy/solar_panel_side");
+        ResourceLocation bottomTexture = modLoc("block/energy/solar_panel_bottom");
+        ResourceLocation topBaseTexture = modLoc("block/energy/solar_panel_top");
+        ResourceLocation topOverlayTexture = modLoc("block/energy/solar_panel_top_overlay");
+
+        getBuilder(name)
+            .parent(getExistingFile(modLoc("block_entity_orientable")))
+            .renderType(mcLoc("cutout"))
+            .texture("particle", sideTexture)
+            .texture("side", sideTexture)
+            .texture("bottom", bottomTexture)
+            .texture("top_base", topBaseTexture)
+            .texture("top_overlay", topOverlayTexture)
+
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN).end()
+            .face(Direction.UP).texture("#top_base").cullface(Direction.UP).end()
+            .face(Direction.NORTH).texture("#side").cullface(Direction.NORTH).tintindex(0).end()
+            .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).tintindex(0).end()
+            .face(Direction.EAST).texture("#side").cullface(Direction.EAST).tintindex(0).end()
+            .face(Direction.WEST).texture("#side").cullface(Direction.WEST).tintindex(0).end()
+            .end()
+
+            .element()
+            .from(0, 16, 0)
+            .to(16, 16, 16)
+            .face(Direction.UP)
+            .texture("#top_overlay")
+            .cullface(Direction.UP)
+            .tintindex(0)
+            .end()
+            .end();
     }
 
     private void registerSackStation() {

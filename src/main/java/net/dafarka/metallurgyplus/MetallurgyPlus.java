@@ -18,8 +18,6 @@ import net.dafarka.metallurgyplus.util.color.DynamicKeyColor;
 import net.dafarka.metallurgyplus.worldgen.placement.ModPlacementModifiers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -193,13 +191,6 @@ public class MetallurgyPlus {
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);
 
             MenuScreens.register(ModMenuTypes.MULTIBLOCK_BATTERY_MENU.get(), MBBatteryScreen::new);
-
-            for (RegistryObject<Block> ore : ModBlocks.ORE_BLOCKS_MAP.values()) {
-                ItemBlockRenderTypes.setRenderLayer(ore.get(), RenderType.cutout());
-            }
-
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SACK_STATION.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.MACHINE_FRAME.get(), RenderType.cutout());
         }
 
         @SubscribeEvent
