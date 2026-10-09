@@ -134,7 +134,6 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 oldMaterials.add(currentMaterialName);
 
                 Item raw = ModItems.ORE_MAP.get(currentMaterialName + "_" + ModItems.ORE_COMPONENT_NAMES[0]).get();
-                Item dust = ModItems.ORE_MAP.get(currentMaterialName + "_" + ModItems.ORE_COMPONENT_NAMES[1]).get();
 
             }
         }
@@ -334,6 +333,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(Items.QUARTZ), has(Items.QUARTZ))
             .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
             .save(pWriter);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CUSTOM_ITEM_MAP.get("fertilizer").get(), 8)
+            .requires(ModItems.GEM_MAP.get("apatite_gem").get())
+            .requires(Items.SAND, 2)
+            .unlockedBy(getHasName(ModItems.GEM_MAP.get("apatite_gem").get()), has(ModItems.GEM_MAP.get("apatite_gem").get()))
+            .unlockedBy(getHasName(Items.SAND), has(Items.SAND))
+            .save(pWriter);
     }
 
     private void buildBlockEntitiesRecipes(Consumer<FinishedRecipe> pWriter) {
@@ -481,7 +487,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.COIL_MAP.get(1).get()), has(ModItems.COIL_MAP.get(1).get()))
             .save(pWriter);
 
-        
+
     }
 
     private void buildCableRecipe(Consumer<FinishedRecipe> pWriter, int tier, Item plate) {

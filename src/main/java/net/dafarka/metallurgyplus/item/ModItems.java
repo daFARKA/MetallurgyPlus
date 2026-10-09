@@ -14,6 +14,7 @@ import net.dafarka.metallurgyplus.util.OreRarity;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModItems {
@@ -91,7 +93,7 @@ public class ModItems {
         TIER_COLORS.get(72)  // 12. Rb peak (Deep Bordeaux/Wine)
     );
 
-    public static final Map<String, RegistryObject<Item>> CUSTOM_ITEM_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<? extends Item>> CUSTOM_ITEM_MAP = new HashMap<>();
 
     public static final Map<String, RegistryObject<Item>> MATERIAL_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> ORE_MAP = new HashMap<>();
@@ -142,6 +144,7 @@ public class ModItems {
         registerCustomItem("mixed_rare_earth_alloy_plate");
         registerCustomItem("solar_cell");
         registerCustomItem("mercury");
+        registerCustomItem("fertilizer", BoneMealItem::new);
 
         // Base Materials
         registerMaterial("aluminum", 0xb9f0f0);
@@ -380,6 +383,12 @@ public class ModItems {
         CUSTOM_ITEM_MAP.put(name, item);
     }
 
+    private static <T extends Item> RegistryObject<T> registerCustomItem(String name, Function<Item.Properties, T> factory) {
+        RegistryObject<T> item = ITEMS.register(name, () -> factory.apply(new Item.Properties()));
+        CUSTOM_ITEM_MAP.put(name, item);
+        return item;
+    }
+
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
 
     private static void registerMaterial(String materialName, int color) {
@@ -400,7 +409,7 @@ public class ModItems {
         ModBlocks.MATERIAL_COLOR_MAP.put(name, color);
     }
 
-    public static final String[] ORE_COMPONENT_NAMES = {"raw", "dust"};
+    public static final String[] ORE_COMPONENT_NAMES = {"raw"};
     public static final String[] ORE_BASE_NAME = {"stone", "deepslate"};
 
     private static void registerOre(String oreName, int color, OreRarity oreRarity) {

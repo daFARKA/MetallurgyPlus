@@ -122,7 +122,7 @@ public class ModCreativeTabs {
         CREATIVE_TABS.register(eventBus);
     }
 
-    private static void addSortedItems(Map<?, RegistryObject<Item>> itemMap, CreativeModeTab.Output output) {
+    private static void addSortedItems(Map<?, ? extends RegistryObject<? extends Item>> itemMap, CreativeModeTab.Output output) {
         itemMap.values().stream()
             .sorted(Comparator.comparing(item -> item.getId().getPath()))
             .forEach(item -> output.accept(item.get()));

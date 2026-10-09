@@ -108,8 +108,8 @@ public class ModLangProvider extends LanguageProvider {
     /**
      * name_component -> Name Component
      */
-    private void addCustomItemMapTranslations(Map<String, RegistryObject<Item>> itemMap) {
-        for (RegistryObject<Item> item : itemMap.values()) {
+    private void addCustomItemMapTranslations(Map<String, ? extends RegistryObject<? extends Item>> itemMap) {
+        for (RegistryObject<? extends Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = fullName.replace('_', ' ');
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));

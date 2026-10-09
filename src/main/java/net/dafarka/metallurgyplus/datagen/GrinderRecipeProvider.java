@@ -96,7 +96,6 @@ public class GrinderRecipeProvider extends RecipeProvider {
                 oldMaterials.add(currentMaterialName);
 
                 Item raw = ModItems.ORE_MAP.get(currentMaterialName + "_" + ModItems.ORE_COMPONENT_NAMES[0]).get();
-                Item dust = ModItems.ORE_MAP.get(currentMaterialName + "_" + ModItems.ORE_COMPONENT_NAMES[1]).get();
 
                 Item ore_stone = ModBlocks.ORE_BLOCKS_MAP.get(currentMaterialName + "_" + ModItems.ORE_BASE_NAME[0] + "_block").get().asItem();
                 Item ore_deepslate = ModBlocks.ORE_BLOCKS_MAP.get(currentMaterialName + "_" + ModItems.ORE_BASE_NAME[1] + "_block").get().asItem();

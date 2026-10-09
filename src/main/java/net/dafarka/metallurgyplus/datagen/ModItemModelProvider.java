@@ -56,13 +56,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         multiBlockItemModels();
     }
 
-    private ItemModelBuilder groupItem(RegistryObject<Item> item, String group) {
+    private ItemModelBuilder groupItem(RegistryObject<? extends Item> item, String group) {
         return withExistingParent(item.getId().getPath(),
             new ResourceLocation("item/generated")).texture("layer0",
             new ResourceLocation(MetallurgyPlus.MODID, "item/" + group + "/" + item.getId().getPath()));
     }
 
-    private ItemModelBuilder baseItem(RegistryObject<Item> item) {
+    private ItemModelBuilder baseItem(RegistryObject<? extends Item> item) {
         String currentName = item.getId().getPath();
         String componentName = currentName.split("_")[1];
 
@@ -71,7 +71,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             new ResourceLocation(MetallurgyPlus.MODID, "item/base/" + componentName));
     }
 
-    private ItemModelBuilder dynamicItem(RegistryObject<Item> item, @Nullable String group) {
+    private ItemModelBuilder dynamicItem(RegistryObject<? extends Item> item, @Nullable String group) {
         if (group == null) return baseItem(item);
 
         String texturePath = "item/" + (group.isEmpty() ? "" : group + "/") + item.getId().getPath();
@@ -129,8 +129,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void generateItemMap(Map<String, RegistryObject<Item>> itemMap, String group) {
-        for (RegistryObject<Item> item : itemMap.values()) {
+    private void generateItemMap(Map<String, RegistryObject<? extends Item>> itemMap, String group) {
+        for (RegistryObject<? extends Item> item : itemMap.values()) {
             dynamicItem(item, group);
         }
     }
@@ -153,7 +153,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
             String multiblock = parts[0];
             String blockName = parts[1];
-            
+
             String texturePath = "multiblock/" + multiblock + "/" + blockName;
             String modelName = multiblock + "/" + blockName;
 
