@@ -50,10 +50,9 @@ public class ModBlockModelProvider extends BlockModelProvider {
         }
 
         for (RegistryObject<CableBlock> block : ModBlocks.CABLE_BLOCKS_MAP.values()) {
-            String blockName = block.get().getDescriptionId().split("\\.")[2];
-            String baseName = Utility.removeInString(blockName, "_block");
-            baseName = Utility.removeTrailingDigits(baseName);
-            registerCubeAllModel(blockName, baseName, "energy");
+            String blockName = block.getId().getPath();
+            String textureName = Utility.removeTrailingDigits(Utility.removeInString(blockName, "_block"));
+            registerCableModels(blockName, modLoc("block/energy/" + textureName));
         }
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
@@ -86,6 +85,53 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("quarry", "machine", "quarry", "_", "front", "side", "top", "top", null);
         registerOrientable("power_source", "energy", "power_source", "", "", "", "", "", null);
         registerSackStation();
+    }
+
+    private void registerCableModels(String name, ResourceLocation texture) {
+        getBuilder(name + "_core")
+            .parent(getExistingFile(mcLoc("block/block")))
+            .texture("particle", texture)
+            .texture("cable", texture)
+            .element()
+            .from(6, 6, 6)
+            .to(10, 10, 10)
+            .allFaces((direction, face) -> face
+                .uvs(6, 6, 10, 10)
+                .texture("#cable")
+                .tintindex(0))
+            .end();
+
+        getBuilder(name + "_arm")
+            .parent(getExistingFile(mcLoc("block/block")))
+            .texture("particle", texture)
+            .texture("cable", texture)
+            .element()
+            .from(6, 6, 0)
+            .to(10, 10, 6)
+            .face(Direction.DOWN).uvs(6, 0, 10, 6).texture("#cable").tintindex(0).end()
+            .face(Direction.UP).uvs(6, 10, 10, 16).texture("#cable").tintindex(0).end()
+            .face(Direction.NORTH).uvs(6, 6, 10, 10).texture("#cable").tintindex(0)
+                .cullface(Direction.NORTH).end()
+            .face(Direction.WEST).uvs(0, 6, 6, 10).texture("#cable").tintindex(0).end()
+            .face(Direction.EAST).uvs(10, 6, 16, 10).texture("#cable").tintindex(0).end()
+            // The south face meets the core, so it is intentionally omitted.
+            .end();
+
+        // A straight cable segment for the inventory icon.
+        getBuilder(name + "_item")
+            .parent(getExistingFile(mcLoc("block/block")))
+            .texture("particle", texture)
+            .texture("cable", texture)
+            .element()
+            .from(6, 6, 0)
+            .to(10, 10, 16)
+            .face(Direction.DOWN).uvs(6, 0, 10, 16).texture("#cable").tintindex(0).end()
+            .face(Direction.UP).uvs(6, 0, 10, 16).texture("#cable").tintindex(0).end()
+            .face(Direction.NORTH).uvs(6, 6, 10, 10).texture("#cable").tintindex(0).end()
+            .face(Direction.SOUTH).uvs(6, 6, 10, 10).texture("#cable").tintindex(0).end()
+            .face(Direction.WEST).uvs(0, 6, 6, 10).texture("#cable").tintindex(0).end()
+            .face(Direction.EAST).uvs(10, 6, 16, 10).texture("#cable").tintindex(0).end()
+            .end();
     }
 
     private void registerCubeAllModel(String blockName, String textureName, String group) {

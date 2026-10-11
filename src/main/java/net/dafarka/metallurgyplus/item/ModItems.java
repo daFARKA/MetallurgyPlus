@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.item;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.base.MBBlock;
+import net.dafarka.metallurgyplus.block.base.MBEnergyPortBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
@@ -574,8 +575,8 @@ public class ModItems {
         List<String> blockNames = new ArrayList<>(List.of(
             "battery/controller",
             "battery/casing",
-            "battery/input",
-            "battery/output"
+            "battery/energy_input",
+            "battery/energy_output"
         ));
 
         appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
@@ -600,6 +601,10 @@ public class ModItems {
             Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {
                 return new MBBlock(properties, beSupplier);
+            }
+
+            if (name.contains("energy")) {
+                return new MBEnergyPortBlock(properties);
             }
 
             return new Block(properties);

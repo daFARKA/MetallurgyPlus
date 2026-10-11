@@ -19,6 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -48,7 +49,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("power_source");
         simpleBlockItemModel("sack_station", "sack_station", "cutout");
 
-        simpleBlockItemModels(ModBlocks.CABLE_BLOCKS_MAP.values());
+        for (RegistryObject<? extends Block> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            String name = cable.getId().getPath();
+            simpleBlockItemModel(name, name + "_item");
+        }
+
         simpleBlockItemModels(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
         simpleBlockItemModels(ModBlocks.BATTERY_BLOCK_MAP.values());
 
@@ -90,13 +95,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel(modelName, modelName, null);
     }
 
-    public void simpleBlockItemModel(String modelName, String parentBlockPath) {
-        simpleBlockItemModel(modelName, parentBlockPath, null);
+    public void simpleBlockItemModel(String modelName, String parentPath) {
+        simpleBlockItemModel(modelName, parentPath, null);
     }
 
-    public void simpleBlockItemModel(String modelName, String parentBlockPath, @Nullable String renderType) {
+    public void simpleBlockItemModel(String modelName, String parentPath, @Nullable String renderType) {
         var builder = getBuilder(modelName)
-            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + parentBlockPath)));
+            .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + parentPath)));
 
         if (renderType != null) {
             builder.renderType(renderType);
@@ -150,13 +155,17 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks) {
-        simpleBlockItemModels(blocks, null);
+        simpleBlockItemModels(blocks, null, null);
     }
 
-    private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks, @Nullable String renderType) {
+    private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks, String parentPath) {
+        simpleBlockItemModels(blocks, parentPath, null);
+    }
+
+    private void simpleBlockItemModels(Collection<? extends RegistryObject<? extends Block>> blocks, @Nullable String parentPath, @Nullable String renderType) {
         for (RegistryObject<? extends Block> block : blocks) {
             String blockName = block.getId().getPath();
-            simpleBlockItemModel(blockName, blockName, renderType);
+            simpleBlockItemModel(blockName, Objects.requireNonNullElse(parentPath, blockName), renderType);
         }
     }
 

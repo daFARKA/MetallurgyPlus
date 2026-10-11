@@ -36,6 +36,8 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     public static final int ENERGY_DATA_COUNT = ENERGY_WORDS * 2 + 1;
     private static final BigInteger ENERGY_WORD_MASK = BigInteger.ONE.shiftLeft(ENERGY_WORD_BITS).subtract(BigInteger.ONE);
     private static final BigInteger MAX_STANDARD_TRANSFER = BigInteger.valueOf(Integer.MAX_VALUE);
+    private static final String INPUT_NAME = "battery/energy_input";
+    private static final String OUTPUT_NAME = "battery/energy_output";
 
     private final ContainerData menuData = new ContainerData() {
         @Override
@@ -157,7 +159,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
             return false;
         }
 
-        List<EnergyEndpoint> endpoints = getConnectedEndpoints(structure, "battery/input", true);
+        List<EnergyEndpoint> endpoints = getConnectedEndpoints(structure, INPUT_NAME, true);
         for (EnergyEndpoint endpoint : endpoints) {
             endpoint.available = getExtractableEnergy(endpoint.storage, remainingBudget);
         }
@@ -193,7 +195,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
             return false;
         }
 
-        List<EnergyEndpoint> endpoints = getConnectedEndpoints(structure, "battery/output", false);
+        List<EnergyEndpoint> endpoints = getConnectedEndpoints(structure, OUTPUT_NAME, false);
         for (EnergyEndpoint endpoint : endpoints) {
             endpoint.available = getReceivableEnergy(endpoint.storage, remainingBudget);
         }
@@ -277,7 +279,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     }
 
     private static BigInteger extractFrom(IEnergyStorage storage, BigInteger requested) {
-        if (requested.signum() <= 0) {
+        if (requested.signum() <= 0 || !storage.canExtract()) {
             return BigInteger.ZERO;
         }
 
@@ -291,7 +293,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     }
 
     private static BigInteger receiveAt(IEnergyStorage storage, BigInteger offered) {
-        if (offered.signum() <= 0) {
+        if (offered.signum() <= 0 || !storage.canReceive()) {
             return BigInteger.ZERO;
         }
 
@@ -327,8 +329,8 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
             .edges(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get()))
             .walls(state -> state.is(Blocks.GLASS)
                 || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get())
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/input").get())
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/output").get())
+                || state.is(ModBlocks.MULTIBLOCKS_MAP.get(INPUT_NAME).get())
+                || state.is(ModBlocks.MULTIBLOCKS_MAP.get(OUTPUT_NAME).get())
                 || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
             .controller(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
             .requireInterior(
