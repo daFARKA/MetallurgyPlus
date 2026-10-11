@@ -207,4 +207,29 @@ public class Utility {
     public static String removeInString(String input, String toRemove) {
         return replaceInString(input, toRemove, "");
     }
+
+    /**
+     * Darkens a given color
+     *
+     * @param rgb    The given color either in 0xRRGGBB or 0xAARRGGBB
+     * @param factor The factor of the new color. E.g: 0.9 means 10% darker.
+     *
+     * @return The darkened color.
+     */
+    public static int darkenColor(int rgb, float factor) {
+        int alpha = (rgb >> 24) & 0xFF;
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+
+        red = Math.round(red * factor);
+        green = Math.round(green * factor);
+        blue = Math.round(blue * factor);
+
+        if (alpha == 0) {
+            alpha = 0xFF;
+        }
+
+        return (alpha << 24) | (red << 16) | (green << 8) | blue;
+    }
 }

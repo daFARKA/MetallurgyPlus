@@ -87,6 +87,14 @@ public class ModCreativeTabs {
             })
             .build());
 
+    public static final RegistryObject<CreativeModeTab> FISSION = CREATIVE_TABS.register("metallurgyplus_fission",
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.FISSION_MAP.get("uranium-238_pellet").get()))
+            .title(Component.translatable("creativetab.metallurgyplus_fission"))
+            .displayItems((pParameters, pOutput) -> {
+                addSortedItems(ModItems.FISSION_MAP, pOutput);
+            })
+            .build());
+
     public static final RegistryObject<CreativeModeTab> MACHINES = CREATIVE_TABS.register("metallurgyplus_machines",
         () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.ALLOY_SMELTER.get()))
             .title(Component.translatable("creativetab.metallurgyplus_machines"))
@@ -134,11 +142,7 @@ public class ModCreativeTabs {
 
     private static void addSortedItems(Map<?, RegistryObject<Item>> itemMap, Map<String, RegistryObject<Block>> blockMap, CreativeModeTab.Output output) {
         itemMap.values().stream()
-            .sorted(Comparator
-                .comparing((RegistryObject<Item> item) -> item.getId().getPath().replaceAll("\\d+", ""))
-                .thenComparingInt(item -> Utility.getTier(item.getId().getPath()))
-                .thenComparing(item -> item.getId().getPath())
-            )
+            .sorted(Comparator.comparing((RegistryObject<Item> item) -> item.getId().getPath()))
             .forEach(item -> {
                 output.accept(item.get());
 
@@ -156,11 +160,7 @@ public class ModCreativeTabs {
                         return blockName.equals(baseName + "_block")
                             || (blockName.startsWith(baseName + "_") && blockName.endsWith("_block"));
                     })
-                    .sorted(Comparator
-                        .comparing((Map.Entry<String, RegistryObject<Block>> entry) -> entry.getKey().replaceAll("\\d+", ""))
-                        .thenComparingInt(entry -> Utility.getTier(entry.getKey()))
-                        .thenComparing(Map.Entry::getKey)
-                    )
+                    .sorted(Map.Entry.comparingByKey())
                     .forEach(entry -> output.accept(entry.getValue().get()));
             });
     }

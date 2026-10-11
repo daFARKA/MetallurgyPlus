@@ -101,6 +101,7 @@ public class ModItems {
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> VANILLA_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> GEM_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> FISSION_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> SACK_MAP = new HashMap<>();
 
@@ -109,6 +110,7 @@ public class ModItems {
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> VANILLA_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> GEM_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> FISSION_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> SACK_COLOR_MAP = new HashMap<>();
 
@@ -359,6 +361,28 @@ public class ModItems {
         registerGem("wulfenite", 0xff8469);
         registerGem("zircon", 0xd9c3bf);
 
+        // Fissions
+        registerFission("uranium-238", 0x00702d);
+        registerFission("uranium-235", 0x004c20);
+
+        /*Uranium-238
+        ↓
+        Uranium-235
+        ↓
+        Neptunium-235
+        ↓
+        Plutonium-236
+        ↓
+        Plutonium-239
+        ↓
+        Americium-241
+        ↓
+        Curium-245
+        ↓
+        Berkelium-249
+        ↓
+        Californium-252*/
+
         // Cables
         registerCables();
 
@@ -485,6 +509,26 @@ public class ModItems {
 
         ModBlocks.GEM_BLOCKS_MAP.put(name, block);
         ModBlocks.GEM_COLOR_MAP.put(name, color);
+    }
+
+    public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel"};
+
+    private static void registerFission(String fissionName, int color) {
+        for (String component : FISSION_COMPONENT_NAMES) {
+            String name = fissionName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            FISSION_MAP.put(name, item);
+            FISSION_COLOR_MAP.put(name, color);
+
+            String depletedName = fissionName + "_" + component + "_depleted";
+            RegistryObject<Item> depletedItem = ITEMS.register(depletedName, () ->
+                new Item(new Item.Properties())
+            );
+            FISSION_MAP.put(depletedName, depletedItem);
+            FISSION_COLOR_MAP.put(depletedName, Utility.darkenColor(color, 0.75f));
+        }
     }
 
     private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {

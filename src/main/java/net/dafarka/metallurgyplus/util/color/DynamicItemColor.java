@@ -24,7 +24,8 @@ public class DynamicItemColor implements ItemColor {
         ModItems.ORE_COLOR_MAP,
         ModItems.ALLOY_COLOR_MAP,
         ModItems.VANILLA_COLOR_MAP,
-        ModItems.GEM_COLOR_MAP
+        ModItems.GEM_COLOR_MAP,
+        ModItems.FISSION_COLOR_MAP
     );
 
     private static final List<Map<String, Integer>> BLOCK_ITEM_COLOR_MAPS = List.of(

@@ -34,6 +34,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         generateItemMap(ModItems.CUSTOM_ITEM_MAP, "custom");
         generateItemMapBase(ModItems.VANILLA_MAP);
         generateMaps(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP, "gem");
+        generateItemMapBase(ModItems.FISSION_MAP);
 
         simpleBlockItemModel("machine_frame", "machine_frame", "cutout");
 
