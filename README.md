@@ -23,7 +23,7 @@ Processes multiple metals and materials to produce alloys.
 
 Processes raw pieces of ores to produce raw pieces of resources.
 
-### Grinder ![Grinder](src/main/resources/assets/metallurgyplus/textures/block/grinder_front.png)
+### Grinder ![Grinder](src/main/resources/assets/metallurgyplus/textures/block/machine/enricher_front.png)
 
 Grinds ingots and raw pieces into their respective dust variant.
 

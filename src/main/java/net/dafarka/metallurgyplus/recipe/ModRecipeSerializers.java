@@ -55,6 +55,12 @@ public class ModRecipeSerializers {
             () -> new MachineRecipeExtraOutputSerializer(ModRecipeTypes.GEMSTONE_CUTTER_TYPE)
         );
 
+    public static final RegistryObject<RecipeSerializer<MachineRecipeWithExtraOutputs>> ENRICHER_SERIALIZER =
+        SERIALIZERS.register(
+            "enricher",
+            () -> new MachineRecipeExtraOutputSerializer(ModRecipeTypes.ENRICHER_TYPE)
+        );
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

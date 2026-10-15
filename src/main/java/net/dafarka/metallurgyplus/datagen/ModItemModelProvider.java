@@ -46,6 +46,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemModel("press");
         simpleBlockItemModel("extractor");
         simpleBlockItemModel("gemstone_cutter");
+        simpleBlockItemModel("enricher");
         simpleBlockItemModel("quarry");
         simpleBlockItemModel("power_source");
         simpleBlockItemModel("sack_station", "sack_station", "cutout");

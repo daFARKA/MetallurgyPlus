@@ -114,6 +114,8 @@ public class ModItems {
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> SACK_COLOR_MAP = new HashMap<>();
 
+    public static final List<String> FISSION_TIER_LIST = new ArrayList<>();
+
     public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
         () -> new ModTools(
             Tiers.NETHERITE,
@@ -362,26 +364,15 @@ public class ModItems {
         registerGem("zircon", 0xd9c3bf);
 
         // Fissions
-        registerFission("uranium-238", 0x00702d);
-        registerFission("uranium-235", 0x004c20);
-
-        /*Uranium-238
-        ↓
-        Uranium-235
-        ↓
-        Neptunium-235
-        ↓
-        Plutonium-236
-        ↓
-        Plutonium-239
-        ↓
-        Americium-241
-        ↓
-        Curium-245
-        ↓
-        Berkelium-249
-        ↓
-        Californium-252*/
+        registerFission("uranium-238", 0x00702d, 0);
+        registerFission("uranium-235", 0x004c20, 1);
+        registerFission("neptunium-235", 0x4e7a96, 2);
+        registerFission("plutonium-236", 0x102273, 3);
+        registerFission("plutonium-239", 0x071346, 4);
+        registerFission("americium-241", 0x928e7f, 5);
+        registerFission("curium-245", 0x8b9ca2, 6);
+        registerFission("berkelium-249", 0x798076, 7);
+        registerFission("californium-252", 0x746868, 8);
 
         // Cables
         registerCables();
@@ -399,7 +390,7 @@ public class ModItems {
         registerSacks();
 
         // MultiBlock Blocks
-        registerMultiBlockBlocks();
+        registerMBBlocks();
     }
 
     private static void registerCustomItem(String name) {
@@ -513,7 +504,9 @@ public class ModItems {
 
     public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel"};
 
-    private static void registerFission(String fissionName, int color) {
+    private static void registerFission(String fissionName, int color, int fissionTier) {
+        FISSION_TIER_LIST.add(fissionTier, fissionName);
+
         for (String component : FISSION_COMPONENT_NAMES) {
             String name = fissionName + "_" + component;
             RegistryObject<Item> item = ITEMS.register(name, () ->
@@ -521,14 +514,14 @@ public class ModItems {
             );
             FISSION_MAP.put(name, item);
             FISSION_COLOR_MAP.put(name, color);
-
-            String depletedName = fissionName + "_" + component + "_depleted";
-            RegistryObject<Item> depletedItem = ITEMS.register(depletedName, () ->
-                new Item(new Item.Properties())
-            );
-            FISSION_MAP.put(depletedName, depletedItem);
-            FISSION_COLOR_MAP.put(depletedName, Utility.darkenColor(color, 0.75f));
         }
+
+        String depletedName = fissionName + "_fuel_depleted";
+        RegistryObject<Item> depletedItem = ITEMS.register(depletedName, () ->
+            new Item(new Item.Properties())
+        );
+        FISSION_MAP.put(depletedName, depletedItem);
+        FISSION_COLOR_MAP.put(depletedName, Utility.darkenColor(color, 0.75f));
     }
 
     private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {
@@ -611,7 +604,7 @@ public class ModItems {
         }
     }
 
-    private static void registerMultiBlockBlocks() {
+    private static void registerMBBlocks() {
         registerMBBatteryBlocks();
     }
 

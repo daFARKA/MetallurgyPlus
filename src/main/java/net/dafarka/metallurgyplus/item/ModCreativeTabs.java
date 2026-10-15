@@ -107,6 +107,7 @@ public class ModCreativeTabs {
                 pOutput.accept(ModBlocks.PRESS.get());
                 pOutput.accept(ModBlocks.EXTRACTOR.get());
                 pOutput.accept(ModBlocks.GEMSTONE_CUTTER.get());
+                pOutput.accept(ModBlocks.ENRICHER.get());
                 pOutput.accept(ModBlocks.QUARRY.get());
                 pOutput.accept(ModBlocks.POWER_SOURCE.get());
                 pOutput.accept(ModBlocks.SACK_STATION.get());

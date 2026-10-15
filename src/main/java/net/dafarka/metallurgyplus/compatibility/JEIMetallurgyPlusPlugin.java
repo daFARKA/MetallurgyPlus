@@ -27,6 +27,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
     private MachineRecipeCategory pressCategory;
     private MachineRecipeWithExtraOutputsCategory extractorCategory;
     private MachineRecipeWithExtraOutputsCategory gemstoneCutterCategory;
+    private MachineRecipeWithExtraOutputsCategory enricherCategory;
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -73,13 +74,20 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             ModBlocks.GEMSTONE_CUTTER.get()
         );
 
+        enricherCategory = new MachineRecipeWithExtraOutputsCategory(
+            guiHelper,
+            new ResourceLocation(MetallurgyPlus.MODID, "enricher"),
+            ModBlocks.ENRICHER.get()
+        );
+
         registration.addRecipeCategories(
             alloySmelterCategory,
             oreProcessingUnitCategory,
             grinderCategory,
             pressCategory,
             extractorCategory,
-            gemstoneCutterCategory
+            gemstoneCutterCategory,
+            enricherCategory
         );
     }
 
@@ -93,6 +101,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         List<MachineRecipe> pressRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.PRESS_TYPE);
         List<MachineRecipeWithExtraOutputs> extractorRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.EXTRACTOR_TYPE);
         List<MachineRecipeWithExtraOutputs> gemstoneCutterRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.GEMSTONE_CUTTER_TYPE);
+        List<MachineRecipeWithExtraOutputs> enricherRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.ENRICHER_TYPE);
 
         registration.addRecipes(alloySmelterCategory.getRecipeType(), alloySmelterRecipes);
         registration.addRecipes(oreProcessingUnitCategory.getRecipeType(), oreProcessingUnitRecipes);
@@ -100,6 +109,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipes(pressCategory.getRecipeType(), pressRecipes);
         registration.addRecipes(extractorCategory.getRecipeType(), extractorRecipes);
         registration.addRecipes(gemstoneCutterCategory.getRecipeType(), gemstoneCutterRecipes);
+        registration.addRecipes(enricherCategory.getRecipeType(), enricherRecipes);
     }
 
     @Override
@@ -137,6 +147,11 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipeCatalyst(
             new ItemStack(ModBlocks.GEMSTONE_CUTTER.get()),
             gemstoneCutterCategory.getRecipeType()
+        );
+
+        registration.addRecipeCatalyst(
+            new ItemStack(ModBlocks.ENRICHER.get()),
+            enricherCategory.getRecipeType()
         );
     }
 }

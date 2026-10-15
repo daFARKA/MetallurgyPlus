@@ -82,6 +82,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
         registerOrientable("press", "machine", "press", "_", "front", "side", "top", "top", null);
         registerOrientable("extractor", "machine", "extractor", "_", "front", "side", "top", "top", null);
         registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", "_", "front", "side", "top", "top", null);
+        registerOrientable("enricher", "machine", "enricher", "_", "front", "side", "top", "top", null);
         registerOrientable("quarry", "machine", "quarry", "_", "front", "side", "top", "top", null);
         registerOrientable("power_source", "energy", "power_source", "", "", "", "", "", null);
         registerSackStation();
@@ -111,7 +112,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .face(Direction.DOWN).uvs(6, 0, 10, 6).texture("#cable").tintindex(0).end()
             .face(Direction.UP).uvs(6, 10, 10, 16).texture("#cable").tintindex(0).end()
             .face(Direction.NORTH).uvs(6, 6, 10, 10).texture("#cable").tintindex(0)
-                .cullface(Direction.NORTH).end()
+            .cullface(Direction.NORTH).end()
             .face(Direction.WEST).uvs(0, 6, 6, 10).texture("#cable").tintindex(0).end()
             .face(Direction.EAST).uvs(10, 6, 16, 10).texture("#cable").tintindex(0).end()
             // The south face meets the core, so it is intentionally omitted.
