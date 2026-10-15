@@ -76,14 +76,14 @@ public class ModBlockModelProvider extends BlockModelProvider {
             }
         }
 
-        registerOrientable("alloy_smelter", "machine", "alloy_smelter", "_", "front", "side", "top", "top", null);
-        registerOrientable("ore_processing_unit", "machine", "ore_processing_unit", "_", "front", "side", "top", "top", null);
-        registerOrientable("grinder", "machine", "grinder", "_", "front", "side", "top", "top", null);
-        registerOrientable("press", "machine", "press", "_", "front", "side", "top", "top", null);
-        registerOrientable("extractor", "machine", "extractor", "_", "front", "side", "top", "top", null);
-        registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", "_", "front", "side", "top", "top", null);
-        registerOrientable("enricher", "machine", "enricher", "_", "front", "side", "top", "top", null);
-        registerOrientable("quarry", "machine", "quarry", "_", "front", "side", "top", "top", null);
+        registerOrientable("alloy_smelter", "machine", "alloy_smelter", "_", null);
+        registerOrientable("ore_processing_unit", "machine", "ore_processing_unit", "_", null);
+        registerOrientable("grinder", "machine", "grinder", "_", null);
+        registerOrientable("press", "machine", "press", "_", null);
+        registerOrientable("extractor", "machine", "extractor", "_", null);
+        registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", "_", null);
+        registerOrientable("enricher", "machine", "enricher", "_", null);
+        registerOrientable("quarry", "machine", "quarry", "_", null);
         registerOrientable("power_source", "energy", "power_source", "", "", "", "", "", null);
         registerSackStation();
     }
@@ -201,6 +201,20 @@ public class ModBlockModelProvider extends BlockModelProvider {
             textureName + connector + side,
             textureName + connector + top,
             textureName + connector + bottom,
+            tintIndices
+        );
+    }
+
+    private void registerOrientable(String name, String group, String textureName, String connector, @Nullable int[] tintIndices) {
+        registerOrientable(
+            name,
+            group,
+            textureName,
+            connector,
+            "front",
+            "side",
+            "top",
+            "bottom",
             tintIndices
         );
     }
