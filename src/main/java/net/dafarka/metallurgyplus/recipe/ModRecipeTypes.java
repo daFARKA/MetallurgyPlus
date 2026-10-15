@@ -41,6 +41,10 @@ public class ModRecipeTypes {
         GEMSTONE_CUTTER_TYPE =
         new MachineRecipeWithExtraOutputsType();
 
+    public static final RecipeType<MachineRecipeWithExtraOutputs>
+        ENRICHER_TYPE =
+        new MachineRecipeWithExtraOutputsType();
+
 
     public static final RegistryObject<RecipeType<MachineRecipeWithExtraOutputs>>
         ORE_PROCESSING_UNIT =
@@ -82,6 +86,13 @@ public class ModRecipeTypes {
         RECIPE_TYPES.register(
             "gemstone_cutter",
             () -> GEMSTONE_CUTTER_TYPE
+        );
+
+    public static final RegistryObject<RecipeType<MachineRecipeWithExtraOutputs>>
+        ENRICHER =
+        RECIPE_TYPES.register(
+            "enricher",
+            () -> ENRICHER_TYPE
         );
 
     public static void register(IEventBus eventBus) {

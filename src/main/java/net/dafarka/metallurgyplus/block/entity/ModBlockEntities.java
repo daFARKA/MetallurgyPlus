@@ -38,7 +38,8 @@ public class ModBlockEntities {
                 ModBlocks.GRINDER.get(),
                 ModBlocks.PRESS.get(),
                 ModBlocks.EXTRACTOR.get(),
-                ModBlocks.GEMSTONE_CUTTER.get()
+                ModBlocks.GEMSTONE_CUTTER.get(),
+                ModBlocks.ENRICHER.get()
             ).build(null)
         );
 

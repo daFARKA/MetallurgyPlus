@@ -24,6 +24,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private GrinderRecipeProvider grinderRecipeProvider;
     private PressRecipeProvider pressRecipeProvider;
     private ExtractorRecipeProvider extractorRecipeProvider;
+    private GemstoneCutterRecipeProvider gemstoneCutterRecipeProvider;
+    private EnricherRecipeProvider enricherRecipeProvider;
 
     private static final List<ItemLike> CLAY_SMELTABLES = List.of(ModItems.CUSTOM_ITEM_MAP.get("clay_mineral_raw").get());
 
@@ -34,6 +36,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         grinderRecipeProvider = new GrinderRecipeProvider(pOutput);
         pressRecipeProvider = new PressRecipeProvider(pOutput);
         extractorRecipeProvider = new ExtractorRecipeProvider(pOutput);
+        gemstoneCutterRecipeProvider = new GemstoneCutterRecipeProvider(pOutput);
+        enricherRecipeProvider = new EnricherRecipeProvider(pOutput);
     }
 
     @Override
@@ -44,12 +48,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildOreRecipes(pWriter);
         buildAlloyRecipes(pWriter);
         buildVanillaRecipes(pWriter);
+        buildFissionRecipes(pWriter);
 
         alloySmelterRecipeProvider.buildRecipes(pWriter);
         oreProcessingUnitRecipeProvider.buildRecipes(pWriter);
         grinderRecipeProvider.buildRecipes(pWriter);
         pressRecipeProvider.buildRecipes(pWriter);
         extractorRecipeProvider.buildRecipes(pWriter);
+        gemstoneCutterRecipeProvider.buildRecipes(pWriter);
+        enricherRecipeProvider.buildRecipes(pWriter);
 
         buildCableRecipes(pWriter);
         buildCoilRecipes(pWriter);
@@ -246,6 +253,30 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 }
 
                 oreSmelting(pWriter, List.of(dust), RecipeCategory.MISC, ingot, 0.25f, 100, currentMaterialName);
+            }
+        }
+    }
+
+    private void buildFissionRecipes(Consumer<FinishedRecipe> pWriter) {
+        List<String> oldMaterials = new ArrayList<>();
+        for (RegistryObject<Item> item : ModItems.FISSION_MAP.values()) {
+            String currentName = item.getId().getPath();
+            String currentMaterialName = currentName.split("_")[0];
+            if (!oldMaterials.contains(currentMaterialName)) {
+                oldMaterials.add(currentMaterialName);
+
+                Item pellet = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
+                Item chunk = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
+                Item fuel = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
+                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
+
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, pellet)
+                    .pattern("XXX")
+                    .pattern("XXX")
+                    .pattern("XXX")
+                    .define('X', chunk)
+                    .unlockedBy(getHasName(chunk), has(chunk))
+                    .save(pWriter, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_pellet_from_chunks"));
             }
         }
     }

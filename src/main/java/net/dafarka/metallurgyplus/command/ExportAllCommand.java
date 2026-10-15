@@ -250,6 +250,13 @@ public class ExportAllCommand {
             "Gemstone Cutter",
             ModBlocks.GEMSTONE_CUTTER.get()
         );
+
+        appendMachineRecipes(
+            markdown,
+            minecraft,
+            "Enricher",
+            ModBlocks.ENRICHER.get()
+        );
     }
 
     private static void appendMachineRecipes(

@@ -127,6 +127,17 @@ public class ModBlocks {
             new int[]{64, 38}
         ));
 
+    public static final int[][] ENRICHER_INPUT_POSITION = {{22, 17}, {40, 17}, {22, 35}, {40, 35}};
+    public static final int[][] ENRICHER_OUTPUT_POSITIONS = {{98, 17}, {116, 17}, {134, 17}, {152, 17}, {98, 35}, {116, 35}, {134, 35}, {152, 35}};
+    public static final RegistryObject<MachineBlock> ENRICHER = registerBlock("enricher",
+        () -> new MachineBlock(
+            BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
+            ModRecipeTypes.ENRICHER_TYPE,
+            ENRICHER_INPUT_POSITION,
+            ENRICHER_OUTPUT_POSITIONS,
+            new int[]{64, 30}
+        ));
+
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",
         () -> new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion()));
 

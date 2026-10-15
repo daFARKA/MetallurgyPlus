@@ -2,17 +2,22 @@ package net.dafarka.metallurgyplus.datagen;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SackStationBlock;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
@@ -36,11 +41,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalFacingBlock("press", ModBlocks.PRESS.get());
         horizontalFacingBlock("extractor", ModBlocks.EXTRACTOR.get());
         horizontalFacingBlock("gemstone_cutter", ModBlocks.GEMSTONE_CUTTER.get());
+        horizontalFacingBlock("enricher", ModBlocks.ENRICHER.get());
         horizontalFacingBlock("quarry", ModBlocks.QUARRY.get());
         horizontalFacingBlock("power_source", ModBlocks.POWER_SOURCE.get());
         sackStationBlock();
 
-        horizontalFacingBlocks(ModBlocks.CABLE_BLOCKS_MAP.values());
+        for (RegistryObject<CableBlock> cable : ModBlocks.CABLE_BLOCKS_MAP.values()) {
+            registerCable(cable.get());
+        }
         horizontalFacingBlocks(ModBlocks.SOLAR_PANEL_BLOCK_MAP.values());
         horizontalFacingBlocks(ModBlocks.BATTERY_BLOCK_MAP.values());
 
@@ -144,5 +152,35 @@ public class ModBlockStateProvider extends BlockStateProvider {
         } else {
             simpleBlockState(block, modLoc(texturePath));
         }
+    }
+
+    private void registerCable(CableBlock block) {
+        String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+        ModelFile coreModel = new ModelFile.UncheckedModelFile(modLoc("block/" + name + "_core"));
+        ModelFile armModel = new ModelFile.UncheckedModelFile(modLoc("block/" + name + "_arm"));
+
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+
+        // Always render the center, then overlay an arm for each true connection property.
+        builder.part().modelFile(coreModel).addModel().end();
+
+        addConnectionPart(builder, armModel, PipeBlock.NORTH, 0, 0);
+        addConnectionPart(builder, armModel, PipeBlock.SOUTH, 0, 180);
+        addConnectionPart(builder, armModel, PipeBlock.WEST, 0, 270);
+        addConnectionPart(builder, armModel, PipeBlock.EAST, 0, 90);
+        addConnectionPart(builder, armModel, PipeBlock.UP, 270, 0);
+        addConnectionPart(builder, armModel, PipeBlock.DOWN, 90, 0);
+    }
+
+    private void addConnectionPart(MultiPartBlockStateBuilder builder, ModelFile model,
+                                   BooleanProperty property, int rotationX, int rotationY) {
+        builder.part()
+            .modelFile(model)
+            .rotationX(rotationX)
+            .rotationY(rotationY)
+            .uvLock(true)
+            .addModel()
+            .condition(property, true)
+            .end();
     }
 }

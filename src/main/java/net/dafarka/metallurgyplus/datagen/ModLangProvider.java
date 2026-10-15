@@ -31,6 +31,7 @@ public class ModLangProvider extends LanguageProvider {
         add("block.metallurgyplus.press", "Metal Press");
         add("block.metallurgyplus.extractor", "Extractor");
         add("block.metallurgyplus.gemstone_cutter", "Gemstone Cutter");
+        add("block.metallurgyplus.enricher", "Fission Materials Enricher");
         add("block.metallurgyplus.quarry", "Quarry");
         add("block.metallurgyplus.power_source", "Creative Power Source");
         add("block.metallurgyplus.sack_station", "Sack Docking Station");
@@ -61,6 +62,7 @@ public class ModLangProvider extends LanguageProvider {
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
         addBaseItemMapTranslations(ModItems.GEM_MAP);
         addBlockMapTranslations(ModBlocks.GEM_BLOCKS_MAP);
+        addItemMapTranslations(ModItems.FISSION_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
         addMultiBlockTranslations();
@@ -74,6 +76,7 @@ public class ModLangProvider extends LanguageProvider {
         add("creativetab.metallurgyplus_alloys", "MetallurgyPlus Alloys");
         add("creativetab.metallurgyplus_vanilla_items", "MetallurgyPlus Vanilla Items");
         add("creativetab.metallurgyplus_gems", "MetallurgyPlus Gemstones");
+        add("creativetab.metallurgyplus_fission", "MetallurgyPlus Fission Materials");
         add("creativetab.metallurgyplus_machines", "MetallurgyPlus Machines");
         add("creativetab.metallurgyplus_multiblocks", "MetallurgyPlus Multiblock Parts");
     }
@@ -101,6 +104,7 @@ public class ModLangProvider extends LanguageProvider {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = getName(fullName);
+            System.out.println(name);
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
@@ -231,38 +235,39 @@ public class ModLangProvider extends LanguageProvider {
      *
      * @param fullName The full name of the entity, of the following form:
      *                 name<-tag><_component>, where -tag and _component are optional.
-     *                 There can even be more tags, e.g: name<-tag1-tag2-tag3><_component>
+     *                 There can even be more tags or components, e.g: name<-tag1-tag2-tag3><_component><_component>
      *
      * @return a nicely formatted name, such as: Name Tag Component
      */
     private String getName(String fullName) {
-        String[] parts = {fullName};
+        String[] componentParts = fullName.split("_");
+        String nameAndTags = componentParts[0];
 
-        if (fullName.contains("_")) {
-            parts = fullName.split("_");
+        String[] tagParts = nameAndTags.split("-");
+
+        String name = tagParts[0];
+
+        String[] tags = Arrays.copyOfRange(tagParts, 1, tagParts.length);
+        String[] components = Arrays.copyOfRange(componentParts, 1, componentParts.length);
+
+        if (tags.length > 2 && tags[0].equals("titanium")) {
+            return getTitaniumAlloyName(tags) + formatList(components);
         }
 
-        String name = parts[0];
-        String component = "";
-        if (parts.length == 2) {
-            component = parts[1];
-            name = parts[0] + " " + component;
-        }
-        if (parts[0].split("-").length > 1) {
-            String[] _parts = parts[0].split("-");
-            if (_parts[0].equals("titanium") && _parts.length > 2) {
-                return getTitaniumAlloyName(_parts) + " " + component;
-            }
+        return name
+            + " "
+            + formatList(tags)
+            + formatList(components);
+    }
 
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String text : _parts) {
-                stringBuilder.append(text);
-                stringBuilder.append(" ");
-            }
-            stringBuilder.append(component);
-            name = stringBuilder.toString();
+    private String formatList(String[] list) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String text : list) {
+            stringBuilder.append(text);
+            stringBuilder.append(" ");
         }
-        return name;
+
+        return stringBuilder.toString();
     }
 
     /**

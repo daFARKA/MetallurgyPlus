@@ -3,6 +3,7 @@ package net.dafarka.metallurgyplus.item;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.base.MBBlock;
+import net.dafarka.metallurgyplus.block.base.MBEnergyPortBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
@@ -100,6 +101,7 @@ public class ModItems {
     public static final Map<String, RegistryObject<Item>> ALLOY_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> VANILLA_MAP = new HashMap<>();
     public static final Map<String, RegistryObject<Item>> GEM_MAP = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> FISSION_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> COIL_MAP = new HashMap<>();
     public static final Map<Integer, RegistryObject<Item>> SACK_MAP = new HashMap<>();
 
@@ -108,8 +110,11 @@ public class ModItems {
     public static final Map<String, Integer> ALLOY_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> VANILLA_COLOR_MAP = new HashMap<>();
     public static final Map<String, Integer> GEM_COLOR_MAP = new HashMap<>();
+    public static final Map<String, Integer> FISSION_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> COIL_COLOR_MAP = new HashMap<>();
     public static final Map<Integer, Integer> SACK_COLOR_MAP = new HashMap<>();
+
+    public static final List<String> FISSION_TIER_LIST = new ArrayList<>();
 
     public static final RegistryObject<Item> LLAMKANA = ITEMS.register("llamkana",
         () -> new ModTools(
@@ -358,6 +363,17 @@ public class ModItems {
         registerGem("wulfenite", 0xff8469);
         registerGem("zircon", 0xd9c3bf);
 
+        // Fissions
+        registerFission("uranium-238", 0x00702d, 0);
+        registerFission("uranium-235", 0x004c20, 1);
+        registerFission("neptunium-235", 0x4e7a96, 2);
+        registerFission("plutonium-236", 0x102273, 3);
+        registerFission("plutonium-239", 0x071346, 4);
+        registerFission("americium-241", 0x928e7f, 5);
+        registerFission("curium-245", 0x8b9ca2, 6);
+        registerFission("berkelium-249", 0x798076, 7);
+        registerFission("californium-252", 0x746868, 8);
+
         // Cables
         registerCables();
 
@@ -374,7 +390,7 @@ public class ModItems {
         registerSacks();
 
         // MultiBlock Blocks
-        registerMultiBlockBlocks();
+        registerMBBlocks();
     }
 
     private static void registerCustomItem(String name) {
@@ -486,6 +502,28 @@ public class ModItems {
         ModBlocks.GEM_COLOR_MAP.put(name, color);
     }
 
+    public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel"};
+
+    private static void registerFission(String fissionName, int color, int fissionTier) {
+        FISSION_TIER_LIST.add(fissionTier, fissionName);
+
+        for (String component : FISSION_COMPONENT_NAMES) {
+            String name = fissionName + "_" + component;
+            RegistryObject<Item> item = ITEMS.register(name, () ->
+                new Item(new Item.Properties())
+            );
+            FISSION_MAP.put(name, item);
+            FISSION_COLOR_MAP.put(name, color);
+        }
+
+        String depletedName = fissionName + "_fuel_depleted";
+        RegistryObject<Item> depletedItem = ITEMS.register(depletedName, () ->
+            new Item(new Item.Properties())
+        );
+        FISSION_MAP.put(depletedName, depletedItem);
+        FISSION_COLOR_MAP.put(depletedName, Utility.darkenColor(color, 0.75f));
+    }
+
     private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {
         String name = itemName + tier;
         RegistryObject<Item> item = ITEMS.register(name, () -> new Item(new Item.Properties()));
@@ -566,7 +604,7 @@ public class ModItems {
         }
     }
 
-    private static void registerMultiBlockBlocks() {
+    private static void registerMBBlocks() {
         registerMBBatteryBlocks();
     }
 
@@ -574,8 +612,8 @@ public class ModItems {
         List<String> blockNames = new ArrayList<>(List.of(
             "battery/controller",
             "battery/casing",
-            "battery/input",
-            "battery/output"
+            "battery/energy_input",
+            "battery/energy_output"
         ));
 
         appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
@@ -600,6 +638,10 @@ public class ModItems {
             Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {
                 return new MBBlock(properties, beSupplier);
+            }
+
+            if (name.contains("energy")) {
+                return new MBEnergyPortBlock(properties);
             }
 
             return new Block(properties);
