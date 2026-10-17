@@ -46,6 +46,14 @@ public class EnricherRecipeProvider extends RecipeProvider {
         extraChances.set(0, 0.25f);
         addEnricherRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, "test_ore_processing_unit"));*/
 
+        inputSize = 1;
+        inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+        inputAmounts = NonNullList.withSize(inputSize, 1);
+        inputItems.set(0, ModItems.MATERIAL_MAP.get("uranium_ingot").get());
+        inputAmounts.set(0, 1);
+        output = new ItemStack(ModItems.FISSION_MAP.get("uranium-238_chunk").get());
+        addEnricherRecipe(pWriter, inputItems, inputAmounts, output, null, null, new ResourceLocation(MetallurgyPlus.MODID, "uranium_ingot_enricher"));
+
         List<String> oldMaterials = new ArrayList<>();
         for (RegistryObject<Item> item : ModItems.FISSION_MAP.values()) {
             String currentName = item.getId().getPath();
@@ -54,12 +62,20 @@ public class EnricherRecipeProvider extends RecipeProvider {
                 oldMaterials.add(currentMaterialName);
 
                 int tier = ModItems.FISSION_TIER_LIST.indexOf(currentMaterialName);
-                if (tier > 0) {
-                    Item pellet = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
-                    Item chunk = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
-                    Item fuel = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
-                    Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
+                Item pellet = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
+                Item chunk = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
+                Item fuel = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
+                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
 
+                inputSize = 1;
+                inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
+                inputAmounts = NonNullList.withSize(inputSize, 1);
+                inputItems.set(0, pellet);
+                inputAmounts.set(0, 3);
+                output = new ItemStack(fuel);
+                addEnricherRecipe(pWriter, inputItems, inputAmounts, output, null, null, new ResourceLocation(currentMaterialName + "_pellet_to_fuel_enricher"));
+
+                if (tier > 0) {
                     String prevTierName = ModItems.FISSION_TIER_LIST.get(tier - 1);
                     Item previous_pellet = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
                     Item previous_chunk = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
@@ -84,7 +100,7 @@ public class EnricherRecipeProvider extends RecipeProvider {
                     extraChances.set(3, 0.50f);
                     extraOutputs.set(4, new ItemStack(chunk, 1));
                     extraChances.set(4, 0.25f);
-                    addEnricherRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "prev_depleted_fuel_to_pellets_enricher"));
+                    addEnricherRecipe(pWriter, inputItems, inputAmounts, output, extraOutputs, extraChances, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_prev_depleted_fuel_to_pellets_enricher"));
                 }
             }
         }

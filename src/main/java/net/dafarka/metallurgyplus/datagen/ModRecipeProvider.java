@@ -409,13 +409,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .define('N', ModItems.MATERIAL_MAP.get("nickel_plate").get())
             .define('C', ModItems.MATERIAL_MAP.get("chromium_rod").get())
             .define('F', ModBlocks.MACHINE_FRAME.get())
-            .define('G', ModItems.MATERIAL_MAP.get("graphite_gear").get())
-            .define('S', ModItems.MATERIAL_MAP.get("selenium_plate").get())
+            .define('G', ModItems.MATERIAL_MAP.get("hafnium_gear").get())
+            .define('S', ModBlocks.MATERIAL_BLOCKS_MAP.get("selenium_block").get())
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("nickel_plate").get()), has(ModItems.MATERIAL_MAP.get("nickel_plate").get()))
             .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("chromium_rod").get()), has(ModItems.MATERIAL_MAP.get("chromium_rod").get()))
             .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("graphite_gear").get()), has(ModItems.MATERIAL_MAP.get("graphite_gear").get()))
-            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("selenium_plate").get()), has(ModItems.MATERIAL_MAP.get("selenium_plate").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("hafnium_gear").get()), has(ModItems.MATERIAL_MAP.get("hafnium_gear").get()))
+            .unlockedBy(getHasName(ModBlocks.MATERIAL_BLOCKS_MAP.get("selenium_block").get()), has(ModBlocks.MATERIAL_BLOCKS_MAP.get("selenium_block").get()))
             .save(pWriter);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALLOY_SMELTER.get())
@@ -502,6 +502,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()), has(ModItems.ALLOY_MAP.get("titanium-6al-4v_rod").get()))
             .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
             .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("tungsten-steel_block").get()))
+            .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ENRICHER.get())
+            .pattern("PRP")
+            .pattern("GFG")
+            .pattern("PBP")
+            .define('P', ModItems.ALLOY_MAP.get("spring-steel_plate").get())
+            .define('R', ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_rod").get())
+            .define('G', ModItems.MATERIAL_MAP.get("graphite_gear").get())
+            .define('F', ModBlocks.MACHINE_FRAME.get())
+            .define('B', ModBlocks.ALLOY_BLOCKS_MAP.get("vanadium-steel_block").get())
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("spring-steel_plate").get()), has(ModItems.ALLOY_MAP.get("spring-steel_plate").get()))
+            .unlockedBy(getHasName(ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_rod").get()), has(ModItems.ALLOY_MAP.get("titanium-10v-2fe-3al_rod").get()))
+            .unlockedBy(getHasName(ModItems.MATERIAL_MAP.get("graphite_gear").get()), has(ModItems.MATERIAL_MAP.get("graphite_gear").get()))
+            .unlockedBy(getHasName(ModBlocks.MACHINE_FRAME.get()), has(ModBlocks.MACHINE_FRAME.get()))
+            .unlockedBy(getHasName(ModBlocks.ALLOY_BLOCKS_MAP.get("vanadium-steel_block").get()), has(ModBlocks.ALLOY_BLOCKS_MAP.get("vanadium-steel_block").get()))
             .save(pWriter);
     }
 

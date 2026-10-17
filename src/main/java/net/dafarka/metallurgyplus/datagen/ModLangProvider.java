@@ -104,7 +104,6 @@ public class ModLangProvider extends LanguageProvider {
         for (RegistryObject<Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
             String name = getName(fullName);
-            System.out.println(name);
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
@@ -250,8 +249,8 @@ public class ModLangProvider extends LanguageProvider {
         String[] tags = Arrays.copyOfRange(tagParts, 1, tagParts.length);
         String[] components = Arrays.copyOfRange(componentParts, 1, componentParts.length);
 
-        if (tags.length > 2 && tags[0].equals("titanium")) {
-            return getTitaniumAlloyName(tags) + formatList(components);
+        if (tags.length > 1 && name.equals("titanium")) {
+            return getTitaniumAlloyName(tags) + " " + capitalizeFirstLetterEach(formatList(components));
         }
 
         return name
@@ -275,27 +274,26 @@ public class ModLangProvider extends LanguageProvider {
      * <br>
      * x is a number and El1 the first element (that is not Titanium) and so on.
      *
-     * @param parts The parts of the name that is formatted like this: titanium-xel1-xel2-....
+     * @param tags The tags of the name that is formatted like this: xel1-xel2-....
      *
      * @return A well formatted name typically looking like this: Titanium-xEl1-xEl2-...
      */
-    private String getTitaniumAlloyName(String[] parts) {
+    private String getTitaniumAlloyName(String[] tags) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Titanium");
-        String[] components = Arrays.copyOfRange(parts, 1, parts.length);
-        for (String component : components) {
+        for (String tag : tags) {
             stringBuilder.append("-");
             int i = 0;
-            while (i < component.length() && Character.isDigit(component.charAt(i))) {
+            while (i < tag.length() && Character.isDigit(tag.charAt(i))) {
                 i++;
             }
 
-            if (i < component.length()) {
-                stringBuilder.append(component, 0, i); // Add the numeric part
-                stringBuilder.append(Character.toUpperCase(component.charAt(i))); // Capitalize the first letter of element
-                stringBuilder.append(component.substring(i + 1)); // Append the rest of the element symbol
+            if (i < tag.length()) {
+                stringBuilder.append(tag, 0, i); // Add the numeric part
+                stringBuilder.append(Character.toUpperCase(tag.charAt(i))); // Capitalize the first letter of element
+                stringBuilder.append(tag.substring(i + 1)); // Append the rest of the element symbol
             } else {
-                stringBuilder.append(component);
+                stringBuilder.append(tag);
             }
 
         }

@@ -46,7 +46,7 @@ public class ModCreativeTabs {
             .build());
 
     public static final RegistryObject<CreativeModeTab> MATERIALS = CREATIVE_TABS.register("metallurgyplus_materials",
-        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MATERIAL_MAP.get("tantalum_ingot").get()))
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MATERIAL_MAP.get("titanium_ingot").get()))
             .title(Component.translatable("creativetab.metallurgyplus_materials"))
             .displayItems((pParameters, pOutput) -> {
                 addSortedItems(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP, pOutput);
@@ -64,7 +64,7 @@ public class ModCreativeTabs {
             .build());
 
     public static final RegistryObject<CreativeModeTab> ALLOYS = CREATIVE_TABS.register("metallurgyplus_alloys",
-        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.ALLOY_MAP.get("titanium-6al-2sn-4zr-2mo_ingot").get()))
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.ALLOY_MAP.get("bronze_ingot").get()))
             .title(Component.translatable("creativetab.metallurgyplus_alloys"))
             .displayItems((pParameters, pOutput) -> {
                 addSortedItems(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP, pOutput);
