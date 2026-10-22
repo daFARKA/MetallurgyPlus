@@ -71,8 +71,13 @@ public class ModBlockModelProvider extends BlockModelProvider {
             String multiblock = parts[0];
             String blockName = parts[1];
 
-            if (multiblock.equals("battery")) {
-                registerBatteryPart(blockName);
+            switch (multiblock) {
+                case "battery":
+                    registerBatteryPart(blockName);
+                    break;
+                case "reactor":
+                    registerReactorPart(blockName);
+                    break;
             }
         }
 
@@ -136,15 +141,21 @@ public class ModBlockModelProvider extends BlockModelProvider {
     }
 
     private void registerCubeAllModel(String blockName, String textureName, String group) {
-        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + group + "/" + textureName);
-        if (group.isEmpty()) {
-            texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + blockName);
+        registerCubeAllModel(blockName, textureName, group, false);
+    }
+
+    private void registerCubeAllModel(String blockName, String textureName, String group, boolean cutout) {
+        String texturePath = group.isEmpty() ? blockName : group + "/" + textureName;
+        ResourceLocation texture = new ResourceLocation(MetallurgyPlus.MODID, "block/" + texturePath);
+
+        var model = getBuilder(blockName)
+            .parent(getExistingFile(mcLoc("block/cube_all")))
+            .texture("all", texture);
+        if (cutout) {
+            model.renderType(mcLoc("cutout"));
         }
 
-        getBuilder(blockName)
-            .parent(getExistingFile(mcLoc("block/cube_all")))
-            .texture("all", texture)
-            .element()
+        model.element()
             .from(0, 0, 0)
             .to(16, 16, 16)
             .face(Direction.NORTH).tintindex(0).texture("#all").end()
@@ -269,19 +280,71 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .renderType(mcLoc("cutout"));
     }
 
-    private void registerBatteryPart(String blockName) {
-        String groupName = "multiblock/battery";
+    private record MBPartData(
+        String pathName,
+        String baseName,
+        String groupName,
+        boolean hasRegistered
+    ) { }
 
+    /**
+     * Register common MultiBlock parts.
+     * The controller is always present for any given MultiBlock.
+     *
+     * @param blockName The simple name of the block. For instance: "controller"
+     * @param mbName    The multiblock name.
+     *
+     * @return A MBPartData.
+     */
+    private MBPartData registerMBPart(String blockName, String mbName) {
+        String groupName = "multiblock/" + mbName;
         String pathName = "block/" + groupName + "/" + blockName;
         String baseName = Utility.removeTrailingDigits(blockName);
-        if (baseName.contains("controller")) {
+        boolean hasRegistered = false;
+
+        if (baseName.equals("controller")) {
             registerOrientable(pathName, groupName, "controller", "casing", "casing", "casing", null);
-        } else if (baseName.contains("cell")) {
+            hasRegistered = true;
+        }
+
+        return new MBPartData(pathName, baseName, groupName, hasRegistered);
+    }
+
+    private void registerBatteryPart(String blockName) {
+        MBPartData data = registerMBPart(blockName, "battery");
+
+        if (data.hasRegistered) {
+            return;
+        }
+
+        String pathName = data.pathName;
+        String baseName = data.baseName;
+        String groupName = data.groupName;
+
+        if (baseName.contains("cell")) {
             groupName = groupName + "/base";
             String textureName = Utility.removeTrailingDigits(baseName);
             String sideTextureName = textureName + "_side";
             String topTextureName = "cell_top";
             registerOrientable(pathName, groupName, sideTextureName, sideTextureName, topTextureName, topTextureName, new int[]{0, 0, 0, 0, 1, 1});
+        } else {
+            registerCubeAllModel(pathName, blockName, groupName);
+        }
+    }
+
+    private void registerReactorPart(String blockName) {
+        MBPartData data = registerMBPart(blockName, "reactor");
+
+        if (data.hasRegistered) {
+            return;
+        }
+
+        String pathName = data.pathName;
+        String baseName = data.baseName;
+        String groupName = data.groupName;
+
+        if (baseName.contains("fuel_cell") || baseName.contains("glass")) {
+            registerCubeAllModel(pathName, blockName, groupName, true);
         } else {
             registerCubeAllModel(pathName, blockName, groupName);
         }

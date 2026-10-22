@@ -4,6 +4,8 @@ import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.base.MBBlock;
 import net.dafarka.metallurgyplus.block.base.MBEnergyPortBlock;
+import net.dafarka.metallurgyplus.block.base.MBFluidPortBlock;
+import net.dafarka.metallurgyplus.block.base.MBItemPortBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
@@ -606,6 +608,15 @@ public class ModItems {
 
     private static void registerMBBlocks() {
         registerMBBatteryBlocks();
+        registerMBReactorBlocks();
+    }
+
+    private static void appendTieredBlocks(List<String> blockNames, String name, int tier, Map<String, Integer> colorMap, List<Integer> colors) {
+        for (int i = 1; i <= tier; i++) {
+            String blockName = name + i;
+            blockNames.add(blockName);
+            colorMap.put(blockName, colors.get(i));
+        }
     }
 
     private static void registerMBBatteryBlocks() {
@@ -615,6 +626,8 @@ public class ModItems {
             "battery/energy_input",
             "battery/energy_output"
         ));
+
+        assert blockNames.contains("battery/controller");
 
         appendTieredBlocks(blockNames, "battery/cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
         appendTieredBlocks(blockNames, "battery/resonant-cell", 12, ModBlocks.MULTIBLOCK_COLOR_MAP, MAJOR_TIER_COLORS);
@@ -648,11 +661,42 @@ public class ModItems {
         });
     }
 
-    private static void appendTieredBlocks(List<String> blockNames, String name, int tier, Map<String, Integer> colorMap, List<Integer> colors) {
-        for (int i = 1; i <= tier; i++) {
-            String blockName = name + i;
-            blockNames.add(blockName);
-            colorMap.put(blockName, colors.get(i));
-        }
+    private static void registerMBReactorBlocks() {
+        List<String> blockNames = new ArrayList<>(List.of(
+            "reactor/controller",
+            "reactor/casing",
+            "reactor/glass",
+            "reactor/fuel_cell",
+            "reactor/energy_input",
+            "reactor/energy_output",
+            "reactor/item_input",
+            "reactor/item_output",
+            "reactor/fluid_input",
+            "reactor/fluid_output"
+        ));
+
+        assert blockNames.contains("reactor/controller");
+
+        ModBlocks.registerMapBlocks(ModBlocks.MULTIBLOCKS_MAP, blockNames, name -> {
+            BlockBehaviour.Properties properties = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL);
+
+            Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
+            if (beSupplier != null) {
+                return new MBBlock(properties, beSupplier);
+            }
+
+            if (name.contains("energy")) {
+                return new MBEnergyPortBlock(properties);
+            } else if (name.contains("item")) {
+                return new MBItemPortBlock(properties);
+            } else if (name.contains("fluid")) {
+                return new MBFluidPortBlock(properties);
+            } else if (name.contains("fuel_cell") || name.contains("glass")) {
+                properties = BlockBehaviour.Properties.copy(Blocks.GLASS).sound(SoundType.GLASS);
+                return new Block(properties);
+            }
+
+            return new Block(properties);
+        });
     }
 }

@@ -8,6 +8,7 @@ import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.base.MachineBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBBatteryController;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBReactorController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,12 +61,17 @@ public class ModBlockEntities {
         registration.register(registryName, controllerBlockName, factory);
     }
 
+    private static void registerControllerTypes() {
+        registerControllerType("battery_controller_be", "battery/controller", MBBatteryController::new);
+        registerControllerType("reactor_controller_be", "reactor/controller", MBReactorController::new);
+    }
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
         registerCableBlocks();
         registerSolarBlocks();
         registerBatteryBlocks();
-        registerControllerType("battery_controller_be", "battery/controller", MBBatteryController::new);
+        registerControllerTypes();
     }
 
     @FunctionalInterface

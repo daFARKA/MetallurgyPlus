@@ -171,7 +171,7 @@ public class ModLangProvider extends LanguageProvider {
             String multiblock = parts[0];
             String rawBlockName = parts[1];
 
-            Integer tier = Utility.getTier(rawBlockName);
+            int tier = Utility.getTier(rawBlockName);
 
             String cleanedBlockName = rawBlockName
                 .replaceAll("\\d+", "")

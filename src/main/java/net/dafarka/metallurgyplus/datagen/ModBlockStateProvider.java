@@ -135,15 +135,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
             String multiblock = parts[0];
             String blockName = parts[1];
 
-            if (multiblock.equals("battery")) {
-                batteryPart(blockName, block);
-            }
+            multiBlockPart(blockName, multiblock, block);
         }
     }
 
-    private void batteryPart(String blockName, RegistryObject<? extends Block> registryObject) {
-        String groupName = "multiblock/battery";
-
+    private void multiBlockPart(String blockName, String group, RegistryObject<? extends Block> registryObject) {
+        String groupName = "multiblock/" + group;
         String texturePath = "block/" + groupName + "/" + blockName;
 
         Block block = registryObject.get();
