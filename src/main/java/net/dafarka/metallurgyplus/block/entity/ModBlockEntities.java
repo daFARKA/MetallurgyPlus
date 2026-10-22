@@ -8,8 +8,12 @@ import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.base.MachineBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBBatteryController;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBEnergyPortBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBFluidPortBlockEntity;
+import net.dafarka.metallurgyplus.block.entity.multiblock.MBItemPortBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBReactorController;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,7 +21,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -28,6 +34,9 @@ public class ModBlockEntities {
     public static final Map<Integer, RegistryObject<BlockEntityType<SolarPanelBlockEntity>>> SOLAR_BLOCK_ENTITIES = new HashMap<>();
     public static final Map<Integer, RegistryObject<BlockEntityType<BatteryBlockEntity>>> BATTERY_BLOCK_ENTITIES = new HashMap<>();
     public static final Map<String, Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>>> CONTROLLER_TYPES = new HashMap<>();
+    private static RegistryObject<BlockEntityType<MBEnergyPortBlockEntity>> energyPortBlockEntityType;
+    private static RegistryObject<BlockEntityType<MBFluidPortBlockEntity>> fluidPortBlockEntityType;
+    private static RegistryObject<BlockEntityType<MBItemPortBlockEntity>> itemPortBlockEntityType;
 
     public static final RegistryObject<BlockEntityType<MachineBlockEntity>> MACHINE_BE =
         BLOCK_ENTITIES.register(
@@ -68,10 +77,85 @@ public class ModBlockEntities {
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
+        registerEnergyPortBlockEntityType();
+        registerFluidPortBlockEntityType();
+        registerItemPortBlockEntityType();
         registerCableBlocks();
         registerSolarBlocks();
         registerBatteryBlocks();
         registerControllerTypes();
+    }
+
+    private static void registerEnergyPortBlockEntityType() {
+        List<RegistryObject<? extends Block>> energyPortBlocks = new ArrayList<>();
+        for (Map.Entry<String, RegistryObject<? extends Block>> entry : ModBlocks.MULTIBLOCKS_MAP.entrySet()) {
+            if (entry.getKey().endsWith("/energy_input") || entry.getKey().endsWith("/energy_output")) {
+                energyPortBlocks.add(entry.getValue());
+            }
+        }
+
+        energyPortBlockEntityType = BLOCK_ENTITIES.register("multiblock_energy_port_be", () -> {
+            Block[] blocks = new Block[energyPortBlocks.size()];
+            for (int index = 0; index < energyPortBlocks.size(); index++) {
+                blocks[index] = energyPortBlocks.get(index).get();
+            }
+            return BlockEntityType.Builder.of(
+                (pos, state) -> new MBEnergyPortBlockEntity(energyPortBlockEntityType.get(), pos, state),
+                blocks
+            ).build(null);
+        });
+    }
+
+    public static BlockEntityType<MBEnergyPortBlockEntity> getEnergyPortBlockEntityType() {
+        return energyPortBlockEntityType.get();
+    }
+
+    private static void registerFluidPortBlockEntityType() {
+        List<RegistryObject<? extends Block>> fluidPortBlocks = new ArrayList<>();
+        for (Map.Entry<String, RegistryObject<? extends Block>> entry : ModBlocks.MULTIBLOCKS_MAP.entrySet()) {
+            if (entry.getKey().endsWith("/fluid_input") || entry.getKey().endsWith("/fluid_output")) {
+                fluidPortBlocks.add(entry.getValue());
+            }
+        }
+
+        fluidPortBlockEntityType = BLOCK_ENTITIES.register("multiblock_fluid_port_be", () -> {
+            Block[] blocks = new Block[fluidPortBlocks.size()];
+            for (int index = 0; index < fluidPortBlocks.size(); index++) {
+                blocks[index] = fluidPortBlocks.get(index).get();
+            }
+            return BlockEntityType.Builder.of(
+                (pos, state) -> new MBFluidPortBlockEntity(fluidPortBlockEntityType.get(), pos, state),
+                blocks
+            ).build(null);
+        });
+    }
+
+    public static BlockEntityType<MBFluidPortBlockEntity> getFluidPortBlockEntityType() {
+        return fluidPortBlockEntityType.get();
+    }
+
+    private static void registerItemPortBlockEntityType() {
+        List<RegistryObject<? extends Block>> itemPortBlocks = new ArrayList<>();
+        for (Map.Entry<String, RegistryObject<? extends Block>> entry : ModBlocks.MULTIBLOCKS_MAP.entrySet()) {
+            if (entry.getKey().endsWith("/item_input") || entry.getKey().endsWith("/item_output")) {
+                itemPortBlocks.add(entry.getValue());
+            }
+        }
+
+        itemPortBlockEntityType = BLOCK_ENTITIES.register("multiblock_item_port_be", () -> {
+            Block[] blocks = new Block[itemPortBlocks.size()];
+            for (int index = 0; index < itemPortBlocks.size(); index++) {
+                blocks[index] = itemPortBlocks.get(index).get();
+            }
+            return BlockEntityType.Builder.of(
+                (pos, state) -> new MBItemPortBlockEntity(itemPortBlockEntityType.get(), pos, state),
+                blocks
+            ).build(null);
+        });
+    }
+
+    public static BlockEntityType<MBItemPortBlockEntity> getItemPortBlockEntityType() {
+        return itemPortBlockEntityType.get();
     }
 
     @FunctionalInterface

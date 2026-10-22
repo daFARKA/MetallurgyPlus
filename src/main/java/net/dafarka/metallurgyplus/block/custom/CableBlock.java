@@ -1,8 +1,8 @@
 package net.dafarka.metallurgyplus.block.custom;
 
-import net.dafarka.metallurgyplus.block.base.MBEnergyPortBlock;
 import net.dafarka.metallurgyplus.block.entity.CableBlockEntity;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
+import net.dafarka.metallurgyplus.block.multiblock.MBEnergyPortBlock;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -129,8 +129,8 @@ public class CableBlock extends PipeBlock implements EntityBlock {
             return true;
         }
 
-        // Multiblock energy ports are plain blocks; their controller exchanges
-        // energy with adjacent cable storage when the structure is formed.
+        // Energy-port entities are markers; the formed controller exchanges energy
+        // with the adjacent cable network.
         if (neighborState.getBlock() instanceof MBEnergyPortBlock) {
             return true;
         }

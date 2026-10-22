@@ -316,6 +316,47 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         return connections;
     }
 
+    /**
+     * Finds port block entities placed in the formed structure's wall. Unlike
+     * {@link #getPortConnections(MBStructure, String)}, this returns the port itself rather than
+     * the block entity outside the multiblock.
+     */
+    protected final List<MBPortBlockEntity> getPortBlockEntities(MBStructure structure, String portName) {
+        if (level == null || structure == null || portName == null) {
+            return List.of();
+        }
+
+        var portBlockEntry = ModBlocks.MULTIBLOCKS_MAP.get(portName);
+        if (portBlockEntry == null) {
+            return List.of();
+        }
+
+        Block portBlock = portBlockEntry.get();
+        List<MBPortBlockEntity> portBlockEntities = new ArrayList<>();
+        for (BlockPos portPos : structure.wallPositions()) {
+            if (!level.getBlockState(portPos).is(portBlock)) {
+                continue;
+            }
+
+            BlockEntity blockEntity = level.getBlockEntity(portPos);
+            if (blockEntity instanceof MBPortBlockEntity portBlockEntity) {
+                portBlockEntities.add(portBlockEntity);
+            }
+        }
+
+        return portBlockEntities;
+    }
+
+    protected final List<MBItemPortBlockEntity> getItemPortBlockEntities(MBStructure structure, String portName) {
+        List<MBItemPortBlockEntity> itemPortBlockEntities = new ArrayList<>();
+        for (MBPortBlockEntity portBlockEntity : getPortBlockEntities(structure, portName)) {
+            if (portBlockEntity instanceof MBItemPortBlockEntity itemPortBlockEntity) {
+                itemPortBlockEntities.add(itemPortBlockEntity);
+            }
+        }
+        return itemPortBlockEntities;
+    }
+
     private static Direction getOutwardDirection(MBStructure structure, BlockPos pos) {
         if (pos.getX() == structure.minimum().getX()) return Direction.WEST;
         if (pos.getX() == structure.maximum().getX()) return Direction.EAST;

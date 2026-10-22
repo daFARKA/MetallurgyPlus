@@ -2,16 +2,16 @@ package net.dafarka.metallurgyplus.item;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
-import net.dafarka.metallurgyplus.block.base.MBBlock;
-import net.dafarka.metallurgyplus.block.base.MBEnergyPortBlock;
-import net.dafarka.metallurgyplus.block.base.MBFluidPortBlock;
-import net.dafarka.metallurgyplus.block.base.MBItemPortBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryBlock;
 import net.dafarka.metallurgyplus.block.custom.BatteryCellBlock;
 import net.dafarka.metallurgyplus.block.custom.CableBlock;
 import net.dafarka.metallurgyplus.block.custom.SolarPanelBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.multiblock.MBControllerBlockEntity;
+import net.dafarka.metallurgyplus.block.multiblock.MBControllerBlock;
+import net.dafarka.metallurgyplus.block.multiblock.MBEnergyPortBlock;
+import net.dafarka.metallurgyplus.block.multiblock.MBFluidPortBlock;
+import net.dafarka.metallurgyplus.block.multiblock.MBItemPortBlock;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.dafarka.metallurgyplus.util.Utility;
@@ -650,11 +650,11 @@ public class ModItems {
 
             Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {
-                return new MBBlock(properties, beSupplier);
+                return new MBControllerBlock(properties, beSupplier);
             }
 
             if (name.contains("energy")) {
-                return new MBEnergyPortBlock(properties);
+                return new MBEnergyPortBlock(properties, ModBlockEntities::getEnergyPortBlockEntityType);
             }
 
             return new Block(properties);
@@ -682,15 +682,19 @@ public class ModItems {
 
             Supplier<? extends BlockEntityType<? extends MBControllerBlockEntity>> beSupplier = ModBlockEntities.CONTROLLER_TYPES.get(name);
             if (beSupplier != null) {
-                return new MBBlock(properties, beSupplier);
+                return new MBControllerBlock(properties, beSupplier);
             }
 
             if (name.contains("energy")) {
-                return new MBEnergyPortBlock(properties);
+                return new MBEnergyPortBlock(properties, ModBlockEntities::getEnergyPortBlockEntityType);
             } else if (name.contains("item")) {
-                return new MBItemPortBlock(properties);
+                return new MBItemPortBlock(
+                    properties,
+                    ModBlockEntities::getItemPortBlockEntityType,
+                    name.endsWith("/item_input")
+                );
             } else if (name.contains("fluid")) {
-                return new MBFluidPortBlock(properties);
+                return new MBFluidPortBlock(properties, ModBlockEntities::getFluidPortBlockEntityType);
             } else if (name.contains("fuel_cell") || name.contains("glass")) {
                 properties = BlockBehaviour.Properties.copy(Blocks.GLASS).sound(SoundType.GLASS);
                 return new Block(properties);
