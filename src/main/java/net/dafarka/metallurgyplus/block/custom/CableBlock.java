@@ -129,8 +129,7 @@ public class CableBlock extends PipeBlock implements EntityBlock {
             return true;
         }
 
-        // Energy-port entities are markers; the formed controller exchanges energy
-        // with the adjacent cable network.
+        // The formed controller exchanges energy with the adjacent cable network through the energy port block entity.
         if (neighborState.getBlock() instanceof MBEnergyPortBlock) {
             return true;
         }

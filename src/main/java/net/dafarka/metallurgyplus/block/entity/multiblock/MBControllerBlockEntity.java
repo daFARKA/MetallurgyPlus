@@ -178,14 +178,14 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         }
 
         MBStructure structure = formedStructure;
-        boolean transferredFromInputs = transferFromInputs(structure);
-        boolean transferredToOutputs = transferToOutputs(structure);
+        boolean transferredFromInputs = transferEnergyFromInputs(structure);
+        boolean transferredToOutputs = transferEnergyToOutputs(structure);
         if (transferredFromInputs || transferredToOutputs) {
             setChanged();
         }
     }
 
-    private boolean transferFromInputs(MBStructure structure) {
+    private boolean transferEnergyFromInputs(MBStructure structure) {
         String inputPortName = getEnergyInputPortName();
         if (inputPortName == null) {
             return false;
@@ -201,22 +201,26 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
             return false;
         }
 
-        List<EnergyEndpoint> endpoints = getEnergyEndpoints(structure, inputPortName, true);
-        for (EnergyEndpoint endpoint : endpoints) {
-            endpoint.available = getExtractableEnergy(endpoint.storage, remainingBudget);
+        List<IEnergyStorage> endpoints = getEnergyPortStorages(structure, inputPortName, true);
+        Map<IEnergyStorage, BigInteger> availableByStorage = new IdentityHashMap<>();
+        for (IEnergyStorage endpoint : endpoints) {
+            BigInteger available = getExtractableEnergy(endpoint, remainingBudget);
+            if (available.signum() > 0) {
+                availableByStorage.put(endpoint, available);
+            }
         }
-        endpoints.removeIf(endpoint -> endpoint.available.signum() <= 0);
+        endpoints.removeIf(endpoint -> !availableByStorage.containsKey(endpoint));
 
         BigInteger receivedTotal = BigInteger.ZERO;
         int remainingEndpoints = endpoints.size();
-        for (EnergyEndpoint endpoint : endpoints) {
+        for (IEnergyStorage endpoint : endpoints) {
             if (remainingBudget.signum() <= 0) {
                 break;
             }
 
             BigInteger share = divideRoundUp(remainingBudget, remainingEndpoints);
-            BigInteger requested = endpoint.available.min(share);
-            BigInteger extracted = extractFrom(endpoint.storage, requested);
+            BigInteger requested = availableByStorage.get(endpoint).min(share);
+            BigInteger extracted = extractFrom(endpoint, requested);
             BigInteger received = energyStorage.receiveEnergyBig(extracted, false).min(extracted);
             receivedTotal = receivedTotal.add(received);
             remainingBudget = remainingBudget.subtract(received);
@@ -226,7 +230,7 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         return receivedTotal.signum() > 0;
     }
 
-    private boolean transferToOutputs(MBStructure structure) {
+    private boolean transferEnergyToOutputs(MBStructure structure) {
         String outputPortName = getEnergyOutputPortName();
         if (outputPortName == null) {
             return false;
@@ -242,22 +246,26 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
             return false;
         }
 
-        List<EnergyEndpoint> endpoints = getEnergyEndpoints(structure, outputPortName, false);
-        for (EnergyEndpoint endpoint : endpoints) {
-            endpoint.available = getReceivableEnergy(endpoint.storage, remainingBudget);
+        List<IEnergyStorage> endpoints = getEnergyPortStorages(structure, outputPortName, false);
+        Map<IEnergyStorage, BigInteger> availableByStorage = new IdentityHashMap<>();
+        for (IEnergyStorage endpoint : endpoints) {
+            BigInteger available = getReceivableEnergy(endpoint, remainingBudget);
+            if (available.signum() > 0) {
+                availableByStorage.put(endpoint, available);
+            }
         }
-        endpoints.removeIf(endpoint -> endpoint.available.signum() <= 0);
+        endpoints.removeIf(endpoint -> !availableByStorage.containsKey(endpoint));
 
         BigInteger extractedTotal = BigInteger.ZERO;
         int remainingEndpoints = endpoints.size();
-        for (EnergyEndpoint endpoint : endpoints) {
+        for (IEnergyStorage endpoint : endpoints) {
             if (remainingBudget.signum() <= 0) {
                 break;
             }
 
             BigInteger share = divideRoundUp(remainingBudget, remainingEndpoints);
-            BigInteger offered = endpoint.available.min(share);
-            BigInteger accepted = receiveAt(endpoint.storage, offered);
+            BigInteger offered = availableByStorage.get(endpoint).min(share);
+            BigInteger accepted = receiveAt(endpoint, offered);
             BigInteger extracted = energyStorage.extractEnergyBig(accepted, false).min(accepted);
             extractedTotal = extractedTotal.add(extracted);
             remainingBudget = remainingBudget.subtract(extracted);
@@ -267,62 +275,35 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         return extractedTotal.signum() > 0;
     }
 
-    private List<EnergyEndpoint> getEnergyEndpoints(MBStructure structure, String portName, boolean controllerReceives) {
-        List<EnergyEndpoint> endpoints = new ArrayList<>();
+    private List<IEnergyStorage> getEnergyPortStorages(MBStructure structure, String portName, boolean controllerReceives) {
+        List<IEnergyStorage> endpoints = new ArrayList<>();
         Set<IEnergyStorage> seen = Collections.newSetFromMap(new IdentityHashMap<>());
 
-        for (PortConnection connection : getPortConnections(structure, portName)) {
-            IEnergyStorage storage = connection.blockEntity()
-                .getCapability(ForgeCapabilities.ENERGY, connection.neighborSide())
-                .orElse(null);
-            if ((controllerReceives ? !storage.canExtract() : !storage.canReceive()) || !seen.add(storage)) {
+        for (MBEnergyPortBlockEntity port : getPortBlockEntities(structure, portName, MBEnergyPortBlockEntity.class)) {
+            Direction outward = getOutwardDirection(structure, port.getBlockPos());
+            IEnergyStorage storage = port.getExternalEnergyStorage(outward);
+            if (storage == null
+                || (controllerReceives ? !storage.canExtract() : !storage.canReceive())
+                || !seen.add(storage)) {
                 continue;
             }
 
-            endpoints.add(new EnergyEndpoint(storage));
+            endpoints.add(storage);
         }
 
         return endpoints;
     }
 
     /**
-     * Finds adjacent block entities for matching wall ports. The side is the face on the neighbor
-     * that points back toward the multiblock, suitable for capability lookups.
-     */
-    protected final List<PortConnection> getPortConnections(MBStructure structure, String portName) {
-        if (level == null || structure == null || portName == null) {
-            return List.of();
-        }
-
-        var portBlockEntry = ModBlocks.MULTIBLOCKS_MAP.get(portName);
-        if (portBlockEntry == null) {
-            return List.of();
-        }
-
-        Block portBlock = portBlockEntry.get();
-        List<PortConnection> connections = new ArrayList<>();
-        for (BlockPos portPos : structure.wallPositions()) {
-            if (!level.getBlockState(portPos).is(portBlock)) {
-                continue;
-            }
-
-            Direction outward = getOutwardDirection(structure, portPos);
-            BlockEntity neighbor = level.getBlockEntity(portPos.relative(outward));
-            if (neighbor != null) {
-                connections.add(new PortConnection(neighbor, outward.getOpposite()));
-            }
-        }
-
-        return connections;
-    }
-
-    /**
      * Finds port block entities placed in the formed structure's wall. Unlike
-     * {@link #getPortConnections(MBStructure, String)}, this returns the port itself rather than
-     * the block entity outside the multiblock.
+     * resolving their outside neighbors, this returns the port itself.
      */
-    protected final List<MBPortBlockEntity> getPortBlockEntities(MBStructure structure, String portName) {
-        if (level == null || structure == null || portName == null) {
+    protected final <T extends MBPortBlockEntity> List<T> getPortBlockEntities(
+        MBStructure structure,
+        String portName,
+        Class<T> portType
+    ) {
+        if (level == null || structure == null || portName == null || portType == null) {
             return List.of();
         }
 
@@ -332,29 +313,19 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         }
 
         Block portBlock = portBlockEntry.get();
-        List<MBPortBlockEntity> portBlockEntities = new ArrayList<>();
+        List<T> portBlockEntities = new ArrayList<>();
         for (BlockPos portPos : structure.wallPositions()) {
             if (!level.getBlockState(portPos).is(portBlock)) {
                 continue;
             }
 
             BlockEntity blockEntity = level.getBlockEntity(portPos);
-            if (blockEntity instanceof MBPortBlockEntity portBlockEntity) {
-                portBlockEntities.add(portBlockEntity);
+            if (portType.isInstance(blockEntity)) {
+                portBlockEntities.add(portType.cast(blockEntity));
             }
         }
 
         return portBlockEntities;
-    }
-
-    protected final List<MBItemPortBlockEntity> getItemPortBlockEntities(MBStructure structure, String portName) {
-        List<MBItemPortBlockEntity> itemPortBlockEntities = new ArrayList<>();
-        for (MBPortBlockEntity portBlockEntity : getPortBlockEntities(structure, portName)) {
-            if (portBlockEntity instanceof MBItemPortBlockEntity itemPortBlockEntity) {
-                itemPortBlockEntities.add(itemPortBlockEntity);
-            }
-        }
-        return itemPortBlockEntities;
     }
 
     private static Direction getOutwardDirection(MBStructure structure, BlockPos pos) {
@@ -419,14 +390,4 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
         return division[1].signum() == 0 ? division[0] : division[0].add(BigInteger.ONE);
     }
 
-    protected record PortConnection(BlockEntity blockEntity, Direction neighborSide) { }
-
-    private static final class EnergyEndpoint {
-        private final IEnergyStorage storage;
-        private BigInteger available = BigInteger.ZERO;
-
-        private EnergyEndpoint(IEnergyStorage storage) {
-            this.storage = storage;
-        }
-    }
 }
