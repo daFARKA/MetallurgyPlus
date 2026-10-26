@@ -1,6 +1,9 @@
 package net.dafarka.metallurgyplus.network;
 
 import net.dafarka.metallurgyplus.MetallurgyPlus;
+import net.dafarka.metallurgyplus.network.packets.SetMachineIOModePacket;
+import net.dafarka.metallurgyplus.network.packets.SwitchMachineMenuPacket;
+import net.dafarka.metallurgyplus.network.packets.ToggleMachineAutoIOPacket;
 import net.dafarka.metallurgyplus.network.packets.SetAreaQuarryPacket;
 import net.dafarka.metallurgyplus.network.packets.ToggleQuarryPacket;
 import net.minecraftforge.network.NetworkRegistry;
@@ -33,6 +36,24 @@ public class ModMessages {
             .encoder(ToggleQuarryPacket::toBytes)
             .decoder(ToggleQuarryPacket::new)
             .consumerMainThread(ToggleQuarryPacket::handle)
+            .add();
+
+        net.messageBuilder(SwitchMachineMenuPacket.class, id())
+            .encoder(SwitchMachineMenuPacket::toBytes)
+            .decoder(SwitchMachineMenuPacket::new)
+            .consumerMainThread(SwitchMachineMenuPacket::handle)
+            .add();
+
+        net.messageBuilder(SetMachineIOModePacket.class, id())
+            .encoder(SetMachineIOModePacket::toBytes)
+            .decoder(SetMachineIOModePacket::new)
+            .consumerMainThread(SetMachineIOModePacket::handle)
+            .add();
+
+        net.messageBuilder(ToggleMachineAutoIOPacket.class, id())
+            .encoder(ToggleMachineAutoIOPacket::toBytes)
+            .decoder(ToggleMachineAutoIOPacket::new)
+            .consumerMainThread(ToggleMachineAutoIOPacket::handle)
             .add();
     }
 

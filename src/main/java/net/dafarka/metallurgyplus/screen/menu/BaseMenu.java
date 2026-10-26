@@ -18,6 +18,10 @@ public abstract class BaseMenu extends AbstractContainerMenu {
         SLOT_COUNT = slotCount;
     }
 
+    protected BaseMenu(@Nullable MenuType<?> pMenuType, int pContainerId) {
+        this(pMenuType, pContainerId, 0);
+    }
+
     protected void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {

@@ -1,5 +1,7 @@
 package net.dafarka.metallurgyplus.block.entity.base;
 
+import net.dafarka.metallurgyplus.block.BlockFace;
+import net.dafarka.metallurgyplus.block.ItemSideMode;
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.block.base.MachineBlock;
 import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
@@ -11,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
@@ -24,22 +27,32 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> implements MenuProvider {
 
+    private static final int AUTO_IO_TRANSFER_INTERVAL = 20;
+
     private MachineBlock machineBlock;
+
+    private final EnumMap<BlockFace, ItemSideMode> itemSideModes = new EnumMap<>(BlockFace.class);
+    private boolean autoInputEnabled;
+    private boolean autoOutputEnabled;
 
     protected int progress = 0;
     protected int maxProgress = 100;
@@ -51,9 +64,10 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
     protected final ItemStackHandler inputHandler;
     protected final ItemStackHandler outputHandler;
     protected final CombinedInvWrapper allHandler;
+    private final IItemHandler inputOnlyHandler;
+    private int autoIOTransferCooldown;
 
-    protected LazyOptional<IItemHandler> inputLazy = LazyOptional.empty();
-    protected LazyOptional<IItemHandler> outputLazy = LazyOptional.empty();
+    private final EnumMap<Direction, LazyOptional<IItemHandler>> sideItemHandlerCapabilities = new EnumMap<>(Direction.class);
     protected LazyOptional<IItemHandler> allLazy = LazyOptional.empty();
 
     protected final ContainerData data = new ContainerData() {
@@ -94,6 +108,7 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         );
 
         this.machineBlock = (MachineBlock) state.getBlock();
+        resetItemSideModesToDefaults();
 
         inputHandler = new ItemStackHandler(machineBlock.getInputSlots()) {
             @Override
@@ -115,6 +130,37 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         };
 
         allHandler = new CombinedInvWrapper(inputHandler, outputHandler);
+        inputOnlyHandler = new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return inputHandler.getSlots();
+            }
+
+            @Override
+            public @NotNull ItemStack getStackInSlot(int slot) {
+                return inputHandler.getStackInSlot(slot);
+            }
+
+            @Override
+            public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+                return inputHandler.insertItem(slot, stack, simulate);
+            }
+
+            @Override
+            public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return ItemStack.EMPTY;
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return inputHandler.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                return inputHandler.isItemValid(slot, stack);
+            }
+        };
     }
 
     private MachineBlock getMachineBlock() {
@@ -149,26 +195,75 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == Direction.UP) {
-                return inputLazy.cast();
-            } else if (side == Direction.DOWN) {
-                return outputLazy.cast();
-            } else if (side != null) {
-                return inputLazy.cast();
-            } else {
+            if (side == null) {
                 return allLazy.cast();
             }
+
+            return getSideItemHandlerCapability(side).cast();
         }
 
         return super.getCapability(cap, side);
+    }
+
+    private LazyOptional<IItemHandler> getSideItemHandlerCapability(Direction worldSide) {
+        ItemSideMode mode = getItemSideMode(getBlockFace(worldSide));
+        if (mode == ItemSideMode.DISABLED) {
+            return LazyOptional.empty();
+        }
+
+        LazyOptional<IItemHandler> capability = sideItemHandlerCapabilities.get(worldSide);
+        if (capability != null && capability.isPresent()) {
+            return capability;
+        }
+
+        capability = switch (mode) {
+            case INPUT -> LazyOptional.of(() -> inputOnlyHandler);
+            case OUTPUT -> LazyOptional.of(() -> outputHandler);
+            case BOTH -> LazyOptional.of(() -> allHandler);
+            case DISABLED -> LazyOptional.empty();
+        };
+        if (capability.isPresent()) {
+            sideItemHandlerCapabilities.put(worldSide, capability);
+        }
+        return capability;
+    }
+
+    private BlockFace getBlockFace(Direction worldSide) {
+        Direction facing = getBlockState().getValue(MachineBlock.FACING);
+        if (worldSide == Direction.UP) {
+            return BlockFace.TOP;
+        }
+        if (worldSide == Direction.DOWN) {
+            return BlockFace.BOTTOM;
+        }
+        if (worldSide == facing) {
+            return BlockFace.FRONT;
+        }
+        if (worldSide == facing.getOpposite()) {
+            return BlockFace.BACK;
+        }
+        if (worldSide == facing.getClockWise()) {
+            return BlockFace.LEFT;
+        }
+        return BlockFace.RIGHT;
+    }
+
+    private Direction getWorldSide(BlockFace face) {
+        Direction facing = getBlockState().getValue(MachineBlock.FACING);
+        return switch (face) {
+            case TOP -> Direction.UP;
+            case BOTTOM -> Direction.DOWN;
+            case FRONT -> facing;
+            case BACK -> facing.getOpposite();
+            case LEFT -> facing.getClockWise();
+            case RIGHT -> facing.getCounterClockWise();
+        };
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
 
-        inputLazy = LazyOptional.of(() -> inputHandler);
-        outputLazy = LazyOptional.of(() -> outputHandler);
         allLazy = LazyOptional.of(() -> allHandler);
     }
 
@@ -176,9 +271,63 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
     public void invalidateCaps() {
         super.invalidateCaps();
 
-        inputLazy.invalidate();
-        outputLazy.invalidate();
+        for (LazyOptional<IItemHandler> capability : sideItemHandlerCapabilities.values()) {
+            capability.invalidate();
+        }
+        sideItemHandlerCapabilities.clear();
         allLazy.invalidate();
+    }
+
+    public ItemSideMode getItemSideMode(BlockFace face) {
+        return itemSideModes.get(Objects.requireNonNull(face, "face"));
+    }
+
+    public boolean isAutoInputEnabled() {
+        return autoInputEnabled;
+    }
+
+    public void setAutoInputEnabled(boolean enabled) {
+        if (autoInputEnabled != enabled) {
+            autoInputEnabled = enabled;
+            setChanged();
+        }
+    }
+
+    public boolean isAutoOutputEnabled() {
+        return autoOutputEnabled;
+    }
+
+    public void setAutoOutputEnabled(boolean enabled) {
+        if (autoOutputEnabled != enabled) {
+            autoOutputEnabled = enabled;
+            setChanged();
+        }
+    }
+
+    public void setItemSideMode(BlockFace face, ItemSideMode mode) {
+        Objects.requireNonNull(face, "face");
+        Objects.requireNonNull(mode, "mode");
+
+        if (itemSideModes.put(face, mode) != mode) {
+            setChanged();
+
+            Direction worldSide = getWorldSide(face);
+            LazyOptional<IItemHandler> oldCapability = sideItemHandlerCapabilities.remove(worldSide);
+            if (oldCapability != null) {
+                oldCapability.invalidate();
+            }
+
+            if (level != null && !level.isClientSide) {
+                level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+            }
+        }
+    }
+
+    private void resetItemSideModesToDefaults() {
+        itemSideModes.clear();
+        for (BlockFace face : BlockFace.values()) {
+            itemSideModes.put(face, face == BlockFace.BOTTOM ? ItemSideMode.OUTPUT : ItemSideMode.INPUT);
+        }
     }
 
     public void drops() {
@@ -196,6 +345,12 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         tag.put("input", inputHandler.serializeNBT());
         tag.put("output", outputHandler.serializeNBT());
         tag.putInt("progress", progress);
+
+        CompoundTag sideModesTag = new CompoundTag();
+        itemSideModes.forEach((face, mode) -> sideModesTag.putString(face.name(), mode.name()));
+        tag.put("item_side_modes", sideModesTag);
+        tag.putBoolean("auto_input_enabled", autoInputEnabled);
+        tag.putBoolean("auto_output_enabled", autoOutputEnabled);
     }
 
     @Override
@@ -205,6 +360,18 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         inputHandler.deserializeNBT(tag.getCompound("input"));
         outputHandler.deserializeNBT(tag.getCompound("output"));
         progress = tag.getInt("progress");
+
+        resetItemSideModesToDefaults();
+        CompoundTag sideModesTag = tag.getCompound("item_side_modes");
+        for (BlockFace face : BlockFace.values()) {
+            if (!sideModesTag.contains(face.name(), Tag.TAG_STRING)) {
+                continue;
+            }
+
+            itemSideModes.put(face, ItemSideMode.valueOf(sideModesTag.getString(face.name())));
+        }
+        autoInputEnabled = tag.getBoolean("auto_input_enabled");
+        autoOutputEnabled = tag.getBoolean("auto_output_enabled");
     }
 
     @Override
@@ -225,6 +392,8 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
+        tickAutomaticItemTransfer(pLevel);
+
         if (hasRecipe() && energyStorage.getEnergyStored() >= ModBlocks.ENERGY_CONSUMPTION_PER_TICK) {
             energyStorage.extractEnergy(ModBlocks.ENERGY_CONSUMPTION_PER_TICK, false);
             progress++;
@@ -237,6 +406,109 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
         } else {
             resetProgress();
         }
+    }
+
+    private void tickAutomaticItemTransfer(Level level) {
+        if (level.isClientSide || (!autoInputEnabled && !autoOutputEnabled)) {
+            autoIOTransferCooldown = 0;
+            return;
+        }
+
+        if (autoIOTransferCooldown > 0) {
+            autoIOTransferCooldown--;
+            return;
+        }
+        autoIOTransferCooldown = AUTO_IO_TRANSFER_INTERVAL - 1;
+
+        for (BlockFace face : BlockFace.values()) {
+            ItemSideMode mode = getItemSideMode(face);
+            boolean canPullFromFace = autoInputEnabled
+                && (mode == ItemSideMode.INPUT || mode == ItemSideMode.BOTH);
+            boolean canPushToFace = autoOutputEnabled
+                && (mode == ItemSideMode.OUTPUT || mode == ItemSideMode.BOTH);
+            if (!canPullFromFace && !canPushToFace) {
+                continue;
+            }
+
+            Direction direction = getWorldSide(face);
+            BlockPos neighborPos = worldPosition.relative(direction);
+            if (!level.isLoaded(neighborPos)) {
+                continue;
+            }
+
+            BlockEntity neighbor = level.getBlockEntity(neighborPos);
+            if (neighbor == null || neighbor == this) {
+                continue;
+            }
+
+            if (canPullFromFace) {
+                neighbor.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite())
+                    .ifPresent(externalHandler -> transferFirstStack(level, externalHandler, inputOnlyHandler));
+            }
+            if (canPushToFace) {
+                neighbor.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite())
+                    .ifPresent(externalHandler -> transferFirstStack(level, outputHandler, externalHandler));
+            }
+        }
+    }
+
+    private void transferFirstStack(Level level, IItemHandler source, IItemHandler destination) {
+        for (int sourceSlot = 0; sourceSlot < source.getSlots(); sourceSlot++) {
+            ItemStack available = source.getStackInSlot(sourceSlot);
+            if (available.isEmpty()) {
+                continue;
+            }
+
+            ItemStack simulatedRemainder = ItemHandlerHelper.insertItem(destination, available.copy(), true);
+            int amountToTransfer = available.getCount() - simulatedRemainder.getCount();
+            if (amountToTransfer <= 0) {
+                continue;
+            }
+
+            ItemStack extracted = source.extractItem(sourceSlot, amountToTransfer, false);
+            if (extracted.isEmpty()) {
+                continue;
+            }
+
+            ItemStack remainder = ItemHandlerHelper.insertItem(destination, extracted, false);
+            if (!remainder.isEmpty()) {
+                restoreTransferRemainder(level, source, sourceSlot, remainder);
+            }
+            return;
+        }
+    }
+
+    private void restoreTransferRemainder(Level level, IItemHandler source, int sourceSlot, ItemStack remainder) {
+        if (source == outputHandler) {
+            ItemStack currentStack = outputHandler.getStackInSlot(sourceSlot);
+            if (currentStack.isEmpty()) {
+                outputHandler.setStackInSlot(sourceSlot, remainder);
+                return;
+            }
+            if (ItemHandlerHelper.canItemStacksStack(currentStack, remainder)
+                && currentStack.getCount() + remainder.getCount() <= currentStack.getMaxStackSize()) {
+                ItemStack restoredStack = currentStack.copy();
+                restoredStack.grow(remainder.getCount());
+                outputHandler.setStackInSlot(sourceSlot, restoredStack);
+                return;
+            }
+        } else {
+            remainder = source.insertItem(sourceSlot, remainder, false);
+            if (!remainder.isEmpty()) {
+                remainder = ItemHandlerHelper.insertItem(source, remainder, false);
+            }
+            if (remainder.isEmpty()) {
+                return;
+            }
+        }
+
+        Containers.dropItemStack(
+            level,
+            worldPosition.getX() + 0.5,
+            worldPosition.getY() + 0.5,
+            worldPosition.getZ() + 0.5,
+            remainder
+        );
     }
 
     protected boolean hasRecipe() {
@@ -259,9 +531,8 @@ public class MachineBlockEntity extends EnergyBlockEntity<GenericEnergyStorage> 
 
         for (int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
-            int requiredAmount = amounts.get(i);
 
-            int remainingAmount = requiredAmount;
+            int remainingAmount = amounts.get(i);
 
             for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
                 ItemStack stack = inventory.getItem(slot);

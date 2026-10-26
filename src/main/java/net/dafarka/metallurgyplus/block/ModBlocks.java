@@ -116,26 +116,26 @@ public class ModBlocks {
             new int[]{64, 34}
         ));
 
-    public static final int[][] GEMSTONE_CUTTER_INPUT_POSITION = {{40, 35}};
-    public static final int[][] GEMSTONE_CUTTER_OUTPUT_POSITIONS = {{98, 17}, {116, 17}, {134, 17}, {98, 35}, {116, 35}, {134, 35}, {98, 53}, {116, 53}, {134, 53}};
+    public static final int[][] GEMSTONE_CUTTER_INPUT_POSITION = {{40, 36}};
+    public static final int[][] GEMSTONE_CUTTER_OUTPUT_POSITIONS = {{98, 18}, {116, 18}, {134, 18}, {98, 36}, {116, 36}, {134, 36}, {98, 54}, {116, 54}, {134, 54}};
     public static final RegistryObject<MachineBlock> GEMSTONE_CUTTER = registerBlock("gemstone_cutter",
         () -> new MachineBlock(
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.GEMSTONE_CUTTER_TYPE,
             GEMSTONE_CUTTER_INPUT_POSITION,
             GEMSTONE_CUTTER_OUTPUT_POSITIONS,
-            new int[]{64, 38}
+            new int[]{64, 39}
         ));
 
-    public static final int[][] ENRICHER_INPUT_POSITION = {{22, 17}, {40, 17}, {22, 35}, {40, 35}};
-    public static final int[][] ENRICHER_OUTPUT_POSITIONS = {{98, 17}, {116, 17}, {134, 17}, {152, 17}, {98, 35}, {116, 35}, {134, 35}, {152, 35}};
+    public static final int[][] ENRICHER_INPUT_POSITION = {{22, 18}, {40, 18}, {22, 36}, {40, 36}};
+    public static final int[][] ENRICHER_OUTPUT_POSITIONS = {{98, 18}, {116, 18}, {134, 18}, {152, 18}, {98, 36}, {116, 36}, {134, 36}, {152, 36}};
     public static final RegistryObject<MachineBlock> ENRICHER = registerBlock("enricher",
         () -> new MachineBlock(
             BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.METAL).noOcclusion(),
             ModRecipeTypes.ENRICHER_TYPE,
             ENRICHER_INPUT_POSITION,
             ENRICHER_OUTPUT_POSITIONS,
-            new int[]{64, 30}
+            new int[]{64, 31}
         ));
 
     public static final RegistryObject<Block> QUARRY = registerBlock("quarry",

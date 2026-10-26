@@ -17,6 +17,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<MachineMenu>> MACHINE_MENU =
         registerMenuType("machine_menu", MachineMenu::new);
 
+    public static final RegistryObject<MenuType<MachineIOMenu>> MACHINE_IO_MENU =
+        registerMenuType("machine_io_menu", MachineIOMenu::new);
+
     public static final RegistryObject<MenuType<QuarryMenu>> QUARRY_MENU =
         registerMenuType("quarry_menu", QuarryMenu::new);
 

@@ -186,6 +186,7 @@ public class MetallurgyPlus {
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             MenuScreens.register(ModMenuTypes.MACHINE_MENU.get(), MachineScreen::new);
+            MenuScreens.register(ModMenuTypes.MACHINE_IO_MENU.get(), MachineIOScreen::new);
             MenuScreens.register(ModMenuTypes.QUARRY_MENU.get(), QuarryScreen::new);
             MenuScreens.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
             MenuScreens.register(ModMenuTypes.SACK_MENU.get(), SackScreen::new);
