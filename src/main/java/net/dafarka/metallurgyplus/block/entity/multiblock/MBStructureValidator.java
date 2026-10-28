@@ -19,10 +19,10 @@ final class MBStructureValidator {
         }
 
         Direction lateral = facing.getClockWise();
-        int negativeWidth = findEdgeDistance(level, controllerPos, lateral.getOpposite(), definition);
-        int positiveWidth = findEdgeDistance(level, controllerPos, lateral, definition);
-        int below = findEdgeDistance(level, controllerPos, Direction.DOWN, definition);
-        int above = findEdgeDistance(level, controllerPos, Direction.UP, definition);
+        int negativeWidth = findEdgeDistance(level, controllerPos, lateral.getOpposite(), definition.maximumBaseSize(), definition);
+        int positiveWidth = findEdgeDistance(level, controllerPos, lateral, definition.maximumBaseSize(), definition);
+        int below = findEdgeDistance(level, controllerPos, Direction.DOWN, definition.maximumHeight(), definition);
+        int above = findEdgeDistance(level, controllerPos, Direction.UP, definition.maximumHeight(), definition);
 
         if (negativeWidth < 1 || positiveWidth < 1 || below < 1 || above < 1) {
             return Optional.empty();
@@ -30,11 +30,11 @@ final class MBStructureValidator {
 
         int width = negativeWidth + positiveWidth + 1;
         int height = below + above + 1;
-        if (!isAllowedSize(width, definition) || !isAllowedSize(height, definition)) {
+        if (!isAllowedBaseSize(width, definition) || !isAllowedHeight(height, definition)) {
             return Optional.empty();
         }
 
-        for (int depth = definition.minimumSize(); depth <= definition.maximumSize(); depth++) {
+        for (int depth = definition.minimumBaseSize(); depth <= definition.maximumBaseSize(); depth++) {
             BlockPos[] corners = getCorners(controllerPos, lateral, negativeWidth, positiveWidth, below, above, facing.getOpposite(), depth - 1);
             BlockPos minimum = minimum(corners);
             BlockPos maximum = maximum(corners);
@@ -48,8 +48,14 @@ final class MBStructureValidator {
         return Optional.empty();
     }
 
-    private static int findEdgeDistance(LevelReader level, BlockPos origin, Direction direction, MBStructureDefinition definition) {
-        for (int distance = 1; distance < definition.maximumSize() - 1; distance++) {
+    private static int findEdgeDistance(
+        LevelReader level,
+        BlockPos origin,
+        Direction direction,
+        int maximumDimension,
+        MBStructureDefinition definition
+    ) {
+        for (int distance = 1; distance < maximumDimension - 1; distance++) {
             BlockPos pos = origin.relative(direction, distance);
             if (!level.hasChunkAt(pos)) {
                 return -1;
@@ -63,8 +69,12 @@ final class MBStructureValidator {
         return -1;
     }
 
-    private static boolean isAllowedSize(int size, MBStructureDefinition definition) {
-        return size >= definition.minimumSize() && size <= definition.maximumSize();
+    private static boolean isAllowedBaseSize(int size, MBStructureDefinition definition) {
+        return size >= definition.minimumBaseSize() && size <= definition.maximumBaseSize();
+    }
+
+    private static boolean isAllowedHeight(int height, MBStructureDefinition definition) {
+        return height >= definition.minimumHeight() && height <= definition.maximumHeight();
     }
 
     private static BlockPos[] getCorners(
@@ -129,7 +139,9 @@ final class MBStructureValidator {
         int sizeX = maximum.getX() - minimum.getX() + 1;
         int sizeY = maximum.getY() - minimum.getY() + 1;
         int sizeZ = maximum.getZ() - minimum.getZ() + 1;
-        if (!isAllowedSize(sizeX, definition) || !isAllowedSize(sizeY, definition) || !isAllowedSize(sizeZ, definition)) {
+        if (!isAllowedBaseSize(sizeX, definition)
+            || !isAllowedHeight(sizeY, definition)
+            || !isAllowedBaseSize(sizeZ, definition)) {
             return Optional.empty();
         }
 

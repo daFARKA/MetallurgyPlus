@@ -29,11 +29,14 @@ import java.util.function.Supplier;
 public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnergyStorage> {
     private static final double NOTIFICATION_RADIUS_SQUARED = 32 * 32;
     private static final BigInteger MAX_STANDARD_TRANSFER = BigInteger.valueOf(Integer.MAX_VALUE);
+    private final String multiblockName;
 
     private MBStructure formedStructure;
 
-    protected MBControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Supplier<BigEnergyStorage> storageSupplier) {
+    protected MBControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Supplier<BigEnergyStorage> storageSupplier, String multiblockName) {
         super(type, pos, state, storageSupplier);
+
+        this.multiblockName = Objects.requireNonNull(multiblockName, "multiblockName");
     }
 
     /**
@@ -51,46 +54,32 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
     protected void onServerTick() {
     }
 
-    /**
-     * The registered multiblock block name used for this controller's energy input ports.
-     */
+    protected String getControllerName() {
+        return this.multiblockName + "/controller";
+    }
+
     protected String getEnergyInputPortName() {
-        return null;
+        return multiblockName + "/energy_input";
     }
 
-    /**
-     * The registered multiblock block name used for this controller's energy output ports.
-     */
     protected String getEnergyOutputPortName() {
-        return null;
+        return multiblockName + "/energy_output";
     }
 
-    /**
-     * The registered multiblock block name used for this controller's item input ports.
-     */
     protected String getItemInputPortName() {
-        return null;
+        return multiblockName + "/item_input";
     }
 
-    /**
-     * The registered multiblock block name used for this controller's item output ports.
-     */
     protected String getItemOutputPortName() {
-        return null;
+        return multiblockName + "/item_output";
     }
 
-    /**
-     * The registered multiblock block name used for this controller's fluid input ports.
-     */
     protected String getFluidInputPortName() {
-        return null;
+        return multiblockName + "/fluid_input";
     }
 
-    /**
-     * The registered multiblock block name used for this controller's fluid output ports.
-     */
     protected String getFluidOutputPortName() {
-        return null;
+        return multiblockName + "/fluid_output";
     }
 
     @NotNull

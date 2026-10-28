@@ -667,7 +667,6 @@ public class ModItems {
             "reactor/casing",
             "reactor/glass",
             "reactor/fuel_cell",
-            "reactor/energy_input",
             "reactor/energy_output",
             "reactor/item_input",
             "reactor/item_output",

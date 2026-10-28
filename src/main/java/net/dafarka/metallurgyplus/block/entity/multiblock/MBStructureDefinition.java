@@ -6,11 +6,14 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * Rules for an axis-aligned rectangular-prism multiblock.
+ * Rules for an axis-aligned rectangular-prism multiblock. The footprint is
+ * bounded independently from the vertical height.
  */
 public final class MBStructureDefinition {
-    private final int minimumSize;
-    private final int maximumSize;
+    private final int minimumBaseSize;
+    private final int maximumBaseSize;
+    private final int minimumHeight;
+    private final int maximumHeight;
     private final Predicate<BlockState> edgeMatcher;
     private final Predicate<BlockState> wallMatcher;
     private final Predicate<BlockState> interiorMatcher;
@@ -19,8 +22,10 @@ public final class MBStructureDefinition {
     private final int minimumRequiredInteriorBlocks;
 
     private MBStructureDefinition(Builder builder) {
-        this.minimumSize = builder.minimumSize;
-        this.maximumSize = builder.maximumSize;
+        this.minimumBaseSize = builder.minimumBaseSize;
+        this.maximumBaseSize = builder.maximumBaseSize;
+        this.minimumHeight = builder.minimumHeight;
+        this.maximumHeight = builder.maximumHeight;
         this.edgeMatcher = Objects.requireNonNull(builder.edgeMatcher, "An edge matcher is required");
         this.wallMatcher = Objects.requireNonNull(builder.wallMatcher, "A wall matcher is required");
         this.interiorMatcher = builder.interiorMatcher;
@@ -29,16 +34,38 @@ public final class MBStructureDefinition {
         this.minimumRequiredInteriorBlocks = builder.minimumRequiredInteriorBlocks;
     }
 
+    /** Creates a prism with the same size range for its footprint and height. */
     public static Builder rectangularPrism(int minimumSize, int maximumSize) {
-        return new Builder(minimumSize, maximumSize);
+        return rectangularPrism(minimumSize, maximumSize, minimumSize, maximumSize);
     }
 
-    int minimumSize() {
-        return minimumSize;
+    /**
+     * Creates a prism whose horizontal footprint and vertical height have
+     * independent size ranges. The base bounds apply to both horizontal axes.
+     */
+    public static Builder rectangularPrism(
+        int minimumBaseSize,
+        int maximumBaseSize,
+        int minimumHeight,
+        int maximumHeight
+    ) {
+        return new Builder(minimumBaseSize, maximumBaseSize, minimumHeight, maximumHeight);
     }
 
-    int maximumSize() {
-        return maximumSize;
+    int minimumBaseSize() {
+        return minimumBaseSize;
+    }
+
+    int maximumBaseSize() {
+        return maximumBaseSize;
+    }
+
+    int minimumHeight() {
+        return minimumHeight;
+    }
+
+    int maximumHeight() {
+        return maximumHeight;
     }
 
     Predicate<BlockState> edgeMatcher() {
@@ -66,8 +93,10 @@ public final class MBStructureDefinition {
     }
 
     public static final class Builder {
-        private final int minimumSize;
-        private final int maximumSize;
+        private final int minimumBaseSize;
+        private final int maximumBaseSize;
+        private final int minimumHeight;
+        private final int maximumHeight;
         private Predicate<BlockState> edgeMatcher;
         private Predicate<BlockState> wallMatcher;
         private Predicate<BlockState> interiorMatcher = state -> true;
@@ -75,13 +104,18 @@ public final class MBStructureDefinition {
         private Predicate<BlockState> requiredInteriorMatcher = state -> false;
         private int minimumRequiredInteriorBlocks;
 
-        private Builder(int minimumSize, int maximumSize) {
-            if (minimumSize < 2 || maximumSize < minimumSize) {
-                throw new IllegalArgumentException("Prism sizes must satisfy 2 <= minimum <= maximum");
+        private Builder(int minimumBaseSize, int maximumBaseSize, int minimumHeight, int maximumHeight) {
+            if (minimumBaseSize < 2 || maximumBaseSize < minimumBaseSize) {
+                throw new IllegalArgumentException("Base sizes must satisfy 2 <= minimum <= maximum");
+            }
+            if (minimumHeight < 2 || maximumHeight < minimumHeight) {
+                throw new IllegalArgumentException("Height must satisfy 2 <= minimum <= maximum");
             }
 
-            this.minimumSize = minimumSize;
-            this.maximumSize = maximumSize;
+            this.minimumBaseSize = minimumBaseSize;
+            this.maximumBaseSize = maximumBaseSize;
+            this.minimumHeight = minimumHeight;
+            this.maximumHeight = maximumHeight;
         }
 
         public Builder edges(Predicate<BlockState> matcher) {

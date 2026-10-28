@@ -15,6 +15,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
 import java.math.BigInteger;
 import java.util.function.Supplier;
 
@@ -23,8 +24,8 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     public static final int ENERGY_WORD_BITS = 15;
     public static final int ENERGY_DATA_COUNT = ENERGY_WORDS * 2 + 1;
     private static final BigInteger ENERGY_WORD_MASK = BigInteger.ONE.shiftLeft(ENERGY_WORD_BITS).subtract(BigInteger.ONE);
-    private static final String INPUT_NAME = "battery/energy_input";
-    private static final String OUTPUT_NAME = "battery/energy_output";
+
+    private final MBStructureDefinition structureDefinition;
 
     private final ContainerData menuData = new ContainerData() {
         @Override
@@ -62,7 +63,9 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     }
 
     public MBBatteryController(BlockEntityType<?> type, BlockPos pos, BlockState state, Supplier<BigEnergyStorage> storageSupplier) {
-        super(type, pos, state, storageSupplier);
+        super(type, pos, state, storageSupplier, "battery");
+        
+        structureDefinition = BatteryStructureDefinition.create(getControllerName(), getEnergyInputPortName(), getEnergyOutputPortName());
     }
 
     private static int getEnergyWord(BigInteger value, int wordIndex) {
@@ -81,17 +84,7 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
 
     @Override
     protected MBStructureDefinition getStructureDefinition() {
-        return BatteryStructureDefinition.DEFINITION;
-    }
-
-    @Override
-    protected String getEnergyInputPortName() {
-        return INPUT_NAME;
-    }
-
-    @Override
-    protected String getEnergyOutputPortName() {
-        return OUTPUT_NAME;
+        return structureDefinition;
     }
 
     @Override
@@ -126,18 +119,20 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
     }
 
     private static final class BatteryStructureDefinition {
-        private static final MBStructureDefinition DEFINITION = MBStructureDefinition.rectangularPrism(3, 16)
-            .edges(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get()))
-            .walls(state -> state.is(Blocks.GLASS)
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get())
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get(INPUT_NAME).get())
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get(OUTPUT_NAME).get())
-                || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
-            .controller(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/controller").get()))
-            .requireInterior(
-                state -> state.is(ModTags.Blocks.BATTERY_CELLS) || state.getBlock() instanceof BatteryCellBlock,
-                1
-            )
-            .build();
+        private static MBStructureDefinition create(String controllerName, String energyInputPortName, String energyOutputPortName) {
+            return MBStructureDefinition.rectangularPrism(3, 16, 3, 16)
+                .edges(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get()))
+                .walls(state -> state.is(Blocks.GLASS)
+                    || state.is(ModBlocks.MULTIBLOCKS_MAP.get("battery/casing").get())
+                    || state.is(ModBlocks.MULTIBLOCKS_MAP.get(energyInputPortName).get())
+                    || state.is(ModBlocks.MULTIBLOCKS_MAP.get(energyOutputPortName).get())
+                    || state.is(ModBlocks.MULTIBLOCKS_MAP.get(controllerName).get()))
+                .controller(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get(controllerName).get()))
+                .requireInterior(
+                    state -> state.is(ModTags.Blocks.BATTERY_CELLS) || state.getBlock() instanceof BatteryCellBlock,
+                    1
+                )
+                .build();
+        }
     }
 }
