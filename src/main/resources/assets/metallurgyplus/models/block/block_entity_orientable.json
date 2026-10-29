@@ -14,8 +14,8 @@
 				"east": {"texture": "#side", "cullface": "east" },
 				"south": {"texture": "#side", "cullface": "south" },
 				"west": {"texture": "#side", "cullface": "west" },
-				"up": {"texture": "#top", "cullface": "up" },
-				"down": {"texture": "#bottom", "cullface": "down" }
+				"up": {"texture": "#top", "cullface": "up", "rotation": 180 },
+				"down": {"texture": "#bottom", "cullface": "down", "rotation": 180 }
 			}
 		}
 	]

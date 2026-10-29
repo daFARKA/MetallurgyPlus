@@ -1,25 +1,22 @@
 package net.dafarka.metallurgyplus.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.menu.MBFluidPortMenu;
 import net.dafarka.metallurgyplus.util.FluidGaugeRenderer;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MBFluidPortScreen extends AbstractContainerScreen<MBFluidPortMenu> {
+public class MBFluidPortScreen extends BaseScreen<MBFluidPortMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(
         MetallurgyPlus.MODID,
         "textures/gui/fluid_port_gui.png"
     );
 
     public MBFluidPortScreen(MBFluidPortMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+        super(menu, playerInventory, title, TEXTURE);
         imageWidth = 176;
         imageHeight = 166;
     }
@@ -32,13 +29,10 @@ public class MBFluidPortScreen extends AbstractContainerScreen<MBFluidPortMenu> 
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
 
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-        graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        int x = leftPos;
+        int y = topPos;
 
         renderFluidBar(graphics, x, y);
         renderFluidText(graphics, x, y);

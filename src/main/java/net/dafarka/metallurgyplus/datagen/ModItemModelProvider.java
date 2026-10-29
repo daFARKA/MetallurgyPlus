@@ -7,7 +7,6 @@ import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -62,7 +61,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         createCoilItems();
         createSackItems();
 
-        multiBlockItemModels();
+        MBItemModels();
     }
 
     private ItemModelBuilder groupItem(RegistryObject<? extends Item> item, String group) {
@@ -108,13 +107,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         if (renderType != null) {
             builder.renderType(renderType);
         }
-
-        builder.transforms()
-            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-            .rotation(10, -45, 170)
-            .translation(0, 1.5f, -2.75f)
-            .scale(0.375f, 0.375f, 0.375f)
-            .end();
     }
 
 
@@ -171,7 +163,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void multiBlockItemModels() {
+    private void MBItemModels() {
         for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
             String[] parts = Utility.getMultiBlockNames(block);
 

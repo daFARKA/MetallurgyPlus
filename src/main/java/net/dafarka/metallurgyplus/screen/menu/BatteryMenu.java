@@ -14,8 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class BatteryMenu extends BaseMenu {
 
-    public UtilityMenu utilityMenu;
-
     public final BatteryBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -29,7 +27,6 @@ public class BatteryMenu extends BaseMenu {
         blockEntity = ((BatteryBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
-        this.utilityMenu = new UtilityMenu(this.data);
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);

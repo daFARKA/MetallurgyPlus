@@ -12,8 +12,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
+import net.minecraftforge.client.model.generators.ModelBuilder;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -62,7 +65,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "energy", "battery", "", "", "", "", "", defaultTintIndices);
+            registerOrientableComposite(blockName, "energy", "battery", "_", "side", "side", "top", "top", defaultTintIndices);
         }
 
         for (RegistryObject<? extends Block> block : ModBlocks.MULTIBLOCKS_MAP.values()) {
@@ -257,10 +260,101 @@ public class ModBlockModelProvider extends BlockModelProvider {
                 .face(Direction.SOUTH).texture("#side").tintindex(tintIndices[1]).end()
                 .face(Direction.EAST).texture("#side").tintindex(tintIndices[2]).end()
                 .face(Direction.WEST).texture("#side").tintindex(tintIndices[3]).end()
-                .face(Direction.UP).texture("#top").tintindex(tintIndices[4]).end()
-                .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).end()
+                .face(Direction.UP).texture("#top").tintindex(tintIndices[4]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+                .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
                 .end();
         }
+    }
+
+    private void registerOrientableComposite(String name, String group, String textureName, String connector, String front, String side, String top, String bottom, int @NotNull [] tintIndices) {
+        registerOrientableComposite(
+            name,
+            group,
+            textureName + connector + front,
+            textureName + connector + side,
+            textureName + connector + top,
+            textureName + connector + bottom,
+            tintIndices
+        );
+    }
+
+    private void registerOrientableComposite(String name, String group, String front, String side, String top, String bottom, int @NotNull [] tintIndices) {
+        ResourceLocation frontTexture = modLoc("block/" + group + "/" + front);
+        ResourceLocation sideTexture = modLoc("block/" + group + "/" + side);
+        ResourceLocation topTexture = modLoc("block/" + group + "/" + top);
+        ResourceLocation bottomTexture = modLoc("block/" + group + "/" + bottom);
+
+        ResourceLocation frontBaseTexture = modLoc("block/" + group + "/base/" + front);
+        ResourceLocation sideBaseTexture = modLoc("block/" + group + "/base/" + side);
+        ResourceLocation topBaseTexture = modLoc("block/" + group + "/base/" + top);
+        ResourceLocation bottomBaseTexture = modLoc("block/" + group + "/base/" + bottom);
+
+        frontBaseTexture = existingFileHelper.exists(frontBaseTexture, ModelProvider.TEXTURE)
+            ? frontBaseTexture : frontTexture;
+
+        sideBaseTexture = existingFileHelper.exists(sideBaseTexture, ModelProvider.TEXTURE)
+            ? sideBaseTexture : sideTexture;
+
+        topBaseTexture = existingFileHelper.exists(topBaseTexture, ModelProvider.TEXTURE)
+            ? topBaseTexture : topTexture;
+
+        bottomBaseTexture = existingFileHelper.exists(bottomBaseTexture, ModelProvider.TEXTURE)
+            ? bottomBaseTexture : bottomTexture;
+
+        getBuilder(name)
+            .parent(getExistingFile(modLoc("block_entity_orientable")))
+            .renderType(mcLoc("cutout"))
+            .texture("particle", sideTexture)
+            .texture("front", frontTexture)
+            .texture("side", sideTexture)
+            .texture("top", topTexture)
+            .texture("bottom", bottomTexture)
+            .texture("front_base", frontBaseTexture)
+            .texture("side_base", sideBaseTexture)
+            .texture("top_base", topBaseTexture)
+            .texture("bottom_base", bottomBaseTexture)
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.NORTH).texture("#front_base").cullface(Direction.NORTH).tintindex(tintIndices[0]).end()
+            .face(Direction.SOUTH).texture("#side_base").cullface(Direction.SOUTH).tintindex(tintIndices[1]).end()
+            .face(Direction.EAST).texture("#side_base").cullface(Direction.EAST).tintindex(tintIndices[2]).end()
+            .face(Direction.WEST).texture("#side_base").cullface(Direction.WEST).tintindex(tintIndices[3]).end()
+            .face(Direction.UP).texture("#top_base").cullface(Direction.UP).tintindex(tintIndices[4]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+            .face(Direction.DOWN).texture("#bottom_base").cullface(Direction.DOWN).tintindex(tintIndices[5]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+            .end()
+            .element()
+            .from(0, 0, 0)
+            .to(16, 16, 0)
+            .face(Direction.NORTH).texture("#front").cullface(Direction.NORTH).end()
+            .end()
+            .element()
+            .from(0, 0, 16)
+            .to(16, 16, 16)
+            .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
+            .end()
+            .element()
+            .from(16, 0, 0)
+            .to(16, 16, 16)
+            .face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
+            .end()
+            .element()
+            .from(0, 0, 0)
+            .to(0, 16, 16)
+            .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
+            .end()
+            .element()
+            .from(0, 16, 0)
+            .to(16, 16, 16)
+            .face(Direction.UP).texture("#top").cullface(Direction.UP)
+            .rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+            .end()
+            .element()
+            .from(0, 0, 0)
+            .to(16, 0, 16)
+            .face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN)
+            .rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+            .end();
     }
 
     private void registerSackStation() {

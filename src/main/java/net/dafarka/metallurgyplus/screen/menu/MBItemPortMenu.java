@@ -11,7 +11,6 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class MBItemPortMenu extends BaseMenu {
     private static final int PORT_SLOT_COUNT = MBItemPortBlockEntity.SLOT_COUNT;
-    private static final int PLAYER_SLOT_START = PORT_SLOT_COUNT;
 
     private final MBItemPortBlockEntity port;
     private final Level level;

@@ -14,19 +14,22 @@ public final class MBStructure {
     private final Direction controllerFacing;
     private final List<BlockPos> wallPositions;
     private final List<BlockPos> requiredInteriorPositions;
+    private final List<BlockPos> interiorPositions;
 
     MBStructure(
         BlockPos minimum,
         BlockPos maximum,
         Direction controllerFacing,
         List<BlockPos> wallPositions,
-        List<BlockPos> requiredInteriorPositions
+        List<BlockPos> requiredInteriorPositions,
+        List<BlockPos> interiorPositions
     ) {
         this.minimum = minimum.immutable();
         this.maximum = maximum.immutable();
         this.controllerFacing = controllerFacing;
         this.wallPositions = List.copyOf(wallPositions);
         this.requiredInteriorPositions = List.copyOf(requiredInteriorPositions);
+        this.interiorPositions = interiorPositions;
     }
 
     public BlockPos minimum() {
@@ -65,5 +68,12 @@ public final class MBStructure {
      */
     public List<BlockPos> requiredInteriorPositions() {
         return requiredInteriorPositions;
+    }
+
+    /**
+     * All interior positions.
+     */
+    public List<BlockPos> interiorPositions() {
+        return interiorPositions;
     }
 }

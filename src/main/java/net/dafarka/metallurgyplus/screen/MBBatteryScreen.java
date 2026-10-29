@@ -1,22 +1,19 @@
 package net.dafarka.metallurgyplus.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.menu.MBBatteryMenu;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MBBatteryScreen extends AbstractContainerScreen<MBBatteryMenu> {
+public class MBBatteryScreen extends BaseScreen<MBBatteryMenu> {
     private static final ResourceLocation TEXTURE =
         new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/battery_gui.png");
 
     public MBBatteryScreen(MBBatteryMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+        super(menu, playerInventory, title, TEXTURE);
     }
 
     @Override
@@ -27,13 +24,11 @@ public class MBBatteryScreen extends AbstractContainerScreen<MBBatteryMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
 
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-        graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        int x = leftPos;
+        int y = topPos;
+
         graphics.blit(TEXTURE, x + 8, y + 61, 0, 176, menu.getScaledEnergy(), 13);
 
         graphics.drawString(font, "Stored: " + Utility.formatCompact(menu.getEnergyStored()) + " FE", x + 8, y + 21, 0x000000, false);

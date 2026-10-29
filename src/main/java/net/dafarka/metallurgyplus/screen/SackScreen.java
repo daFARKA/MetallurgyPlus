@@ -1,12 +1,9 @@
 package net.dafarka.metallurgyplus.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.screen.menu.SackMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,9 +12,9 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public class SackScreen extends AbstractContainerScreen<SackMenu> {
+public class SackScreen extends BaseScreen<SackMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/sack_gui.png");
+        new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/sack_gui.png");
 
     private static final int COLUMNS = 7;
     private static final int ROWS = 4;
@@ -42,7 +39,7 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
 
 
     public SackScreen(SackMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
+        super(menu, inventory, title, TEXTURE);
     }
 
     @Override
@@ -57,18 +54,11 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-
-        guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        super.renderBg(guiGraphics, partialTick, mouseX, mouseY);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBg(guiGraphics, partialTick, mouseX, mouseY);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         renderItems(guiGraphics, mouseX, mouseY);
@@ -162,8 +152,8 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
 
         int startIndex = currentPage * ITEMS_PER_PAGE;
         int endIndex = Math.min(
-                startIndex + ITEMS_PER_PAGE,
-                items.size()
+            startIndex + ITEMS_PER_PAGE,
+            items.size()
         );
 
         for (int index = startIndex; index < endIndex; index++) {
@@ -192,11 +182,11 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
                 int buttonId = index * 4 + action;
 
                 Minecraft.getInstance()
-                        .gameMode
-                        .handleInventoryButtonClick(
-                                menu.containerId,
-                                buttonId
-                        );
+                    .gameMode
+                    .handleInventoryButtonClick(
+                        menu.containerId,
+                        buttonId
+                    );
 
                 return true;
             }
@@ -207,9 +197,9 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
 
     private boolean isInside(double mouseX, double mouseY, int x, int y, int width, int height) {
         return mouseX >= leftPos + x
-                && mouseX < leftPos + x + width
-                && mouseY >= topPos + y
-                && mouseY < topPos + y + height;
+            && mouseX < leftPos + x + width
+            && mouseY >= topPos + y
+            && mouseY < topPos + y + height;
     }
 
     @Override
@@ -226,12 +216,12 @@ public class SackScreen extends AbstractContainerScreen<SackMenu> {
             int row = localIndex / COLUMNS;
 
             int x = leftPos
-                    + ITEMS_X
-                    + column * ITEM_SPACING;
+                + ITEMS_X
+                + column * ITEM_SPACING;
 
             int y = topPos
-                    + ITEMS_Y
-                    + row * ITEM_SPACING;
+                + ITEMS_Y
+                + row * ITEM_SPACING;
 
             if (isMouseOverItem(mouseX, mouseY, x, y)) {
                 Item item = items.get(index);

@@ -1,6 +1,5 @@
 package net.dafarka.metallurgyplus.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.BlockFace;
 import net.dafarka.metallurgyplus.block.ItemSideMode;
@@ -11,8 +10,6 @@ import net.dafarka.metallurgyplus.network.packets.ToggleMachineAutoIOPacket;
 import net.dafarka.metallurgyplus.screen.menu.MachineIOMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.Arrays;
 import java.util.EnumMap;
 
-public class MachineIOScreen extends AbstractContainerScreen<MachineIOMenu> {
+public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/machine_io_gui.png");
 
     private static final int[][] FACE_POSITIONS = {
@@ -39,7 +36,7 @@ public class MachineIOScreen extends AbstractContainerScreen<MachineIOMenu> {
     private final EnumMap<BlockFace, ItemSideMode> pendingModes = new EnumMap<>(BlockFace.class);
 
     public MachineIOScreen(MachineIOMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+        super(menu, playerInventory, title, TEXTURE);
         imageWidth = 176;
         imageHeight = 166;
         inventoryLabelY = 72;
@@ -52,13 +49,10 @@ public class MachineIOScreen extends AbstractContainerScreen<MachineIOMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
 
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-        graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        int x = leftPos;
+        int y = topPos;
 
         for (BlockFace face : BlockFace.values()) {
             int[] facePosition = FACE_POSITIONS[face.ordinal()];

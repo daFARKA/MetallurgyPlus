@@ -147,6 +147,7 @@ final class MBStructureValidator {
 
         List<BlockPos> wallPositions = new ArrayList<>();
         List<BlockPos> requiredInteriorPositions = new ArrayList<>();
+        List<BlockPos> interiorPositions = new ArrayList<>();
         int controllerCount = 0;
 
         for (int y = minimum.getY(); y <= maximum.getY(); y++) {
@@ -184,6 +185,9 @@ final class MBStructureValidator {
                         if (!definition.interiorMatcher().test(state)) {
                             return Optional.empty();
                         }
+                        
+                        interiorPositions.add(pos.immutable());
+
                         if (definition.requiredInteriorMatcher().test(state)) {
                             requiredInteriorPositions.add(pos.immutable());
                         }
@@ -199,6 +203,6 @@ final class MBStructureValidator {
             return Optional.empty();
         }
 
-        return Optional.of(new MBStructure(minimum, maximum, facing, wallPositions, requiredInteriorPositions));
+        return Optional.of(new MBStructure(minimum, maximum, facing, wallPositions, requiredInteriorPositions, interiorPositions));
     }
 }
