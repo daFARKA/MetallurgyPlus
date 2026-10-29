@@ -8,6 +8,7 @@ import net.dafarka.metallurgyplus.network.packets.SetMachineIOModePacket;
 import net.dafarka.metallurgyplus.network.packets.SwitchMachineMenuPacket;
 import net.dafarka.metallurgyplus.network.packets.ToggleMachineAutoIOPacket;
 import net.dafarka.metallurgyplus.screen.menu.MachineIOMenu;
+import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -40,11 +41,6 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
         imageWidth = 176;
         imageHeight = 166;
         inventoryLabelY = 72;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
     }
 
     @Override
@@ -104,7 +100,7 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
                 mouseY
             );
         } else {
-            if (isAreaHovered(mouseX, mouseY, 133, 52, 18)) {
+            if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 133, 52, 18)) {
                 String text = menu.isAutoInputEnabled() ? "Disable" : "Enable";
                 graphics.renderTooltip(
                     font,
@@ -112,7 +108,7 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
                     mouseX,
                     mouseY
                 );
-            } else if (isAreaHovered(mouseX, mouseY, 151, 52, 18)) {
+            } else if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 151, 52, 18)) {
                 String text = menu.isAutoOutputEnabled() ? "Disable" : "Enable";
                 graphics.renderTooltip(
                     font,
@@ -120,21 +116,21 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
                     mouseX,
                     mouseY
                 );
-            } else if (isAreaHovered(mouseX, mouseY, 161, 3, 12)) {
+            } else if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 3, 12)) {
                 graphics.renderTooltip(
                     font,
                     Component.literal("Return"),
                     mouseX,
                     mouseY
                 );
-            } else if (isAreaHovered(mouseX, mouseY, 161, 19, 12)) {
+            } else if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 19, 12)) {
                 graphics.renderTooltip(
                     font,
                     Component.literal("Set all sides to blocked"),
                     mouseX,
                     mouseY
                 );
-            } else if (isAreaHovered(mouseX, mouseY, 161, 35, 12)) {
+            } else if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 35, 12)) {
                 graphics.renderTooltip(
                     font,
                     Component.literal("Toggle Colorblind Mode"),
@@ -147,13 +143,13 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && isAreaHovered(mouseX, mouseY, 161, 3, 12)) {
+        if (button == 0 && Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 3, 12)) {
             ModMessages.sendToServer(new SwitchMachineMenuPacket(menu.getBlockEntityPos(), false));
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;
         }
 
-        if (isAreaHovered(mouseX, mouseY, 161, 19, 12)) {
+        if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 19, 12)) {
             if (button == 0) {
                 for (BlockFace face : BlockFace.values()) {
                     ModMessages.sendToServer(new SetMachineIOModePacket(face, ItemSideMode.DISABLED));
@@ -169,7 +165,7 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
             return true;
         }
 
-        if (isAreaHovered(mouseX, mouseY, 161, 35, 12)) {
+        if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 161, 35, 12)) {
             if (button == 0) {
                 notColorBlind = !notColorBlind;
             }
@@ -178,7 +174,7 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
             return true;
         }
 
-        if (isAreaHovered(mouseX, mouseY, 133, 52, 18)) {
+        if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 133, 52, 18)) {
             if (button == 0) {
                 ModMessages.sendToServer(new ToggleMachineAutoIOPacket(true));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -186,7 +182,7 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
             }
         }
 
-        if (isAreaHovered(mouseX, mouseY, 151, 52, 18)) {
+        if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, 151, 52, 18)) {
             if (button == 0) {
                 ModMessages.sendToServer(new ToggleMachineAutoIOPacket(false));
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -215,21 +211,10 @@ public class MachineIOScreen extends BaseScreen<MachineIOMenu> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private boolean isAreaHovered(double mouseX, double mouseY, int x, int y, int width, int height) {
-        int areaX = leftPos + x;
-        int areaY = topPos + y;
-        return mouseX >= areaX && mouseX < areaX + width
-            && mouseY >= areaY && mouseY < areaY + height;
-    }
-
-    private boolean isAreaHovered(double mouseX, double mouseY, int x, int y, int size) {
-        return isAreaHovered(mouseX, mouseY, x, y, size, size);
-    }
-
     private BlockFace getHoveredFace(double mouseX, double mouseY) {
         for (BlockFace face : BlockFace.values()) {
             int[] position = FACE_POSITIONS[face.ordinal()];
-            if (isAreaHovered(mouseX, mouseY, position[0], position[1], 18)) {
+            if (Utility.isAreaHovered(mouseX, mouseY, leftPos, topPos, position[0], position[1], 18)) {
                 return face;
             }
         }

@@ -20,11 +20,23 @@ public abstract class BaseScreen<T extends AbstractContainerMenu> extends Abstra
     }
 
     @Override
+    protected void init() {
+        super.init();
+        this.inventoryLabelY = 10000;
+    }
+
+    @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, texture);
 
         pGuiGraphics.blit(texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.render(guiGraphics, mouseX, mouseY, delta);
+        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 }

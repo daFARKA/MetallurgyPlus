@@ -33,12 +33,6 @@ public class MachineScreen extends BaseScreen<MachineMenu> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.inventoryLabelY = 10000;
-    }
-
-    @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 
@@ -67,7 +61,6 @@ public class MachineScreen extends BaseScreen<MachineMenu> {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         super.render(guiGraphics, mouseX, mouseY, delta);
-        renderTooltip(guiGraphics, mouseX, mouseY);
 
         if (isIoButtonHovered(mouseX, mouseY)) {
             guiGraphics.renderTooltip(font, Component.literal("Configure IO"), mouseX, mouseY);

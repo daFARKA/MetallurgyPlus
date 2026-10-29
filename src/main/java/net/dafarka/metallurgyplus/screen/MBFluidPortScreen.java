@@ -22,12 +22,6 @@ public class MBFluidPortScreen extends BaseScreen<MBFluidPortMenu> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.inventoryLabelY = 10000;
-    }
-
-    @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
 

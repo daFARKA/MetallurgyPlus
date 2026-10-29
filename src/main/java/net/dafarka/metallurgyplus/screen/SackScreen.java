@@ -62,8 +62,6 @@ public class SackScreen extends BaseScreen<SackMenu> {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         renderItems(guiGraphics, mouseX, mouseY);
-
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     private void renderItems(GuiGraphics guiGraphics, int mouseX, int mouseY) {

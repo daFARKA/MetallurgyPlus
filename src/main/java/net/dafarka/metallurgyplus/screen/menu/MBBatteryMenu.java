@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.math.BigInteger;
 
-public class MBBatteryMenu extends BaseMenu {
+public class MBBatteryMenu extends MBBaseMenu {
     private final MBBatteryController blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -29,7 +29,7 @@ public class MBBatteryMenu extends BaseMenu {
     }
 
     public MBBatteryMenu(int containerId, Inventory inventory, BlockEntity blockEntity, ContainerData data) {
-        super(ModMenuTypes.MULTIBLOCK_BATTERY_MENU.get(), containerId, 0);
+        super(ModMenuTypes.MULTIBLOCK_BATTERY_MENU.get(), containerId, 0, data);
         this.blockEntity = (MBBatteryController) blockEntity;
         this.level = inventory.player.level();
         this.data = data;
@@ -49,10 +49,6 @@ public class MBBatteryMenu extends BaseMenu {
 
     public BigInteger getMaxEnergy() {
         return readEnergyValue(MBBatteryController.ENERGY_WORDS);
-    }
-
-    public boolean isFormed() {
-        return data.get(MBBatteryController.ENERGY_WORDS * 2) == 1;
     }
 
     public int getScaledEnergy() {

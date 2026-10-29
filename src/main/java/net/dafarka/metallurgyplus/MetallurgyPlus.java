@@ -194,7 +194,7 @@ public class MetallurgyPlus {
             MenuScreens.register(ModMenuTypes.MULTIBLOCK_BATTERY_MENU.get(), MBBatteryScreen::new);
             MenuScreens.register(ModMenuTypes.MULTIBLOCK_ITEM_PORT_MENU.get(), MBItemPortScreen::new);
             MenuScreens.register(ModMenuTypes.MULTIBLOCK_FLUID_PORT_MENU.get(), MBFluidPortScreen::new);
-            MenuScreens.register(ModMenuTypes.REACTOR_MENU.get(), ReactorScreen::new);
+            MenuScreens.register(ModMenuTypes.REACTOR_MENU.get(), MBReactorScreen::new);
         }
 
         @SubscribeEvent

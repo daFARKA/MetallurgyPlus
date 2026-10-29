@@ -19,6 +19,40 @@ public class Utility {
     private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
     /**
+     * Returns whether the mouse is within a GUI area, using coordinates relative to the GUI origin.
+     */
+    public static boolean isAreaHovered(
+        double mouseX,
+        double mouseY,
+        int guiLeft,
+        int guiTop,
+        int x,
+        int y,
+        int width,
+        int height
+    ) {
+        int areaX = guiLeft + x;
+        int areaY = guiTop + y;
+        return mouseX >= areaX && mouseX < areaX + width
+            && mouseY >= areaY && mouseY < areaY + height;
+    }
+
+    /**
+     * Returns whether the mouse is within a square GUI area, using coordinates relative to the GUI origin.
+     */
+    public static boolean isAreaHovered(
+        double mouseX,
+        double mouseY,
+        int guiLeft,
+        int guiTop,
+        int x,
+        int y,
+        int size
+    ) {
+        return isAreaHovered(mouseX, mouseY, guiLeft, guiTop, x, y, size, size);
+    }
+
+    /**
      * Gets an item from ForgeRegistries using the name.
      * <br>
      * The respecting item is given by a priority system. First ModItems are returned,

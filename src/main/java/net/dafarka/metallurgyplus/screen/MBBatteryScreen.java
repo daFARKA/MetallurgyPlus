@@ -8,18 +8,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MBBatteryScreen extends BaseScreen<MBBatteryMenu> {
+public class MBBatteryScreen extends MBBaseScreen<MBBatteryMenu> {
     private static final ResourceLocation TEXTURE =
         new ResourceLocation(MetallurgyPlus.MODID, "textures/gui/battery_gui.png");
 
     public MBBatteryScreen(MBBatteryMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, TEXTURE);
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.inventoryLabelY = 10000;
     }
 
     @Override
@@ -33,16 +27,6 @@ public class MBBatteryScreen extends BaseScreen<MBBatteryMenu> {
 
         graphics.drawString(font, "Stored: " + Utility.formatCompact(menu.getEnergyStored()) + " FE", x + 8, y + 21, 0x000000, false);
         graphics.drawString(font, "Capacity: " + Utility.formatCompact(menu.getMaxEnergy()) + " FE", x + 8, y + 34, 0x000000, false);
-
-        boolean formed = menu.isFormed();
-        graphics.drawString(
-            font,
-            formed ? "Structure formed" : "Structure incomplete",
-            x + 8,
-            y + 47,
-            formed ? 0x007000 : 0x900000,
-            false
-        );
     }
 
     @Override

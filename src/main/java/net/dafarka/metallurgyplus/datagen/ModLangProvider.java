@@ -38,8 +38,6 @@ public class ModLangProvider extends LanguageProvider {
 
         add("block.metallurgyplus.reactor", "Reactor");
 
-        add("message.metallurgyplus.multiblock.formed", "Multiblock formed");
-
         addCreativeTabsTranslations();
 
         add("tooltip.metallurgyplus.common", "Y-Level: 80 to -64");

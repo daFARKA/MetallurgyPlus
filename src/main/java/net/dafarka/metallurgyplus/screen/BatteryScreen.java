@@ -18,12 +18,6 @@ public class BatteryScreen extends BaseScreen<BatteryMenu> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.inventoryLabelY = 10000;
-    }
-
-    @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 
@@ -50,6 +44,5 @@ public class BatteryScreen extends BaseScreen<BatteryMenu> {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         super.render(guiGraphics, mouseX, mouseY, delta);
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 }

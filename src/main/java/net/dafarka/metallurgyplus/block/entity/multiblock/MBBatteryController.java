@@ -64,11 +64,11 @@ public class MBBatteryController extends MBControllerBlockEntity implements Menu
 
     public MBBatteryController(BlockEntityType<?> type, BlockPos pos, BlockState state, Supplier<BigEnergyStorage> storageSupplier) {
         super(type, pos, state, storageSupplier, "battery");
-        
+
         structureDefinition = BatteryStructureDefinition.create(getControllerName(), getEnergyInputPortName(), getEnergyOutputPortName());
     }
 
-    private static int getEnergyWord(BigInteger value, int wordIndex) {
+    public static int getEnergyWord(BigInteger value, int wordIndex) {
         return value.shiftRight(wordIndex * ENERGY_WORD_BITS).and(ENERGY_WORD_MASK).intValue();
     }
 

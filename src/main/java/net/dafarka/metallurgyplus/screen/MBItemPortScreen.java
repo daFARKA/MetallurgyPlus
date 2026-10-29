@@ -17,11 +17,6 @@ public class MBItemPortScreen extends BaseScreen<MBItemPortMenu> {
         imageHeight = 166;
     }
 
-    @Override
-    protected void init() {
-        super.init();
-        this.inventoryLabelY = 10000;
-    }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {

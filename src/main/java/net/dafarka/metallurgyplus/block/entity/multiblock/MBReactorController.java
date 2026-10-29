@@ -2,13 +2,14 @@ package net.dafarka.metallurgyplus.block.entity.multiblock;
 
 import net.dafarka.metallurgyplus.block.ModBlocks;
 import net.dafarka.metallurgyplus.energy.BigEnergyStorage;
-import net.dafarka.metallurgyplus.screen.menu.ReactorMenu;
+import net.dafarka.metallurgyplus.screen.menu.MBReactorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,11 +18,39 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 import java.util.function.Supplier;
 
+import static net.dafarka.metallurgyplus.block.entity.multiblock.MBBatteryController.*;
+
 public class MBReactorController extends MBControllerBlockEntity implements MenuProvider {
 
     private final MBStructureDefinition structureDefinition;
 
     private int fuelCellAmount = 1;
+
+    private final ContainerData menuData = new ContainerData() {
+        @Override
+        public int get(int index) {
+            if (index >= 0 && index < ENERGY_WORDS) {
+                return getEnergyWord(energyStorage.getEnergyStoredBig(), index);
+            }
+            if (index >= ENERGY_WORDS && index < ENERGY_WORDS * 2) {
+                return getEnergyWord(energyStorage.getMaxEnergyStoredBig(), index - ENERGY_WORDS);
+            }
+            if (index == ENERGY_WORDS * 2) {
+                return isFormed() ? 1 : 0;
+            }
+            return 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            // The battery screen only reads controller state.
+        }
+
+        @Override
+        public int getCount() {
+            return ENERGY_DATA_COUNT;
+        }
+    };
 
     public MBReactorController(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         this(
@@ -60,7 +89,7 @@ public class MBReactorController extends MBControllerBlockEntity implements Menu
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player pPlayer) {
-        return new ReactorMenu(containerId, playerInventory, this);
+        return new MBReactorMenu(containerId, playerInventory, this, menuData);
     }
 
     private static final class ReactorStructureDefinition {

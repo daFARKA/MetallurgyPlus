@@ -173,9 +173,7 @@ public class QuarryScreen extends BaseScreen<QuarryMenu> {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        renderBg(guiGraphics, delta, mouseX, mouseY);
         super.render(guiGraphics, mouseX, mouseY, delta);
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     private void renderStatus(GuiGraphics guiGraphics, int x, int y) {

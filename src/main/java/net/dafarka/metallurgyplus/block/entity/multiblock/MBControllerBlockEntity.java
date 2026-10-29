@@ -117,10 +117,6 @@ public abstract class MBControllerBlockEntity extends EnergyBlockEntity<BigEnerg
             onStructureInvalidated();
         }
 
-        if (!wasFormed && isNowFormed) {
-            notifyNearbyPlayers(Component.translatable("message.metallurgyplus.multiblock.formed"));
-        }
-
         return formedStructure != null;
     }
 
