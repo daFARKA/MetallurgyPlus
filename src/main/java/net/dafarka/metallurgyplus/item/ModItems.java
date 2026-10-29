@@ -670,8 +670,7 @@ public class ModItems {
             "reactor/energy_output",
             "reactor/item_input",
             "reactor/item_output",
-            "reactor/fluid_input",
-            "reactor/fluid_output"
+            "reactor/fluid_input"
         ));
 
         assert blockNames.contains("reactor/controller");

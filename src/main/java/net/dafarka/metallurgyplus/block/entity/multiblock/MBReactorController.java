@@ -27,7 +27,7 @@ public class MBReactorController extends MBControllerBlockEntity {
         super(type, pos, state, storageSupplier, "reactor");
 
         structureDefinition = ReactorStructureDefinition.create(getControllerName(), getEnergyOutputPortName(),
-            getItemInputPortName(), getItemOutputPortName(), getFluidInputPortName(), getFluidOutputPortName());
+            getItemInputPortName(), getItemOutputPortName(), getFluidInputPortName());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MBReactorController extends MBControllerBlockEntity {
     private static final class ReactorStructureDefinition {
         private static MBStructureDefinition create(String controllerName, String energyOutputPortName,
                                                     String itemInputPortName, String itemOutputPortName,
-                                                    String fluidInputPortName, String fluidOutputPortName) {
+                                                    String fluidInputPortName) {
             return MBStructureDefinition.rectangularPrism(5, 32, 3, 64)
                 .edges(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get("reactor/casing").get()))
                 .walls(state -> state.is(Blocks.GLASS)
@@ -48,7 +48,6 @@ public class MBReactorController extends MBControllerBlockEntity {
                     || state.is(ModBlocks.MULTIBLOCKS_MAP.get(itemInputPortName).get())
                     || state.is(ModBlocks.MULTIBLOCKS_MAP.get(itemOutputPortName).get())
                     || state.is(ModBlocks.MULTIBLOCKS_MAP.get(fluidInputPortName).get())
-                    || state.is(ModBlocks.MULTIBLOCKS_MAP.get(fluidOutputPortName).get())
                     || state.is(ModBlocks.MULTIBLOCKS_MAP.get(controllerName).get()))
                 .controller(state -> state.is(ModBlocks.MULTIBLOCKS_MAP.get(controllerName).get()))
                 .requireInterior(

@@ -23,6 +23,12 @@ public class MBItemPortScreen extends AbstractContainerScreen<MBItemPortMenu> {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        this.inventoryLabelY = 10000;
+    }
+
+    @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

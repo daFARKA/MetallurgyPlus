@@ -51,7 +51,6 @@ public class BatteryScreen extends AbstractContainerScreen<BatteryMenu> {
 
         String energyText = Utility.formatWithSeparator(energy, ',') + " / " + Utility.formatWithSeparator(maxEnergy, ',') + " FE";
 
-        // Draw centered or left-aligned text as you prefer
         guiGraphics.drawString(font, energyText, x + 10, y + 20, 0x000000, false);
     }
 

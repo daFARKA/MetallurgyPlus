@@ -18,12 +18,15 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 import java.util.List;
 
-public class CableBlock extends PipeBlock implements EntityBlock {
+public class CableBlock extends PipeBlock implements EntityBlock, LiquidBlockContainer {
     public static final int TRANSFER = 1000;
 
     private int tier;
@@ -119,6 +122,21 @@ public class CableBlock extends PipeBlock implements EntityBlock {
                                   LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         boolean connect = canConnectTo(level, neighborPos, facing.getOpposite());
         return state.setValue(PROPERTY_BY_DIRECTION.get(facing), connect);
+    }
+
+    @Override
+    public boolean canBeReplaced(BlockState state, Fluid fluid) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceLiquid(BlockGetter pLevel, BlockPos pPos, BlockState pState, Fluid pFluid) {
+        return false;
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidState) {
+        return false;
     }
 
     private boolean canConnectTo(BlockGetter level, BlockPos neighborPos, Direction directionFromNeighbor) {

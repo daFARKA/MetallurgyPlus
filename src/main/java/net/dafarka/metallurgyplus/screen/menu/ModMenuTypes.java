@@ -35,6 +35,9 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<MBItemPortMenu>> MULTIBLOCK_ITEM_PORT_MENU =
         registerMenuType("multiblock_item_port_menu", MBItemPortMenu::new);
 
+    public static final RegistryObject<MenuType<MBFluidPortMenu>> MULTIBLOCK_FLUID_PORT_MENU =
+        registerMenuType("multiblock_fluid_port_menu", MBFluidPortMenu::new);
+
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }
