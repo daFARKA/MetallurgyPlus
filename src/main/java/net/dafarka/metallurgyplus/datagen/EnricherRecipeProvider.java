@@ -65,7 +65,7 @@ public class EnricherRecipeProvider extends RecipeProvider {
                 Item pellet = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
                 Item chunk = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
                 Item fuel = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
-                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
+                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "-depleted").get();
 
                 inputSize = 1;
                 inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));
@@ -80,7 +80,7 @@ public class EnricherRecipeProvider extends RecipeProvider {
                     Item previous_pellet = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
                     Item previous_chunk = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
                     Item previous_fuel = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
-                    Item previous_fuel_depleted = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
+                    Item previous_fuel_depleted = ModItems.FISSION_MAP.get(prevTierName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "-depleted").get();
 
                     inputSize = 1;
                     inputItems = NonNullList.withSize(inputSize, new Item(new Item.Properties()));

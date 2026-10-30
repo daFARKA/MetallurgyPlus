@@ -60,8 +60,7 @@ public class ModLangProvider extends LanguageProvider {
         addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
-        addBaseItemMapTranslations(ModItems.GEM_MAP);
-        addBlockMapTranslations(ModBlocks.GEM_BLOCKS_MAP);
+        addMapsTranslations(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP);
         addItemMapTranslations(ModItems.FISSION_MAP);
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
@@ -114,7 +113,7 @@ public class ModLangProvider extends LanguageProvider {
     private void addCustomItemMapTranslations(Map<String, ? extends RegistryObject<? extends Item>> itemMap) {
         for (RegistryObject<? extends Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
-            String name = fullName.replace('_', ' ');
+            String name = getName(fullName);
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
@@ -233,21 +232,28 @@ public class ModLangProvider extends LanguageProvider {
      * Formats the name of an entity.
      *
      * @param fullName The full name of the entity, of the following form:
-     *                 name<-tag><_component>, where -tag and _component are optional.
-     *                 There can even be more tags or components, e.g: name<-tag1-tag2-tag3><_component><_component>
+     *                 name<-tag>_<component>, where -tag and component are optional.
+     *                 There can even be more tags or components, e.g: name<-tag1-tag2-tag3>_<component><-component1-component2>
      *
      * @return a nicely formatted name, such as: Name Tag Component
      */
     private String getName(String fullName) {
-        String[] componentParts = fullName.split("_");
-        String nameAndTags = componentParts[0];
+        String[] parts = fullName.split("_");
+        String nameAndTags;
+        String[] componentParts = new String[0];
+        if (parts.length == 2) {
+            nameAndTags = parts[0];
+            componentParts = parts[1].split("-");
+        } else {
+            nameAndTags = fullName;
+        }
 
         String[] tagParts = nameAndTags.split("-");
 
         String name = tagParts[0];
 
         String[] tags = Arrays.copyOfRange(tagParts, 1, tagParts.length);
-        String[] components = Arrays.copyOfRange(componentParts, 1, componentParts.length);
+        String[] components = componentParts;
 
         if (tags.length > 1 && name.equals("titanium")) {
             return getTitaniumAlloyName(tags) + " " + capitalizeFirstLetterEach(formatList(components));

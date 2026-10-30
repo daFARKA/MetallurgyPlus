@@ -48,6 +48,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildOreRecipes(pWriter);
         buildAlloyRecipes(pWriter);
         buildVanillaRecipes(pWriter);
+        buildGemRecipes(pWriter);
         buildFissionRecipes(pWriter);
 
         alloySmelterRecipeProvider.buildRecipes(pWriter);
@@ -64,6 +65,21 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildBatteryRecipes(pWriter);
         buildSackRecipes(pWriter);
         buildBlockEntitiesRecipes(pWriter);
+    }
+
+    private void addBlockRecipes(Consumer<FinishedRecipe> pWriter, String currentMaterialName, Item ingot, Block block) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block)
+            .pattern("XXX")
+            .pattern("XXX")
+            .pattern("XXX")
+            .define('X', ingot)
+            .unlockedBy(getHasName(ingot), has(ingot))
+            .save(pWriter, new ResourceLocation(MetallurgyPlus.MODID, "block/" + currentMaterialName + "_ingots_to_block"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot, 9)
+            .requires(block)
+            .unlockedBy(getHasName(block), has(block))
+            .save(pWriter, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingots_from_block"));
     }
 
     private void buildMaterialRecipes(Consumer<FinishedRecipe> pWriter) {
@@ -84,18 +100,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
                 Block block = ModBlocks.MATERIAL_BLOCKS_MAP.get(currentMaterialName + "_block").get();
 
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block)
-                    .pattern("XXX")
-                    .pattern("XXX")
-                    .pattern("XXX")
-                    .define('X', ingot)
-                    .unlockedBy(getHasName(ingot), has(ingot))
-                    .save(pWriter);
-
-                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot, 9)
-                    .requires(block)
-                    .unlockedBy(getHasName(block), has(block))
-                    .save(pWriter, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingots_from_block"));
+                addBlockRecipes(pWriter, currentMaterialName, ingot, block);
 
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ingot)
                     .pattern("XXX")
@@ -162,18 +167,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
                 Block block = ModBlocks.ALLOY_BLOCKS_MAP.get(currentMaterialName + "_block").get();
 
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block)
-                    .pattern("XXX")
-                    .pattern("XXX")
-                    .pattern("XXX")
-                    .define('X', ingot)
-                    .unlockedBy(getHasName(ingot), has(ingot))
-                    .save(pWriter);
-
-                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot, 9)
-                    .requires(block)
-                    .unlockedBy(getHasName(block), has(block))
-                    .save(pWriter, new ResourceLocation(MetallurgyPlus.MODID, currentMaterialName + "_ingots_from_block"));
+                addBlockRecipes(pWriter, currentMaterialName, ingot, block);
 
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ingot)
                     .pattern("XXX")
@@ -257,6 +251,25 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
+    private void buildGemRecipes(Consumer<FinishedRecipe> pWriter) {
+        List<String> oldMaterials = new ArrayList<>();
+        for (RegistryObject<Item> item : ModItems.GEM_MAP.values()) {
+            String currentName = item.getId().getPath();
+            String currentMaterialName = currentName.split("_")[0];
+            if (!oldMaterials.contains(currentMaterialName)) {
+                oldMaterials.add(currentMaterialName);
+
+                Item gem = ModItems.GEM_MAP.get(currentMaterialName + "_" + ModItems.GEM_COMPONENT_NAMES[0]).get();
+                Item gem_rod = ModItems.GEM_MAP.get(currentMaterialName + "_" + ModItems.GEM_COMPONENT_NAMES[1]).get();
+                Item gem_pickaxe_head = ModItems.GEM_MAP.get(currentMaterialName + "_" + ModItems.GEM_COMPONENT_NAMES[2]).get();
+
+                Block block = ModBlocks.GEM_BLOCKS_MAP.get(currentMaterialName + "_block").get();
+
+                addBlockRecipes(pWriter, currentMaterialName, gem, block);
+            }
+        }
+    }
+
     private void buildFissionRecipes(Consumer<FinishedRecipe> pWriter) {
         List<String> oldMaterials = new ArrayList<>();
         for (RegistryObject<Item> item : ModItems.FISSION_MAP.values()) {
@@ -268,7 +281,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 Item pellet = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[0]).get();
                 Item chunk = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[1]).get();
                 Item fuel = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2]).get();
-                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "_depleted").get();
+                Item fuel_depleted = ModItems.FISSION_MAP.get(currentMaterialName + "_" + ModItems.FISSION_COMPONENT_NAMES[2] + "-depleted").get();
 
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, pellet)
                     .pattern("XXX")

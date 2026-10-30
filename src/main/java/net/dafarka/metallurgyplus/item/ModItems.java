@@ -406,7 +406,7 @@ public class ModItems {
         return item;
     }
 
-    public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw"};
+    public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw", "pickaxe-head"};
 
     private static void registerMaterial(String materialName, int color) {
         for (String component : MATERIAL_COMPONENT_NAMES) {
@@ -451,7 +451,7 @@ public class ModItems {
         }
     }
 
-    public static final String[] ALLOY_COMPONENT_NAMES = {"ingot", "gear", "nugget", "plate", "rod"};
+    public static final String[] ALLOY_COMPONENT_NAMES = {"ingot", "gear", "nugget", "plate", "rod", "pickaxe-head"};
 
     private static void registerAlloy(String materialName, int color) {
         for (String component : ALLOY_COMPONENT_NAMES) {
@@ -471,7 +471,7 @@ public class ModItems {
         ModBlocks.ALLOY_COLOR_MAP.put(name, color);
     }
 
-    public static final String[] VANILLA_COMPONENT_NAMES = {"dust", "gear", "plate", "rod"};
+    public static final String[] VANILLA_COMPONENT_NAMES = {"dust", "gear", "plate", "rod", "pickaxe-head"};
 
     private static void registerVanilla(String materialName, int color) {
         for (String component : VANILLA_COMPONENT_NAMES) {
@@ -484,7 +484,7 @@ public class ModItems {
         }
     }
 
-    public static final String[] GEM_COMPONENT_NAMES = {"gem"};
+    public static final String[] GEM_COMPONENT_NAMES = {"gem", "rod", "pickaxe-head"};
 
     private static void registerGem(String gemName, int color) {
         for (String component : GEM_COMPONENT_NAMES) {
@@ -504,7 +504,7 @@ public class ModItems {
         ModBlocks.GEM_COLOR_MAP.put(name, color);
     }
 
-    public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel"};
+    public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel", "fuel-depleted"};
 
     private static void registerFission(String fissionName, int color, int fissionTier) {
         FISSION_TIER_LIST.add(fissionTier, fissionName);
@@ -515,15 +515,13 @@ public class ModItems {
                 new Item(new Item.Properties())
             );
             FISSION_MAP.put(name, item);
+
+            if (component.equals("fuel-depleted")) {
+                color = Utility.darkenColor(color, 0.75f);
+            }
+
             FISSION_COLOR_MAP.put(name, color);
         }
-
-        String depletedName = fissionName + "_fuel_depleted";
-        RegistryObject<Item> depletedItem = ITEMS.register(depletedName, () ->
-            new Item(new Item.Properties())
-        );
-        FISSION_MAP.put(depletedName, depletedItem);
-        FISSION_COLOR_MAP.put(depletedName, Utility.darkenColor(color, 0.75f));
     }
 
     private static void registerTierItem(int tier, int color, String itemName, Map<Integer, RegistryObject<Item>> itemMap, Map<Integer, Integer> colorMap) {
