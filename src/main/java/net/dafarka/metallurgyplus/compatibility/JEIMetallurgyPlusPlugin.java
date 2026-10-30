@@ -8,14 +8,21 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.dafarka.metallurgyplus.MetallurgyPlus;
 import net.dafarka.metallurgyplus.block.ModBlocks;
+import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.item.tool.ModularPickaxeItem;
+import net.dafarka.metallurgyplus.item.tool.ModularTool;
 import net.dafarka.metallurgyplus.recipe.MachineRecipe;
 import net.dafarka.metallurgyplus.recipe.MachineRecipeWithExtraOutputs;
 import net.dafarka.metallurgyplus.recipe.ModRecipeTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
@@ -28,6 +35,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
     private MachineRecipeWithExtraOutputsCategory extractorCategory;
     private MachineRecipeWithExtraOutputsCategory gemstoneCutterCategory;
     private MachineRecipeWithExtraOutputsCategory enricherCategory;
+    private ModularToolRecipeCategory modularToolCategory;
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -80,6 +88,8 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             ModBlocks.ENRICHER.get()
         );
 
+        modularToolCategory = new ModularToolRecipeCategory(guiHelper);
+
         registration.addRecipeCategories(
             alloySmelterCategory,
             oreProcessingUnitCategory,
@@ -87,7 +97,8 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             pressCategory,
             extractorCategory,
             gemstoneCutterCategory,
-            enricherCategory
+            enricherCategory,
+            modularToolCategory
         );
     }
 
@@ -110,6 +121,7 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
         registration.addRecipes(extractorCategory.getRecipeType(), extractorRecipes);
         registration.addRecipes(gemstoneCutterCategory.getRecipeType(), gemstoneCutterRecipes);
         registration.addRecipes(enricherCategory.getRecipeType(), enricherRecipes);
+        registration.addRecipes(modularToolCategory.getRecipeType(), createModularToolExamples());
     }
 
     @Override
@@ -153,5 +165,81 @@ public class JEIMetallurgyPlusPlugin implements IModPlugin {
             new ItemStack(ModBlocks.ENRICHER.get()),
             enricherCategory.getRecipeType()
         );
+
+        registration.addRecipeCatalyst(
+            new ItemStack(Items.CRAFTING_TABLE),
+            modularToolCategory.getRecipeType()
+        );
+    }
+
+    private static List<ModularToolJeiRecipe> createModularToolExamples() {
+        Item ironHead = ModItems.VANILLA_MAP.get("iron_pickaxe-head").get();
+        Item ironRod = ModItems.VANILLA_MAP.get("iron_rod").get();
+        ModularPickaxeItem pickaxe = ModItems.MODULAR_PICKAXE.get();
+        ItemStack defaultPickaxe = pickaxe.createConfiguredStack(new ItemStack(ironHead), new ItemStack(ironRod));
+
+        List<ModularToolJeiRecipe> recipes = new ArrayList<>();
+
+        List<ItemStack> assemblyInputs = emptyCraftingGrid();
+        assemblyInputs.set(0, new ItemStack(ironHead));
+        assemblyInputs.set(1, new ItemStack(ironRod));
+        recipes.add(new ModularToolJeiRecipe(
+            assemblyInputs,
+            defaultPickaxe
+        ));
+
+        ItemStack damagedPickaxe = defaultPickaxe.copy();
+        damagedPickaxe.getOrCreateTag().putInt(
+            ModularTool.CUSTOM_DAMAGE_TAG,
+            Math.max(1, pickaxe.getMaxDurability(damagedPickaxe) / 2)
+        );
+        ItemStack repairedPickaxe = damagedPickaxe.copy();
+        pickaxe.repair(repairedPickaxe, Math.max(1, pickaxe.getMaxDurability(repairedPickaxe) / 4));
+        List<ItemStack> repairInputs = emptyCraftingGrid();
+        repairInputs.set(0, damagedPickaxe);
+        repairInputs.set(1, new ItemStack(Items.IRON_INGOT));
+        recipes.add(new ModularToolJeiRecipe(repairInputs, repairedPickaxe));
+
+        ItemStack speedPickaxe = defaultPickaxe.copy();
+        pickaxe.addMiningSpeedBonus(speedPickaxe, 0.5F);
+        pickaxe.setModifiers(speedPickaxe, pickaxe.getModifiers(defaultPickaxe) - 1);
+        recipes.add(new ModularToolJeiRecipe(
+            createModifierInputs(Items.REDSTONE_BLOCK, defaultPickaxe),
+            speedPickaxe
+        ));
+
+        ItemStack fortunePickaxe = defaultPickaxe.copy();
+        pickaxe.addFortuneBonus(fortunePickaxe, 0.5F);
+        pickaxe.setModifiers(fortunePickaxe, pickaxe.getModifiers(defaultPickaxe) - 1);
+        recipes.add(new ModularToolJeiRecipe(
+            createModifierInputs(Items.LAPIS_BLOCK, defaultPickaxe),
+            fortunePickaxe
+        ));
+
+        ItemStack silkTouchPickaxe = defaultPickaxe.copy();
+        pickaxe.addSilkTouch(silkTouchPickaxe);
+        pickaxe.setModifiers(silkTouchPickaxe, pickaxe.getModifiers(defaultPickaxe) - 1);
+        recipes.add(new ModularToolJeiRecipe(
+            createModifierInputs(Items.AMETHYST_BLOCK, defaultPickaxe),
+            silkTouchPickaxe
+        ));
+
+        return recipes;
+    }
+
+    private static List<ItemStack> createModifierInputs(Item material, ItemStack tool) {
+        List<ItemStack> inputs = emptyCraftingGrid();
+        for (int slot = 0; slot < 9; slot++) {
+            if (slot == 4) {
+                inputs.set(slot, tool.copy());
+            } else {
+                inputs.set(slot, new ItemStack(material));
+            }
+        }
+        return inputs;
+    }
+
+    private static List<ItemStack> emptyCraftingGrid() {
+        return new ArrayList<>(Collections.nCopies(9, ItemStack.EMPTY));
     }
 }

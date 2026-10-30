@@ -13,10 +13,15 @@ import net.dafarka.metallurgyplus.block.multiblock.MBEnergyPortBlock;
 import net.dafarka.metallurgyplus.block.multiblock.MBFluidPortBlock;
 import net.dafarka.metallurgyplus.block.multiblock.MBItemPortBlock;
 import net.dafarka.metallurgyplus.item.sack.SackItem;
+import net.dafarka.metallurgyplus.item.tool.ModTools;
+import net.dafarka.metallurgyplus.item.tool.ModularPickaxeItem;
+import net.dafarka.metallurgyplus.item.tool.ModularToolPartItem;
+import net.dafarka.metallurgyplus.item.tool.ModularToolStats;
 import net.dafarka.metallurgyplus.util.OreRarity;
 import net.dafarka.metallurgyplus.util.Utility;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
@@ -39,6 +44,7 @@ import java.util.function.Supplier;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MetallurgyPlus.MODID);
+    private static final ModularToolStats DEFAULT_TOOL_STATS = new ModularToolStats(100, 2.0F, 1.2F);
 
     private static final List<Integer> TIER_COLORS = List.of(
         0x000000, // Tier 0: Base / Neutral
@@ -127,6 +133,9 @@ public class ModItems {
             true
         ));
 
+    public static final RegistryObject<ModularPickaxeItem> MODULAR_PICKAXE = ITEMS.register("modular_pickaxe",
+        () -> new ModularPickaxeItem(new Item.Properties().stacksTo(1)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
 
@@ -153,67 +162,67 @@ public class ModItems {
         registerCustomItem("fertilizer", BoneMealItem::new);
 
         // Base Materials
-        registerMaterial("aluminum", 0xb9f0f0);
-        registerMaterial("antimony", 0x5465c4);
-        registerMaterial("barium", 0x8c8f85);
-        registerMaterial("beryllium", 0xb5b5b5);
-        registerMaterial("bismuth", 0xbbc4c3);
-        registerMaterial("boron", 0xd9d9d9);
-        registerMaterial("cadmium", 0x56549e);
-        registerMaterial("calcium", 0xa3b5b8);
-        registerMaterial("cerium", 0x5e7c80);
-        registerMaterial("chromium", 0xf5fffb);
-        registerMaterial("cobalt", 0x00108a);
-        registerMaterial("dysprosium", 0x23825d);
-        registerMaterial("erbium", 0x916678);
-        registerMaterial("europium", 0x9e8552);
-        registerMaterial("gadolinium", 0x0a4d33);
-        registerMaterial("gallium", 0x84ada2);
-        registerMaterial("germanium", 0xc9c7ad);
-        registerMaterial("graphite", 0x1a1a1a);
-        registerMaterial("hafnium", 0x8f8281);
-        registerMaterial("holmium", 0x3e635b);
-        registerMaterial("indium", 0xb7bdc7);
-        registerMaterial("iridium", 0xc4f8ff);
-        registerMaterial("lanthanum", 0x232621);
-        registerMaterial("lead", 0x534a6b);
-        registerMaterial("lithium", 0x9db5c9);
-        registerMaterial("lutetium", 0x6c7891);
-        registerMaterial("magnesium", 0xe6e8e8);
-        registerMaterial("manganese", 0xe3e3d5);
-        registerMaterial("molybdenum", 0x7a6f77);
-        registerMaterial("neodymium", 0xe3a1c4);
-        registerMaterial("nickel", 0xc4ac93);
-        registerMaterial("niobium", 0x455075);
-        registerMaterial("osmium", 0x457bd9);
-        registerMaterial("palladium", 0xdbdbdb);
-        registerMaterial("praseodymium", 0x9c9370);
-        registerMaterial("promethium", 0xeb3f4e);
-        registerMaterial("platinum", 0xc5e6e5);
-        registerMaterial("rhenium", 0x5e5e5e);
-        registerMaterial("rhodium", 0x362f26);
-        registerMaterial("ruthenium", 0xcfc8c6);
-        registerMaterial("samarium", 0xf5ffc9);
-        registerMaterial("selenium", 0x262625);
-        registerMaterial("scandium", 0xf2bcac);
-        registerMaterial("silver", 0xcccccc);
-        registerMaterial("tantalum", 0xc1a3e3);
-        registerMaterial("technetium", 0x808691);
-        registerMaterial("tellurium", 0xa0cdfa);
-        registerMaterial("terbium", 0xffebfa);
-        registerMaterial("thallium", 0x2c2e27);
-        registerMaterial("thorium", 0x12151a);
-        registerMaterial("thulium", 0x826d6f);
-        registerMaterial("tin", 0x9e9e9e);
-        registerMaterial("titanium", 0xb1a8ff);
-        registerMaterial("tungsten", 0x47474a);
-        registerMaterial("uranium", 0x00702d);
-        registerMaterial("vanadium", 0x304230);
-        registerMaterial("ytterbium", 0x979c6b);
-        registerMaterial("yttrium", 0xdbdec1);
-        registerMaterial("zinc", 0xc7fff8);
-        registerMaterial("zirconium", 0x705a43);
-        registerMaterial("arsenic", 0x6b7075);
+        registerMaterial("aluminum", 0xb9f0f0, DEFAULT_TOOL_STATS);
+        registerMaterial("antimony", 0x5465c4, DEFAULT_TOOL_STATS);
+        registerMaterial("barium", 0x8c8f85, DEFAULT_TOOL_STATS);
+        registerMaterial("beryllium", 0xb5b5b5, DEFAULT_TOOL_STATS);
+        registerMaterial("bismuth", 0xbbc4c3, DEFAULT_TOOL_STATS);
+        registerMaterial("boron", 0xd9d9d9, DEFAULT_TOOL_STATS);
+        registerMaterial("cadmium", 0x56549e, DEFAULT_TOOL_STATS);
+        registerMaterial("calcium", 0xa3b5b8, DEFAULT_TOOL_STATS);
+        registerMaterial("cerium", 0x5e7c80, DEFAULT_TOOL_STATS);
+        registerMaterial("chromium", 0xf5fffb, DEFAULT_TOOL_STATS);
+        registerMaterial("cobalt", 0x00108a, DEFAULT_TOOL_STATS);
+        registerMaterial("dysprosium", 0x23825d, DEFAULT_TOOL_STATS);
+        registerMaterial("erbium", 0x916678, DEFAULT_TOOL_STATS);
+        registerMaterial("europium", 0x9e8552, DEFAULT_TOOL_STATS);
+        registerMaterial("gadolinium", 0x0a4d33, DEFAULT_TOOL_STATS);
+        registerMaterial("gallium", 0x84ada2, DEFAULT_TOOL_STATS);
+        registerMaterial("germanium", 0xc9c7ad, DEFAULT_TOOL_STATS);
+        registerMaterial("graphite", 0x1a1a1a, DEFAULT_TOOL_STATS);
+        registerMaterial("hafnium", 0x8f8281, DEFAULT_TOOL_STATS);
+        registerMaterial("holmium", 0x3e635b, DEFAULT_TOOL_STATS);
+        registerMaterial("indium", 0xb7bdc7, DEFAULT_TOOL_STATS);
+        registerMaterial("iridium", 0xc4f8ff, DEFAULT_TOOL_STATS);
+        registerMaterial("lanthanum", 0x232621, DEFAULT_TOOL_STATS);
+        registerMaterial("lead", 0x534a6b, DEFAULT_TOOL_STATS);
+        registerMaterial("lithium", 0x9db5c9, DEFAULT_TOOL_STATS);
+        registerMaterial("lutetium", 0x6c7891, DEFAULT_TOOL_STATS);
+        registerMaterial("magnesium", 0xe6e8e8, DEFAULT_TOOL_STATS);
+        registerMaterial("manganese", 0xe3e3d5, DEFAULT_TOOL_STATS);
+        registerMaterial("molybdenum", 0x7a6f77, DEFAULT_TOOL_STATS);
+        registerMaterial("neodymium", 0xe3a1c4, DEFAULT_TOOL_STATS);
+        registerMaterial("nickel", 0xc4ac93, DEFAULT_TOOL_STATS);
+        registerMaterial("niobium", 0x455075, DEFAULT_TOOL_STATS);
+        registerMaterial("osmium", 0x457bd9, DEFAULT_TOOL_STATS);
+        registerMaterial("palladium", 0xdbdbdb, DEFAULT_TOOL_STATS);
+        registerMaterial("praseodymium", 0x9c9370, DEFAULT_TOOL_STATS);
+        registerMaterial("promethium", 0xeb3f4e, DEFAULT_TOOL_STATS);
+        registerMaterial("platinum", 0xc5e6e5, DEFAULT_TOOL_STATS);
+        registerMaterial("rhenium", 0x5e5e5e, DEFAULT_TOOL_STATS);
+        registerMaterial("rhodium", 0x362f26, DEFAULT_TOOL_STATS);
+        registerMaterial("ruthenium", 0xcfc8c6, DEFAULT_TOOL_STATS);
+        registerMaterial("samarium", 0xf5ffc9, DEFAULT_TOOL_STATS);
+        registerMaterial("selenium", 0x262625, DEFAULT_TOOL_STATS);
+        registerMaterial("scandium", 0xf2bcac, DEFAULT_TOOL_STATS);
+        registerMaterial("silver", 0xcccccc, DEFAULT_TOOL_STATS);
+        registerMaterial("tantalum", 0xc1a3e3, DEFAULT_TOOL_STATS);
+        registerMaterial("technetium", 0x808691, DEFAULT_TOOL_STATS);
+        registerMaterial("tellurium", 0xa0cdfa, DEFAULT_TOOL_STATS);
+        registerMaterial("terbium", 0xffebfa, DEFAULT_TOOL_STATS);
+        registerMaterial("thallium", 0x2c2e27, DEFAULT_TOOL_STATS);
+        registerMaterial("thorium", 0x12151a, DEFAULT_TOOL_STATS);
+        registerMaterial("thulium", 0x826d6f, DEFAULT_TOOL_STATS);
+        registerMaterial("tin", 0x9e9e9e, DEFAULT_TOOL_STATS);
+        registerMaterial("titanium", 0xb1a8ff, DEFAULT_TOOL_STATS);
+        registerMaterial("tungsten", 0x47474a, DEFAULT_TOOL_STATS);
+        registerMaterial("uranium", 0x00702d, DEFAULT_TOOL_STATS);
+        registerMaterial("vanadium", 0x304230, DEFAULT_TOOL_STATS);
+        registerMaterial("ytterbium", 0x979c6b, DEFAULT_TOOL_STATS);
+        registerMaterial("yttrium", 0xdbdec1, DEFAULT_TOOL_STATS);
+        registerMaterial("zinc", 0xc7fff8, DEFAULT_TOOL_STATS);
+        registerMaterial("zirconium", 0x705a43, DEFAULT_TOOL_STATS);
+        registerMaterial("arsenic", 0x6b7075, DEFAULT_TOOL_STATS);
 
         // Ores
         registerOre("gibbsite", 0x52695a, OreRarity.UNCOMMON);  // Aluminum
@@ -274,96 +283,96 @@ public class ModItems {
         registerOre("vanadinite", 0x8a2000, OreRarity.VERY_RARE); // Vanadium, Lead - [Wulfenite]
 
         // Alloys
-        registerAlloy("steel", 0x707070); // Iron, Coal
-        registerAlloy("wrought-iron", 0x242020); // Steel, Iron
-        registerAlloy("pig-iron", 0xe3ccb1); // Wrought Iron, Sand
-        registerAlloy("stainless-steel", 0xe0e0e0); // Steel, Chromium, Nickel, Molybdenum
-        registerAlloy("spring-steel", 0xb5b5b5); // Steel, Silicon
-        registerAlloy("tungsten-steel", 0xbcccd1); // Steel, Tungsten
-        registerAlloy("vanadium-steel", 0x344234); // Steel, Vanadium
-        registerAlloy("invar", 0x9c9a84); // Iron, Nickel
-        registerAlloy("maraging-steel-1", 0x98bad9); // Steel, Nickel, Cobalt, Molybdenum, Aluminum
-        registerAlloy("maraging-steel-2", 0x284866); // Steel, Nickel, Cobalt, Molybdenum, Titanium
-        registerAlloy("maraging-steel-3", 0x677d91); // Steel, Nickel, Cobalt, Molybdenum, Niobium
-        registerAlloy("manganese-steel", 0x211d24); // Steel, Manganese
-        registerAlloy("bronze", 0xd9a84e); // Copper, Tin
-        registerAlloy("brass", 0xc9b134); // Copper, Zinc
-        registerAlloy("zamak", 0xabd1de); // Aluminum, Zinc
-        registerAlloy("aluminum-scandium", 0xd0f1f5); // Aluminum, Scandium
-        registerAlloy("aluminum-zirconium", 0xdaf4f7); // Aluminum, Zirconium
-        registerAlloy("aluminum-magnesium", 0x5a676b); // Aluminum, Magnesium
-        registerAlloy("aluminum-magnesium-zinc", 0x998776); // Aluminum, Magnesium, Zinc
-        registerAlloy("nichrome", 0x526275); // Nickel, Chromium
-        registerAlloy("cobalt-chromium", 0x010538); // Cobalt, Chromium
-        registerAlloy("cupronickel", 0x9c7a59); // Copper, Nickel
-        registerAlloy("solder", 0xc8c5ed); // Lead, Tin
-        registerAlloy("nitinol", 0x918a9e); // Nickel, Titanium
-        registerAlloy("spring-copper", 0xff7e33); // Copper, Beryllium
-        registerAlloy("titanium-8al-1mo-1v", 0x1b0933); // Titanium, Aluminum, Molybdenum, Vanadium
-        registerAlloy("titanium-6al-2sn-4zr-2mo", 0x1e152b); // Titanium, Aluminum, Tin, Zirconium, Molybdenum
-        registerAlloy("titanium-6al-4v", 0x180630); // Titanium, Aluminum, Vanadium
-        registerAlloy("titanium-6al-7nb", 0x270f4a); // Titanium, Aluminum, Niobium
-        registerAlloy("titanium-10v-2fe-3al", 0x0d021c); // Titanium, Vanadium, Iron, Aluminum
-        registerAlloy("niobium-titanium", 0x1e1e26); // Niobium, Titanium
-        registerAlloy("electrum", 0xfff5a6); // Gold, Silver
-        registerAlloy("mischmetal", 0x496154); // Cerium, Lanthanum, Neodymium
-        registerAlloy("terbium-dysprosium", 0x7f81a3); // Terbium, Dysprosium
-        registerAlloy("neodymium-iron-boron", 0xf7f6eb); // Neodymium, Iron, Boron
-        registerAlloy("lanthanum-nickel", 0x8f8c6e); // Lanthanum, Nickel
-        registerAlloy("copper-praseodymium", 0x756b59); // Copper, Praseodymium
-        registerAlloy("samarium-cobalt", 0x86959e); // Samarium, Cobalt
-        registerAlloy("gadolinium-silicon-germanium", 0x64757d); // Gadolinium, Silicon, Germanium
-        registerAlloy("pewter", 0xbecfce); // Tin, Antimony
-        registerAlloy("arsenic-lead", 0x77747d); // Arsenic, Lead
-        registerAlloy("gallium-arsenide", 0x434d49); // Gallium, Arsenic
+        registerAlloy("steel", 0x707070, DEFAULT_TOOL_STATS); // Iron, Coal
+        registerAlloy("wrought-iron", 0x242020, DEFAULT_TOOL_STATS); // Steel, Iron
+        registerAlloy("pig-iron", 0xe3ccb1, DEFAULT_TOOL_STATS); // Wrought Iron, Sand
+        registerAlloy("stainless-steel", 0xe0e0e0, DEFAULT_TOOL_STATS); // Steel, Chromium, Nickel, Molybdenum
+        registerAlloy("spring-steel", 0xb5b5b5, DEFAULT_TOOL_STATS); // Steel, Silicon
+        registerAlloy("tungsten-steel", 0xbcccd1, DEFAULT_TOOL_STATS); // Steel, Tungsten
+        registerAlloy("vanadium-steel", 0x344234, DEFAULT_TOOL_STATS); // Steel, Vanadium
+        registerAlloy("invar", 0x9c9a84, DEFAULT_TOOL_STATS); // Iron, Nickel
+        registerAlloy("maraging-steel-1", 0x98bad9, DEFAULT_TOOL_STATS); // Steel, Nickel, Cobalt, Molybdenum, Aluminum
+        registerAlloy("maraging-steel-2", 0x284866, DEFAULT_TOOL_STATS); // Steel, Nickel, Cobalt, Molybdenum, Titanium
+        registerAlloy("maraging-steel-3", 0x677d91, DEFAULT_TOOL_STATS); // Steel, Nickel, Cobalt, Molybdenum, Niobium
+        registerAlloy("manganese-steel", 0x211d24, DEFAULT_TOOL_STATS); // Steel, Manganese
+        registerAlloy("bronze", 0xd9a84e, DEFAULT_TOOL_STATS); // Copper, Tin
+        registerAlloy("brass", 0xc9b134, DEFAULT_TOOL_STATS); // Copper, Zinc
+        registerAlloy("zamak", 0xabd1de, DEFAULT_TOOL_STATS); // Aluminum, Zinc
+        registerAlloy("aluminum-scandium", 0xd0f1f5, DEFAULT_TOOL_STATS); // Aluminum, Scandium
+        registerAlloy("aluminum-zirconium", 0xdaf4f7, DEFAULT_TOOL_STATS); // Aluminum, Zirconium
+        registerAlloy("aluminum-magnesium", 0x5a676b, DEFAULT_TOOL_STATS); // Aluminum, Magnesium
+        registerAlloy("aluminum-magnesium-zinc", 0x998776, DEFAULT_TOOL_STATS); // Aluminum, Magnesium, Zinc
+        registerAlloy("nichrome", 0x526275, DEFAULT_TOOL_STATS); // Nickel, Chromium
+        registerAlloy("cobalt-chromium", 0x010538, DEFAULT_TOOL_STATS); // Cobalt, Chromium
+        registerAlloy("cupronickel", 0x9c7a59, DEFAULT_TOOL_STATS); // Copper, Nickel
+        registerAlloy("solder", 0xc8c5ed, DEFAULT_TOOL_STATS); // Lead, Tin
+        registerAlloy("nitinol", 0x918a9e, DEFAULT_TOOL_STATS); // Nickel, Titanium
+        registerAlloy("spring-copper", 0xff7e33, DEFAULT_TOOL_STATS); // Copper, Beryllium
+        registerAlloy("titanium-8al-1mo-1v", 0x1b0933, DEFAULT_TOOL_STATS); // Titanium, Aluminum, Molybdenum, Vanadium
+        registerAlloy("titanium-6al-2sn-4zr-2mo", 0x1e152b, DEFAULT_TOOL_STATS); // Titanium, Aluminum, Tin, Zirconium, Molybdenum
+        registerAlloy("titanium-6al-4v", 0x180630, DEFAULT_TOOL_STATS); // Titanium, Aluminum, Vanadium
+        registerAlloy("titanium-6al-7nb", 0x270f4a, DEFAULT_TOOL_STATS); // Titanium, Aluminum, Niobium
+        registerAlloy("titanium-10v-2fe-3al", 0x0d021c, DEFAULT_TOOL_STATS); // Titanium, Vanadium, Iron, Aluminum
+        registerAlloy("niobium-titanium", 0x1e1e26, DEFAULT_TOOL_STATS); // Niobium, Titanium
+        registerAlloy("electrum", 0xfff5a6, DEFAULT_TOOL_STATS); // Gold, Silver
+        registerAlloy("mischmetal", 0x496154, DEFAULT_TOOL_STATS); // Cerium, Lanthanum, Neodymium
+        registerAlloy("terbium-dysprosium", 0x7f81a3, DEFAULT_TOOL_STATS); // Terbium, Dysprosium
+        registerAlloy("neodymium-iron-boron", 0xf7f6eb, DEFAULT_TOOL_STATS); // Neodymium, Iron, Boron
+        registerAlloy("lanthanum-nickel", 0x8f8c6e, DEFAULT_TOOL_STATS); // Lanthanum, Nickel
+        registerAlloy("copper-praseodymium", 0x756b59, DEFAULT_TOOL_STATS); // Copper, Praseodymium
+        registerAlloy("samarium-cobalt", 0x86959e, DEFAULT_TOOL_STATS); // Samarium, Cobalt
+        registerAlloy("gadolinium-silicon-germanium", 0x64757d, DEFAULT_TOOL_STATS); // Gadolinium, Silicon, Germanium
+        registerAlloy("pewter", 0xbecfce, DEFAULT_TOOL_STATS); // Tin, Antimony
+        registerAlloy("arsenic-lead", 0x77747d, DEFAULT_TOOL_STATS); // Arsenic, Lead
+        registerAlloy("gallium-arsenide", 0x434d49, DEFAULT_TOOL_STATS); // Gallium, Arsenic
 
         // Vanilla Items
-        registerVanilla("iron", 0xffffff);
-        registerVanilla("copper", 0xe77c56);
-        registerVanilla("gold", 0xfdf55f);
-        registerVanilla("netherite", 0x31292a);
-        registerVanilla("diamond", 0xa1fbe8);
-        registerVanilla("emerald", 0x17dd62);
+        registerVanilla("iron", 0xffffff, DEFAULT_TOOL_STATS);
+        registerVanilla("copper", 0xe77c56, DEFAULT_TOOL_STATS);
+        registerVanilla("gold", 0xfdf55f, DEFAULT_TOOL_STATS);
+        registerVanilla("netherite", 0x31292a, DEFAULT_TOOL_STATS);
+        registerVanilla("diamond", 0xa1fbe8, DEFAULT_TOOL_STATS);
+        registerVanilla("emerald", 0x17dd62, DEFAULT_TOOL_STATS);
 
         // Gemstones
-        registerGem("ruby", 0xD21F3C);
-        registerGem("sapphire", 0x2855C5);
-        registerGem("peridot", 0x8FBF3F);
-        registerGem("aquamarine", 0x69D9D0);
-        registerGem("apatite", 0x82fff9);
-        registerGem("azurite", 0x00095c);
-        registerGem("red-beryl", 0xc7354a);
-        registerGem("morganite", 0xe8a9a5);
-        registerGem("chrysoberyl", 0xe2ff52);
-        registerGem("cinnabar", 0xbf3232);
-        registerGem("clinohumite", 0x9c3111);
-        registerGem("dioptase", 0x2c9980);
-        registerGem("ekanite", 0x53784e);
-        registerGem("amazonite", 0x00ffea);
-        registerGem("moonstone", 0xe0f6ff);
-        registerGem("sunstone", 0xffab5c);
-        registerGem("fluorite", 0xe4c9ff);
-        registerGem("garnet", 0xa32017);
-        registerGem("helenite", 0x59ff78);
-        registerGem("jade", 0x009c4b);
-        registerGem("jasper", 0xff7000);
-        registerGem("lazulite", 0x001b91);
-        registerGem("lazurite", 0x001363);
-        registerGem("malachite", 0x56cc9b);
-        registerGem("moissanite", 0x6e767d);
-        registerGem("opal", 0xffffff);
-        registerGem("black-opal", 0x141414);
-        registerGem("fire-opal", 0xb53300);
-        registerGem("purpurite", 0x6600ba);
-        registerGem("citrine", 0xfffa9e);
-        registerGem("scorodite", 0x1e396b);
-        registerGem("hiddenite", 0x84d193);
-        registerGem("titanite", 0xc7db51);
-        registerGem("topaz", 0xff892e);
-        registerGem("triplite", 0xff7e47);
-        registerGem("turquoise", 0x40e0d0);
-        registerGem("wulfenite", 0xff8469);
-        registerGem("zircon", 0xd9c3bf);
+        registerGem("ruby", 0xD21F3C, DEFAULT_TOOL_STATS);
+        registerGem("sapphire", 0x2855C5, DEFAULT_TOOL_STATS);
+        registerGem("peridot", 0x8FBF3F, DEFAULT_TOOL_STATS);
+        registerGem("aquamarine", 0x69D9D0, DEFAULT_TOOL_STATS);
+        registerGem("apatite", 0x82fff9, DEFAULT_TOOL_STATS);
+        registerGem("azurite", 0x00095c, DEFAULT_TOOL_STATS);
+        registerGem("red-beryl", 0xc7354a, DEFAULT_TOOL_STATS);
+        registerGem("morganite", 0xe8a9a5, DEFAULT_TOOL_STATS);
+        registerGem("chrysoberyl", 0xe2ff52, DEFAULT_TOOL_STATS);
+        registerGem("cinnabar", 0xbf3232, DEFAULT_TOOL_STATS);
+        registerGem("clinohumite", 0x9c3111, DEFAULT_TOOL_STATS);
+        registerGem("dioptase", 0x2c9980, DEFAULT_TOOL_STATS);
+        registerGem("ekanite", 0x53784e, DEFAULT_TOOL_STATS);
+        registerGem("amazonite", 0x00ffea, DEFAULT_TOOL_STATS);
+        registerGem("moonstone", 0xe0f6ff, DEFAULT_TOOL_STATS);
+        registerGem("sunstone", 0xffab5c, DEFAULT_TOOL_STATS);
+        registerGem("fluorite", 0xe4c9ff, DEFAULT_TOOL_STATS);
+        registerGem("garnet", 0xa32017, DEFAULT_TOOL_STATS);
+        registerGem("helenite", 0x59ff78, DEFAULT_TOOL_STATS);
+        registerGem("jade", 0x009c4b, DEFAULT_TOOL_STATS);
+        registerGem("jasper", 0xff7000, DEFAULT_TOOL_STATS);
+        registerGem("lazulite", 0x001b91, DEFAULT_TOOL_STATS);
+        registerGem("lazurite", 0x001363, DEFAULT_TOOL_STATS);
+        registerGem("malachite", 0x56cc9b, DEFAULT_TOOL_STATS);
+        registerGem("moissanite", 0x6e767d, DEFAULT_TOOL_STATS);
+        registerGem("opal", 0xffffff, DEFAULT_TOOL_STATS);
+        registerGem("black-opal", 0x141414, DEFAULT_TOOL_STATS);
+        registerGem("fire-opal", 0xb53300, DEFAULT_TOOL_STATS);
+        registerGem("purpurite", 0x6600ba, DEFAULT_TOOL_STATS);
+        registerGem("citrine", 0xfffa9e, DEFAULT_TOOL_STATS);
+        registerGem("scorodite", 0x1e396b, DEFAULT_TOOL_STATS);
+        registerGem("hiddenite", 0x84d193, DEFAULT_TOOL_STATS);
+        registerGem("titanite", 0xc7db51, DEFAULT_TOOL_STATS);
+        registerGem("topaz", 0xff892e, DEFAULT_TOOL_STATS);
+        registerGem("triplite", 0xff7e47, DEFAULT_TOOL_STATS);
+        registerGem("turquoise", 0x40e0d0, DEFAULT_TOOL_STATS);
+        registerGem("wulfenite", 0xff8469, DEFAULT_TOOL_STATS);
+        registerGem("zircon", 0xd9c3bf, DEFAULT_TOOL_STATS);
 
         // Fissions
         registerFission("uranium-238", 0x00702d, 0);
@@ -406,14 +415,24 @@ public class ModItems {
         return item;
     }
 
+    private static Item createToolPartItem(String component, ResourceLocation repairMaterialId, ModularToolStats stats) {
+        if (component.endsWith("-head")) {
+            return ModularToolPartItem.head(stats.baseDurability, stats.miningSpeed, repairMaterialId);
+        }
+        if (component.equals("rod")) {
+            return ModularToolPartItem.rod(stats.durabilityModifier);
+        }
+        return new Item(new Item.Properties());
+    }
+
     public static final String[] MATERIAL_COMPONENT_NAMES = {"ingot", "dust", "gear", "nugget", "plate", "rod", "raw", "pickaxe-head"};
 
-    private static void registerMaterial(String materialName, int color) {
+    private static void registerMaterial(String materialName, int color, ModularToolStats stats) {
+        ResourceLocation repairMaterialId = new ResourceLocation(MetallurgyPlus.MODID, materialName + "_ingot");
         for (String component : MATERIAL_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
-            RegistryObject<Item> item = ITEMS.register(name, () ->
-                new Item(new Item.Properties())
-            );
+            RegistryObject<Item> item = ITEMS.register(name,
+                () -> createToolPartItem(component, repairMaterialId, stats));
             MATERIAL_MAP.put(name, item);
             MATERIAL_COLOR_MAP.put(name, color);
         }
@@ -453,12 +472,12 @@ public class ModItems {
 
     public static final String[] ALLOY_COMPONENT_NAMES = {"ingot", "gear", "nugget", "plate", "rod", "pickaxe-head"};
 
-    private static void registerAlloy(String materialName, int color) {
+    private static void registerAlloy(String materialName, int color, ModularToolStats stats) {
+        ResourceLocation repairMaterialId = new ResourceLocation(MetallurgyPlus.MODID, materialName + "_ingot");
         for (String component : ALLOY_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
-            RegistryObject<Item> item = ITEMS.register(name, () ->
-                new Item(new Item.Properties())
-            );
+            RegistryObject<Item> item = ITEMS.register(name,
+                () -> createToolPartItem(component, repairMaterialId, stats));
             ALLOY_MAP.put(name, item);
             ALLOY_COLOR_MAP.put(name, color);
         }
@@ -473,12 +492,12 @@ public class ModItems {
 
     public static final String[] VANILLA_COMPONENT_NAMES = {"dust", "gear", "plate", "rod", "pickaxe-head"};
 
-    private static void registerVanilla(String materialName, int color) {
+    private static void registerVanilla(String materialName, int color, ModularToolStats stats) {
+        ResourceLocation repairMaterialId = getVanillaRepairMaterialId(materialName);
         for (String component : VANILLA_COMPONENT_NAMES) {
             String name = materialName + "_" + component;
-            RegistryObject<Item> item = ITEMS.register(name, () ->
-                new Item(new Item.Properties())
-            );
+            RegistryObject<Item> item = ITEMS.register(name,
+                () -> createToolPartItem(component, repairMaterialId, stats));
             VANILLA_MAP.put(name, item);
             VANILLA_COLOR_MAP.put(name, color);
         }
@@ -486,12 +505,12 @@ public class ModItems {
 
     public static final String[] GEM_COMPONENT_NAMES = {"gem", "rod", "pickaxe-head"};
 
-    private static void registerGem(String gemName, int color) {
+    private static void registerGem(String gemName, int color, ModularToolStats stats) {
+        ResourceLocation repairMaterialId = new ResourceLocation(MetallurgyPlus.MODID, gemName + "_gem");
         for (String component : GEM_COMPONENT_NAMES) {
             String name = gemName + "_" + component;
-            RegistryObject<Item> item = ITEMS.register(name, () ->
-                new Item(new Item.Properties())
-            );
+            RegistryObject<Item> item = ITEMS.register(name,
+                () -> createToolPartItem(component, repairMaterialId, stats));
             GEM_MAP.put(name, item);
             GEM_COLOR_MAP.put(name, color);
         }
@@ -502,6 +521,14 @@ public class ModItems {
 
         ModBlocks.GEM_BLOCKS_MAP.put(name, block);
         ModBlocks.GEM_COLOR_MAP.put(name, color);
+    }
+
+    private static ResourceLocation getVanillaRepairMaterialId(String materialName) {
+        String itemName = switch (materialName) {
+            case "diamond", "emerald" -> materialName;
+            default -> materialName + "_ingot";
+        };
+        return new ResourceLocation("minecraft", itemName);
     }
 
     public static final String[] FISSION_COMPONENT_NAMES = {"pellet", "chunk", "fuel", "fuel-depleted"};

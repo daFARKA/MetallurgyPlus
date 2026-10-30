@@ -10,8 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 public class ModLangProvider extends LanguageProvider {
 
@@ -53,7 +52,6 @@ public class ModLangProvider extends LanguageProvider {
         addTieredBlockTranslations(ModBlocks.CABLE_BLOCKS_MAP);
         addTieredBlockTranslations(ModBlocks.SOLAR_PANEL_BLOCK_MAP, "Solar Panel");
 
-
         addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
@@ -65,6 +63,8 @@ public class ModLangProvider extends LanguageProvider {
         addTieredItemTranslations(ModItems.COIL_MAP);
         addTieredItemTranslations(ModItems.SACK_MAP);
         addMultiBlockTranslations();
+
+        addToolTranslations();
     }
 
     private void addCreativeTabsTranslations() {
@@ -187,6 +187,29 @@ public class ModLangProvider extends LanguageProvider {
             }
 
             add(block.get(), name);
+        }
+    }
+
+    public static final String[] TOOLS = {"pickaxe"};
+
+    private void addToolTranslations() {
+        for (String tool : TOOLS) {
+            Set<String> seenMaterials = new HashSet<>();
+            for (Map<String, RegistryObject<Item>> itemMap : List.of(
+                ModItems.MATERIAL_MAP,
+                ModItems.ALLOY_MAP,
+                ModItems.VANILLA_MAP,
+                ModItems.GEM_MAP
+            )) {
+                for (RegistryObject<Item> item : itemMap.values()) {
+                    String itemName = item.getId().getPath();
+                    String materialName = itemName.split("_", 2)[0];
+                    if (seenMaterials.add(materialName)) {
+                        String toolName = materialName + "_" + tool;
+                        add(toolName, capitalizeFirstLetterEach(getName(toolName)));
+                    }
+                }
+            }
         }
     }
 

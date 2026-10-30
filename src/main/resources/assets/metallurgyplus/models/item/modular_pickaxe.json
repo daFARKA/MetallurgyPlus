@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "metallurgyplus:item/tool/rod",
+    "layer1": "metallurgyplus:item/tool/pickaxe-head"
+  }
+}

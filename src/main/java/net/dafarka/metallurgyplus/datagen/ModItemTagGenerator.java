@@ -31,6 +31,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         this.tag(ItemTags.PICKAXES).add(ModItems.LLAMKANA.get());
+        this.tag(ItemTags.PICKAXES).add(ModItems.MODULAR_PICKAXE.get());
 
         addForgeTags(ModItems.MATERIAL_MAP);
         addForgeTags(ModItems.ORE_MAP);

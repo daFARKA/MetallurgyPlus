@@ -9,12 +9,14 @@ import net.dafarka.metallurgyplus.block.entity.ModBlockEntities;
 import net.dafarka.metallurgyplus.block.entity.renderer.SackStationBlockEntityRenderer;
 import net.dafarka.metallurgyplus.item.ModCreativeTabs;
 import net.dafarka.metallurgyplus.item.ModItems;
+import net.dafarka.metallurgyplus.item.tool.ModularToolFortuneLootModifier;
 import net.dafarka.metallurgyplus.network.ModMessages;
 import net.dafarka.metallurgyplus.recipe.ModRecipeSerializers;
 import net.dafarka.metallurgyplus.screen.*;
 import net.dafarka.metallurgyplus.screen.menu.ModMenuTypes;
 import net.dafarka.metallurgyplus.util.color.DynamicItemColor;
 import net.dafarka.metallurgyplus.util.color.DynamicKeyColor;
+import net.dafarka.metallurgyplus.util.color.ModularPickaxeItemColor;
 import net.dafarka.metallurgyplus.worldgen.placement.ModPlacementModifiers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -58,6 +60,7 @@ public class MetallurgyPlus {
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipeSerializers.register(modEventBus);
+        ModularToolFortuneLootModifier.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -168,6 +171,11 @@ public class MetallurgyPlus {
             }
 
             DynamicItemColor dynamicItemColor = new DynamicItemColor();
+            ModularPickaxeItemColor modularPickaxeItemColor = new ModularPickaxeItemColor();
+            Item modularPickaxe = ModItems.MODULAR_PICKAXE.get();
+            event.register(modularPickaxeItemColor, modularPickaxe);
+            handledItems.add(modularPickaxe);
+
             for (RegistryObject<Item> entry : ModItems.ITEMS.getEntries()) {
                 Item item = entry.get();
 
