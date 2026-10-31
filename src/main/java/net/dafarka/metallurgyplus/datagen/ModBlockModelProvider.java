@@ -60,7 +60,7 @@ public class ModBlockModelProvider extends BlockModelProvider {
 
         for (RegistryObject<SolarPanelBlock> block : ModBlocks.SOLAR_PANEL_BLOCK_MAP.values()) {
             String blockName = block.get().getDescriptionId().split("\\.")[2];
-            registerOrientable(blockName, "energy", "solar_panel", "_", "side", "side", "top", "bottom", defaultTintIndices);
+            registerOrientableComposite(blockName, "energy", "solar_panel", "_", "side", "side", "top", "bottom", 8, defaultTintIndices);
         }
 
         for (RegistryObject<BatteryBlock> block : ModBlocks.BATTERY_BLOCK_MAP.values()) {
@@ -84,15 +84,15 @@ public class ModBlockModelProvider extends BlockModelProvider {
             }
         }
 
-        registerOrientable("alloy_smelter", "machine", "alloy_smelter", "_", null);
-        registerOrientable("ore_processing_unit", "machine", "ore_processing_unit", "_", null);
-        registerOrientable("grinder", "machine", "grinder", "_", null);
-        registerOrientable("press", "machine", "press", "_", null);
-        registerOrientable("extractor", "machine", "extractor", "_", null);
-        registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", "_", null);
-        registerOrientable("enricher", "machine", "enricher", "_", null);
-        registerOrientable("quarry", "machine", "quarry", "_", null);
-        registerOrientable("power_source", "energy", "power_source", "", "", "", "", "", null);
+        registerOrientable("alloy_smelter", "machine", "alloy_smelter", true, null);
+        registerOrientable("ore_processing_unit", "machine", "ore_processing_unit", true, null);
+        registerOrientable("grinder", "machine", "grinder", true, null);
+        registerOrientable("press", "machine", "press", true, null);
+        registerOrientable("extractor", "machine", "extractor", true, null);
+        registerOrientable("gemstone_cutter", "machine", "gemstone_cutter", true, null);
+        registerOrientable("enricher", "machine", "enricher", true, null);
+        registerOrientable("quarry", "machine", "quarry", true, null);
+        registerOrientable("power_source", "energy", "power_source", false, null);
         registerSackStation();
     }
 
@@ -207,35 +207,52 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .end();
     }
 
-    private void registerOrientable(String name, String group, String textureName, String connector, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+    private void registerOrientable(String name, String group, String textureName, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
         registerOrientable(
             name,
             group,
-            textureName + connector + front,
-            textureName + connector + side,
-            textureName + connector + top,
-            textureName + connector + bottom,
+            textureName + "_" + front,
+            textureName + "_" + side,
+            textureName + "_" + top,
+            textureName + "_" + bottom,
             tintIndices
         );
     }
 
-    private void registerOrientable(String name, String group, String textureName, String connector, @Nullable int[] tintIndices) {
-        registerOrientable(
-            name,
-            group,
-            textureName,
-            connector,
-            "front",
-            "side",
-            "top",
-            "bottom",
-            tintIndices
-        );
+    private void registerOrientable(String name, String group, String textureName, boolean isSeperated, @Nullable int[] tintIndices) {
+        if (isSeperated) {
+            registerOrientable(
+                name,
+                group,
+                textureName,
+                "front",
+                "side",
+                "top",
+                "bottom",
+                tintIndices
+            );
+        } else {
+            registerOrientable(
+                name,
+                group,
+                textureName,
+                textureName,
+                textureName,
+                textureName,
+                tintIndices
+            );
+        }
     }
 
     private void registerOrientable(String name, String group, String front, String side, String top, String bottom, @Nullable int[] tintIndices) {
+        registerOrientable(name, group, front, side, side, side, top, bottom, tintIndices);
+    }
+
+    private void registerOrientable(String name, String group, String front, String back, String west, String east, String top, String bottom, @Nullable int[] tintIndices) {
         ResourceLocation frontTexture = modLoc("block/" + group + "/" + front);
-        ResourceLocation sideTexture = modLoc("block/" + group + "/" + side);
+        ResourceLocation backTexture = modLoc("block/" + group + "/" + back);
+        ResourceLocation westTexture = modLoc("block/" + group + "/" + west);
+        ResourceLocation eastTexture = modLoc("block/" + group + "/" + east);
         ResourceLocation topTexture = modLoc("block/" + group + "/" + top);
         ResourceLocation bottomTexture = modLoc("block/" + group + "/" + bottom);
 
@@ -243,30 +260,41 @@ public class ModBlockModelProvider extends BlockModelProvider {
             getBuilder(name)
                 .parent(getExistingFile(modLoc("block_entity_orientable")))
                 .texture("front", frontTexture)
-                .texture("side", sideTexture)
+                .texture("back", backTexture)
+                .texture("east", eastTexture)
+                .texture("west", westTexture)
                 .texture("top", topTexture)
                 .texture("bottom", bottomTexture);
         } else {
             getBuilder(name)
                 .parent(getExistingFile(modLoc("block_entity_orientable")))
                 .texture("front", frontTexture)
-                .texture("side", sideTexture)
+                .texture("back", backTexture)
+                .texture("east", eastTexture)
+                .texture("west", westTexture)
                 .texture("top", topTexture)
                 .texture("bottom", bottomTexture)
                 .element()
                 .from(0, 0, 0)
                 .to(16, 16, 16)
                 .face(Direction.NORTH).texture("#front").tintindex(tintIndices[0]).end()
-                .face(Direction.SOUTH).texture("#side").tintindex(tintIndices[1]).end()
-                .face(Direction.EAST).texture("#side").tintindex(tintIndices[2]).end()
-                .face(Direction.WEST).texture("#side").tintindex(tintIndices[3]).end()
+                .face(Direction.SOUTH).texture("#back").tintindex(tintIndices[1]).end()
+                .face(Direction.EAST).texture("#east").tintindex(tintIndices[2]).end()
+                .face(Direction.WEST).texture("#west").tintindex(tintIndices[3]).end()
                 .face(Direction.UP).texture("#top").tintindex(tintIndices[4]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
                 .face(Direction.DOWN).texture("#bottom").tintindex(tintIndices[5]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
                 .end();
         }
     }
 
-    private void registerOrientableComposite(String name, String group, String textureName, String connector, String front, String side, String top, String bottom, int @NotNull [] tintIndices) {
+    private void registerOrientableComposite(String name, String group, String textureName, String connector,
+                                             String front, String side, String top, String bottom, int @NotNull [] tintIndices) {
+        registerOrientableComposite(name, group, textureName, connector, front, side, top, bottom, 16, tintIndices);
+    }
+
+    private void registerOrientableComposite(String name, String group, String textureName, String connector,
+                                             String front, String side, String top, String bottom,
+                                             int height, int @NotNull [] tintIndices) {
         registerOrientableComposite(
             name,
             group,
@@ -274,11 +302,12 @@ public class ModBlockModelProvider extends BlockModelProvider {
             textureName + connector + side,
             textureName + connector + top,
             textureName + connector + bottom,
+            height,
             tintIndices
         );
     }
 
-    private void registerOrientableComposite(String name, String group, String front, String side, String top, String bottom, int @NotNull [] tintIndices) {
+    private void registerOrientableComposite(String name, String group, String front, String side, String top, String bottom, int height, int @NotNull [] tintIndices) {
         ResourceLocation frontTexture = modLoc("block/" + group + "/" + front);
         ResourceLocation sideTexture = modLoc("block/" + group + "/" + side);
         ResourceLocation topTexture = modLoc("block/" + group + "/" + top);
@@ -289,19 +318,24 @@ public class ModBlockModelProvider extends BlockModelProvider {
         ResourceLocation topBaseTexture = modLoc("block/" + group + "/base/" + top);
         ResourceLocation bottomBaseTexture = modLoc("block/" + group + "/base/" + bottom);
 
-        frontBaseTexture = existingFileHelper.exists(frontBaseTexture, ModelProvider.TEXTURE)
+        boolean hasFrontBaseTexture = existingFileHelper.exists(frontBaseTexture, ModelProvider.TEXTURE);
+        boolean hasSideBaseTexture = existingFileHelper.exists(sideBaseTexture, ModelProvider.TEXTURE);
+        boolean hasTopBaseTexture = existingFileHelper.exists(topBaseTexture, ModelProvider.TEXTURE);
+        boolean hasBottomBaseTexture = existingFileHelper.exists(bottomBaseTexture, ModelProvider.TEXTURE);
+
+        frontBaseTexture = hasFrontBaseTexture
             ? frontBaseTexture : frontTexture;
 
-        sideBaseTexture = existingFileHelper.exists(sideBaseTexture, ModelProvider.TEXTURE)
+        sideBaseTexture = hasSideBaseTexture
             ? sideBaseTexture : sideTexture;
 
-        topBaseTexture = existingFileHelper.exists(topBaseTexture, ModelProvider.TEXTURE)
+        topBaseTexture = hasTopBaseTexture
             ? topBaseTexture : topTexture;
 
-        bottomBaseTexture = existingFileHelper.exists(bottomBaseTexture, ModelProvider.TEXTURE)
+        bottomBaseTexture = hasBottomBaseTexture
             ? bottomBaseTexture : bottomTexture;
 
-        getBuilder(name)
+        var model = getBuilder(name)
             .parent(getExistingFile(modLoc("block_entity_orientable")))
             .renderType(mcLoc("cutout"))
             .texture("particle", sideTexture)
@@ -312,49 +346,72 @@ public class ModBlockModelProvider extends BlockModelProvider {
             .texture("front_base", frontBaseTexture)
             .texture("side_base", sideBaseTexture)
             .texture("top_base", topBaseTexture)
-            .texture("bottom_base", bottomBaseTexture)
-            .element()
+            .texture("bottom_base", bottomBaseTexture);
+
+        var baseElement = model.element()
             .from(0, 0, 0)
-            .to(16, 16, 16)
-            .face(Direction.NORTH).texture("#front_base").cullface(Direction.NORTH).tintindex(tintIndices[0]).end()
-            .face(Direction.SOUTH).texture("#side_base").cullface(Direction.SOUTH).tintindex(tintIndices[1]).end()
-            .face(Direction.EAST).texture("#side_base").cullface(Direction.EAST).tintindex(tintIndices[2]).end()
-            .face(Direction.WEST).texture("#side_base").cullface(Direction.WEST).tintindex(tintIndices[3]).end()
-            .face(Direction.UP).texture("#top_base").cullface(Direction.UP).tintindex(tintIndices[4]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
-            .face(Direction.DOWN).texture("#bottom_base").cullface(Direction.DOWN).tintindex(tintIndices[5]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
-            .end()
-            .element()
-            .from(0, 0, 0)
-            .to(16, 16, 0)
-            .face(Direction.NORTH).texture("#front").cullface(Direction.NORTH).end()
-            .end()
-            .element()
-            .from(0, 0, 16)
-            .to(16, 16, 16)
-            .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
-            .end()
-            .element()
-            .from(16, 0, 0)
-            .to(16, 16, 16)
-            .face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
-            .end()
-            .element()
-            .from(0, 0, 0)
-            .to(0, 16, 16)
-            .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
-            .end()
-            .element()
-            .from(0, 16, 0)
-            .to(16, 16, 16)
-            .face(Direction.UP).texture("#top").cullface(Direction.UP)
-            .rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
-            .end()
-            .element()
-            .from(0, 0, 0)
-            .to(16, 0, 16)
-            .face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN)
-            .rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
-            .end();
+            .to(16, height, 16);
+        baseElement.face(Direction.NORTH).texture("#front_base").cullface(Direction.NORTH).tintindex(tintIndices[0]).end();
+        baseElement.face(Direction.SOUTH).texture("#side_base").cullface(Direction.SOUTH).tintindex(tintIndices[1]).end();
+        baseElement.face(Direction.EAST).texture("#side_base").cullface(Direction.EAST).tintindex(tintIndices[2]).end();
+        baseElement.face(Direction.WEST).texture("#side_base").cullface(Direction.WEST).tintindex(tintIndices[3]).end();
+
+        var baseTop = baseElement.face(Direction.UP).texture("#top_base");
+        if (height == 16) {
+            baseTop.cullface(Direction.UP);
+        }
+        baseTop.tintindex(tintIndices[4]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end();
+
+        baseElement.face(Direction.DOWN).texture("#bottom_base").cullface(Direction.DOWN)
+            .tintindex(tintIndices[5]).rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end();
+        baseElement.end();
+
+        if (hasFrontBaseTexture) {
+            model.element()
+                .from(0, 0, 0)
+                .to(16, height, 0)
+                .face(Direction.NORTH).texture("#front").cullface(Direction.NORTH).end()
+                .end();
+        }
+
+        if (hasSideBaseTexture) {
+            model.element()
+                .from(0, 0, 16)
+                .to(16, height, 16)
+                .face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
+                .end();
+            model.element()
+                .from(16, 0, 0)
+                .to(16, height, 16)
+                .face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
+                .end();
+            model.element()
+                .from(0, 0, 0)
+                .to(0, height, 16)
+                .face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
+                .end();
+        }
+
+        if (hasTopBaseTexture) {
+            var topElement = model.element()
+                .from(0, height, 0)
+                .to(16, height, 16);
+            var topFace = topElement.face(Direction.UP).texture("#top");
+            if (height == 16) {
+                topFace.cullface(Direction.UP);
+            }
+            topFace.rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end();
+            topElement.end();
+        }
+
+        if (hasBottomBaseTexture) {
+            model.element()
+                .from(0, 0, 0)
+                .to(16, 0, 16)
+                .face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN)
+                .rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN).end()
+                .end();
+        }
     }
 
     private void registerSackStation() {

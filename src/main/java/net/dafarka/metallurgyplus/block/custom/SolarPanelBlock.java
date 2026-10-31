@@ -14,11 +14,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
@@ -26,6 +29,7 @@ import java.util.List;
 
 public class SolarPanelBlock extends BaseBlock {
     public static final int GENERATION = (int) Math.pow(2, 4);
+    private static final VoxelShape SOLAR_PANEL_SHAPE = Block.box(0, 0, 0, 16, 8, 16);
 
     private int tier = 0;
 
@@ -33,6 +37,11 @@ public class SolarPanelBlock extends BaseBlock {
         super(pProperties);
 
         this.tier = tier;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SOLAR_PANEL_SHAPE;
     }
 
     @Override

@@ -55,8 +55,8 @@ public class ModLangProvider extends LanguageProvider {
         addMapsTranslations(ModItems.MATERIAL_MAP, ModBlocks.MATERIAL_BLOCKS_MAP);
         addOreTranslations();
         addMapsTranslations(ModItems.ALLOY_MAP, ModBlocks.ALLOY_BLOCKS_MAP);
-        addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.CUSTOM_ITEM_MAP);
+        addBlockMapTranslations(ModBlocks.CUSTOM_BLOCKS_MAP);
         addCustomItemMapTranslations(ModItems.VANILLA_MAP);
         addMapsTranslations(ModItems.GEM_MAP, ModBlocks.GEM_BLOCKS_MAP);
         addItemMapTranslations(ModItems.FISSION_MAP);
@@ -113,7 +113,7 @@ public class ModLangProvider extends LanguageProvider {
     private void addCustomItemMapTranslations(Map<String, ? extends RegistryObject<? extends Item>> itemMap) {
         for (RegistryObject<? extends Item> item : itemMap.values()) {
             String fullName = item.getId().getPath();
-            String name = getName(fullName);
+            String name = fullName.replace("_", " ").replace("-", " ");
             add("item." + MetallurgyPlus.MODID + "." + fullName, capitalizeFirstLetterEach(name));
         }
     }
